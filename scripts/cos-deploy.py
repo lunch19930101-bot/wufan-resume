@@ -41,6 +41,52 @@ def get_appid() -> str:
     return str(resp.AppId)
 
 
+# 显式 MIME 表（带 charset，对齐 GitHub Pages 响应头）。
+# 不依赖系统 mimetypes —— 不同机器对 woff2/js 的映射不一致。
+MIME_MAP = {
+    ".html": "text/html; charset=utf-8",
+    ".htm": "text/html; charset=utf-8",
+    ".css": "text/css; charset=utf-8",
+    ".js": "text/javascript; charset=utf-8",
+    ".mjs": "text/javascript; charset=utf-8",
+    ".json": "application/json; charset=utf-8",
+    ".webmanifest": "application/manifest+json; charset=utf-8",
+    ".xml": "application/xml; charset=utf-8",
+    ".txt": "text/plain; charset=utf-8",
+    ".svg": "image/svg+xml",
+    ".png": "image/png",
+    ".jpg": "image/jpeg",
+    ".jpeg": "image/jpeg",
+    ".gif": "image/gif",
+    ".webp": "image/webp",
+    ".avif": "image/avif",
+    ".ico": "image/x-icon",
+    ".woff": "font/woff",
+    ".woff2": "font/woff2",
+    ".ttf": "font/ttf",
+    ".otf": "font/otf",
+    ".eot": "application/vnd.ms-fontobject",
+    ".mp4": "video/mp4",
+    ".webm": "video/webm",
+    ".mp3": "audio/mpeg",
+    ".pdf": "application/pdf",
+    ".docx": "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    ".doc": "application/msword",
+    ".map": "application/json; charset=utf-8",
+    ".wasm": "application/wasm",
+}
+
+# 显式「内联展示」类型 —— 明确告诉浏览器/内核：这是网页，别当文件下载。
+# （myqcloud.com 是文件存储域名，微信内置浏览器等会按域名猜测行为，显式声明可破）
+INLINE_EXTS = {".html", ".htm", ".css", ".js", ".mjs", ".json",
+               ".xml", ".txt", ".svg", ".pdf"}
+
+
+def guess_type(path: str) -> str:
+    ext = os.path.splitext(path)[1].lower()
+    return MIME_MAP.get(ext) or mimetypes.guess_type(path)[0] or "application/octet-stream"
+
+
 def cache_rule(key: str) -> str:
     if key.endswith(".html"):
         return "no-cache"
@@ -95,7 +141,12 @@ def main() -> None:
 
     def upload(job):
         path, key = job
-        ctype = mimetypes.guess_type(path)[0] or "application/octet-stream"
+        ctype = guess_type(path)
+        ext = os.path.splitext(path)[1].lower()
+        extra = {}
+        if ext in INLINE_EXTS:
+            # 显式内联 —— 防止部分手机浏览器把页面当文件弹出下载
+            extra["ContentDisposition"] = "inline"
         with open(path, "rb") as fp:
             client.put_object(
                 Bucket=bucket,
@@ -104,6 +155,7 @@ def main() -> None:
                 ContentType=ctype,
                 CacheControl=cache_rule(key),
                 EnableMD5=False,
+                **extra,
             )
         return key
 
