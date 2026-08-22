@@ -1,0 +1,702 @@
+/*
+ * resume.css —— @atom63/resume playground 1:1 视觉复刻
+ *
+ *   1. [data-resume-document] —— 上游 token vocabulary
+ *   2. .doc-*  —— 文档语义类（字体、颜色、间距、网格）
+ *   3. .live-resume / .live-source / .live-preview —— 游乐场栅格
+ *   4. .resume-viewer-* + --rv-* —— 预览器 chrome（oklch）
+ *   5. 纸张几何（.doc-page[data-paper]）+ @media print
+ *
+ *   字体：ui-sans-serif / ui-monospace（系统字体栈，与上游一致，不加载 web font）。
+ *   背景：body 在 /resume 路由下变为 #f4f4f5（覆盖全局 bg-bg-canvas）。
+ *   注：此 CSS 只在 /resume 路由加载，故可放心覆盖 globals.css 的全局虚线。
+ */
+
+/* /resume 页面隐藏 globals.css 的 body::after 左右虚线 —— 简历编辑器需要纯净背景 */
+body::after {
+  display: none !important;
+}
+
+/* ============================================================
+ * 1. Document tokens（1:1 复刻自上游 [data-resume-document]）
+ * ============================================================ */
+[data-resume-document] {
+  --doc-meta-col: 9.5rem;
+  --doc-resume-cols: 1fr 2fr;
+  --doc-col-gap: 0.75rem;
+  --doc-col-pad: 1.5rem;
+  --doc-block-gap: 0.625rem;
+  --doc-section-gap: 0.875rem;
+  --doc-group-gap: 0.125rem;
+  --doc-text: 13px;
+  --doc-text-xs: 10px;
+  --doc-leading: 1.55;
+  --doc-leading-heading: 1.45;
+  --doc-ink: #000;
+  --doc-ink-body: #333333;
+  --doc-ink-muted: #6b6b6b;
+  --doc-ink-faint: #a3a3a3;
+  --doc-rule: #d4d4d4;
+
+  /* MiSans (CJK only via unicode-range) + Geist (Latin) — both geometric sans,
+     设计语言一致，混排时 EN/CN 视觉差异最小化 */
+  --doc-font: "MiSans", "Geist", ui-sans-serif, system-ui, -apple-system,
+    "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+
+  font-family: var(--doc-font);
+  font-size: var(--doc-text);
+  line-height: var(--doc-leading);
+  color: var(--doc-ink-body);
+}
+
+[data-resume-document],
+[data-resume-document] *,
+[data-resume-document] *:before,
+[data-resume-document] *:after {
+  box-sizing: border-box;
+}
+
+[data-resume-document] :where(h1, h2, h3, h4, h5, h6, p, ul, ol, li, figure, blockquote, dl, dd, pre) {
+  margin: 0;
+}
+
+/* ============================================================
+ * 2. .doc-* semantic classes（1:1 复刻自上游 document.css）
+ * ============================================================ */
+.doc-meta-grid {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: var(--doc-meta-col) minmax(0, 1fr);
+  gap: var(--doc-col-gap);
+}
+
+.doc-resume-grid {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: var(--doc-resume-cols);
+}
+
+.doc-col {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: var(--doc-block-gap);
+}
+
+.doc-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--doc-group-gap);
+}
+
+.doc-section {
+  margin-top: var(--doc-section-gap);
+}
+
+.doc-body {
+  font-size: var(--doc-text);
+  line-height: var(--doc-leading);
+  color: var(--doc-ink-body);
+  overflow-wrap: break-word;
+}
+
+.doc-meta {
+  font-size: var(--doc-text);
+  line-height: var(--doc-leading);
+  color: var(--doc-ink-muted);
+}
+
+.doc-heading {
+  font-size: var(--doc-text);
+  line-height: var(--doc-leading-heading);
+  color: var(--doc-ink);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.doc-title {
+  font-size: var(--doc-text);
+  line-height: 1;
+  color: var(--doc-ink);
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.doc-subheading {
+  font-size: var(--doc-text);
+  line-height: 1;
+  color: var(--doc-ink);
+  font-weight: 600;
+}
+
+.doc-strong {
+  color: var(--doc-ink);
+  font-weight: 600;
+}
+
+.doc-link {
+  color: var(--doc-ink-body);
+  text-decoration: underline;
+  touch-action: manipulation;
+}
+
+.doc-rule {
+  margin: 0.25rem 0;
+  border-bottom: 1px solid var(--doc-rule);
+}
+
+.doc-footer {
+  font-size: var(--doc-text-xs);
+  color: var(--doc-ink-faint);
+  margin-top: auto;
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.doc-footer a {
+  color: inherit;
+}
+
+.doc-header {
+  margin-bottom: 0.75rem;
+}
+
+.doc-header-col {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.doc-header-left {
+  padding-right: var(--doc-col-pad);
+}
+
+.doc-header-right {
+  padding-left: var(--doc-col-pad);
+}
+
+.doc-header-right > p + p {
+  margin-top: 0.125rem;
+}
+
+.doc-links {
+  margin-top: 0.75rem;
+}
+
+.doc-links > p {
+  margin-top: 0;
+  color: var(--doc-ink-muted);
+}
+
+.doc-links a {
+  color: inherit;
+}
+
+.doc-links em {
+  color: var(--doc-ink-faint);
+}
+
+.doc-entry-body {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.125rem;
+}
+
+.doc-col-sidebar {
+  grid-column-start: 1;
+  grid-row-start: 1;
+  padding-right: var(--doc-col-pad);
+}
+
+.doc-col-main {
+  grid-column-start: 2;
+  grid-row-start: 1;
+  padding-left: var(--doc-col-pad);
+}
+
+.doc-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+.doc-list > li {
+  padding-left: 0.85em;
+  text-indent: -0.85em;
+}
+
+.doc-list > li:before {
+  content: "•";
+  margin-right: 0.4em;
+}
+
+.doc-em {
+  font-style: normal;
+}
+
+.doc-hr {
+  margin: 0.75rem 0;
+}
+
+/* ============================================================
+ * 3. .doc-page —— 纸张（含几何尺寸，复刻上游 + 补纸张尺寸）
+ * ============================================================ */
+.doc-pages {
+  display: flex;
+  flex-direction: column;
+}
+
+.doc-page {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: #fff;
+  color: #000;
+  box-shadow: 0 0 0 1px #18181b0a, 0 1px 2px #18181b0a,
+    0 12px 32px -12px #18181b2e;
+}
+
+/* 纸张几何（本项目补充：上游用 inline style 注入，这里用 data-paper 静态驱动） */
+.doc-page[data-paper='letter'] {
+  width: 8.5in;
+  min-height: 11in;
+  padding: 0.5in;
+}
+
+.doc-page[data-paper='a4'] {
+  width: 210mm;
+  min-height: 297mm;
+  padding: 15mm;
+}
+
+.doc-page[data-page-mode='single'] {
+  overflow: hidden;
+}
+
+#resume-print-target,
+#resume-print-target * {
+  -webkit-text-size-adjust: none;
+  text-size-adjust: none;
+}
+
+[data-resume-scale-root] {
+  transform-origin: top left;
+}
+
+/* ============================================================
+ * 4. .resume-viewer chrome —— oklch token + 工具栏 + 滚动容器
+ * ============================================================ */
+.resume-viewer {
+  --rv-surface: oklch(0.995 0.001 264);
+  --rv-canvas: oklch(0.965 0.002 264);
+  --rv-border: oklch(0.28 0.01 264 / 0.1);
+  --rv-ink: oklch(0.32 0.008 264);
+  --rv-ink-muted: oklch(0.56 0.006 264);
+  --rv-hover: oklch(0.28 0.01 264 / 0.06);
+  --rv-active: oklch(0.28 0.01 264 / 0.1);
+  --rv-primary: oklch(0.34 0.012 264);
+  --rv-primary-hover: oklch(0.28 0.012 264);
+  --rv-primary-ink: oklch(0.98 0.001 264);
+  --rv-radius: 0.4375rem;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
+}
+
+.resume-viewer-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.4375rem 0.75rem;
+  border-bottom: 1px solid var(--rv-border);
+  background: var(--rv-surface);
+  flex: 0 0 auto;
+}
+
+.resume-viewer-pagecount {
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+  color: var(--rv-ink-muted);
+  letter-spacing: 0.01em;
+}
+
+.resume-viewer-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.375rem;
+}
+
+.resume-viewer-btn-group {
+  display: flex;
+  align-items: center;
+  gap: 0.125rem;
+  padding: 0.125rem;
+  border-radius: calc(var(--rv-radius) + 0.125rem);
+  background: var(--rv-hover);
+}
+
+.resume-viewer-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.875rem;
+  min-width: 1.875rem;
+  padding: 0 0.4375rem;
+  border: 0;
+  border-radius: var(--rv-radius);
+  background: transparent;
+  color: var(--rv-ink);
+  font-size: 0.8125rem;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background-color 0.12s ease-out;
+}
+
+.resume-viewer-btn:hover:not(:disabled) {
+  background: var(--rv-active);
+}
+
+.resume-viewer-btn:active:not(:disabled) {
+  background: var(--rv-active);
+  transform: translateY(0.5px);
+}
+
+.resume-viewer-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.resume-viewer-btn-active {
+  background: var(--rv-active);
+  color: var(--rv-ink);
+}
+
+.resume-viewer-btn-primary {
+  padding: 0 0.875rem;
+  background: var(--rv-primary);
+  color: var(--rv-primary-ink);
+  font-weight: 500;
+}
+
+.resume-viewer-btn-primary:hover:not(:disabled) {
+  background: var(--rv-primary-hover);
+}
+
+.resume-viewer-zoom-label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 1.875rem;
+  width: 2.875rem;
+  border: 0;
+  border-radius: var(--rv-radius);
+  background: transparent;
+  color: var(--rv-ink-muted);
+  font-size: 0.8125rem;
+  font-family: inherit;
+  font-variant-numeric: tabular-nums;
+  cursor: pointer;
+  transition: background-color 0.12s ease-out;
+}
+
+.resume-viewer-zoom-label:hover {
+  background: var(--rv-active);
+  color: var(--rv-ink);
+}
+
+.resume-viewer-icon {
+  width: 1rem;
+  height: 1rem;
+}
+
+.resume-viewer-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  background: var(--rv-canvas);
+}
+
+.resume-viewer-stage {
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.resume-viewer-page-box {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.resume-viewer-scale-root {
+  position: relative;
+}
+
+.resume-viewer-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  color: #000;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--rv-ink-muted);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+ * 5. .live-resume —— 游乐场栅格（左 source / 右 preview）
+ * ============================================================ */
+.live-resume {
+  --rv-surface: oklch(0.995 0.001 264);
+  --rv-canvas: oklch(0.965 0.002 264);
+  --rv-border: oklch(0.28 0.01 264 / 0.1);
+  --rv-ink: oklch(0.32 0.008 264);
+  --rv-ink-muted: oklch(0.56 0.006 264);
+  --rv-hover: oklch(0.28 0.01 264 / 0.06);
+  --rv-active: oklch(0.28 0.01 264 / 0.1);
+  --rv-primary: oklch(0.34 0.012 264);
+  --rv-primary-hover: oklch(0.28 0.012 264);
+  --rv-primary-ink: oklch(0.98 0.001 264);
+  --rv-radius: 0.4375rem;
+
+  display: grid;
+  grid-template-columns: minmax(clamp(300px, 32vw, 380px), 0.42fr) minmax(0, 1fr);
+  height: 100vh;
+  overflow: hidden;
+  background: var(--rv-canvas);
+  color: var(--rv-ink);
+  font: 14px/1.45 ui-sans-serif, system-ui, -apple-system, Segoe UI, sans-serif;
+}
+
+.live-source,
+.live-preview {
+  min-width: 0;
+  min-height: 0;
+}
+
+.live-source {
+  display: flex;
+  flex-direction: column;
+  border-right: 1px solid var(--rv-border);
+  background: var(--rv-surface);
+}
+
+.live-preview {
+  height: 100%;
+}
+
+.live-source-toolbar,
+.live-source-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.4375rem 0.75rem;
+  flex: 0 0 auto;
+}
+
+.live-source-toolbar {
+  justify-content: space-between;
+  flex-wrap: wrap;
+  row-gap: 0.375rem;
+  border-bottom: 1px solid var(--rv-border);
+}
+
+.live-source-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.live-resume .resume-viewer-toolbar,
+.live-resume .resume-viewer-controls {
+  flex-wrap: wrap;
+  row-gap: 0.375rem;
+}
+
+.live-source-btn {
+  gap: 0.375rem;
+  padding: 0 0.625rem;
+  font-weight: 500;
+}
+
+.live-btn-icon {
+  width: 0.875rem;
+  height: 0.875rem;
+}
+
+.live-btn-icon-check {
+  animation: live-copied-pop 0.16s ease-out;
+}
+
+@keyframes live-copied-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .live-btn-icon-check {
+    animation: none;
+  }
+}
+
+.live-doc-segment .resume-viewer-btn {
+  min-width: 3.25rem;
+}
+
+.live-source-input {
+  flex: 1 1 auto;
+  min-height: 0;
+  resize: none;
+  border: 0;
+  background: var(--rv-surface);
+  color: var(--rv-ink);
+  padding: 0.875rem;
+  font: 0.8125rem/1.55 ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
+  outline: none;
+  tab-size: 2;
+}
+
+.live-source-input:focus-visible {
+  outline: none;
+}
+
+.live-source-footer {
+  justify-content: space-between;
+  border-top: 1px solid var(--rv-border);
+  color: var(--rv-ink-muted);
+  font-size: 0.8125rem;
+  font-variant-numeric: tabular-nums;
+}
+
+.live-error {
+  border-bottom: 1px solid var(--rv-border);
+  background: color-mix(in oklch, #b00020 7%, var(--rv-surface));
+  color: #8a0018;
+  padding: 0.5rem 0.75rem;
+  font-size: 0.8125rem;
+}
+
+.live-page-size .resume-viewer-btn {
+  text-transform: capitalize;
+}
+
+/* ============================================================
+ * 6. body 背景覆盖 —— /resume 路由下变 #f4f4f5
+ * ============================================================ */
+html:has(.live-resume),
+body:has(.live-resume) {
+  height: 100%;
+  overflow: hidden;
+  background: #f4f4f5;
+}
+
+/* ============================================================
+ * 7. Responsive —— 窄屏 / 触屏
+ * ============================================================ */
+@media (max-width: 820px) {
+  .live-resume {
+    grid-template-columns: 1fr;
+    grid-template-rows: minmax(220px, 40vh) minmax(0, 1fr);
+  }
+  .live-source {
+    border-right: 0;
+    border-bottom: 1px solid var(--rv-border);
+  }
+}
+
+@media (pointer: coarse) {
+  .live-resume .resume-viewer-btn,
+  .live-resume .resume-viewer-zoom-label {
+    height: 2.75rem;
+    min-width: 2.75rem;
+  }
+  .live-source-input {
+    font-size: 1rem;
+  }
+}
+
+/* ============================================================
+ * 8. Print —— 保存为 PDF（仅纸张可见，display:none 路径更稳定）
+ * ============================================================ */
+@media print {
+  html,
+  body {
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  /* 隐藏 .live-resume 以外的所有 body 子元素（Nav / Footer / 自定义光标等） */
+  body > *:not(.live-resume) {
+    display: none !important;
+  }
+  body::after,
+  body::before {
+    display: none !important;
+  }
+
+  .live-resume {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+    background: #fff !important;
+  }
+
+  /* 左栏（编辑器）整栏隐藏 */
+  .live-source {
+    display: none !important;
+  }
+
+  .live-preview {
+    height: auto !important;
+  }
+
+  .resume-viewer {
+    display: block !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+
+  .resume-viewer-toolbar {
+    display: none !important;
+  }
+
+  .resume-viewer-scroll {
+    overflow: visible !important;
+    background: #fff !important;
+    flex: none !important;
+  }
+
+  .resume-viewer-stage {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+
+  .resume-viewer-scale-root {
+    position: static !important;
+    zoom: 1 !important;
+    transform: none !important;
+  }
+
+  .doc-page {
+    box-shadow: none !important;
+  }
+
+  @page {
+    margin: 0;
+  }
+}

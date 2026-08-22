@@ -1,0 +1,24 @@
+{
+  "name": "吴帆",
+  "nameEn": "Fan Wu",
+  "codename": "Lunch",
+  "role": "AI 设计工程师",
+  "tagline": "AI Design Engineer for Expressive Digital Systems.",
+  "location": "中国 · 武汉",
+  "intro": "我的工作主要是设计、制作 **3D 动效**与**组件库**，通过 **AI 编写代码**。为公司产品和品牌构建**系统与架构**。在工作中将创意与**用户体验**融入设计当中。\n\n拥有**十一年设计经验**，**六年团队管理**——从**移动端**到 **PC 端**、从 **UI/UX** 到 **3D** 与**组件库**，从 **Sketch** 到 **Claude Code**，我把视觉、用户体验与 **AI 工具**（**MJ**、**豆包**、**即梦**、**Claude Code**）结合，为产品和品牌构建完整的系统与架构。",
+  "email": "alexpeter5@126.com",
+  "phone": "18502728735",
+  "wechat": "18502728735",
+  "calendarUrl": "",
+  "availableForWork": true,
+  "social": {
+    "twitter": "",
+    "linkedin": "",
+    "dribbble": "",
+    "github": ""
+  },
+  "theme": {
+    "default": "light",
+    "toggleable": true
+  }
+}

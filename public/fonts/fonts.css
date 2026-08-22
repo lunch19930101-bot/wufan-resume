@@ -1,0 +1,80 @@
+/* ============================================================
+ * 自托管字体（零外链，GitHub Pages 可用）
+ *   - DINOT   : 拉丁正文/标题（Regular 400 / Medium 500 / Bold 700）
+ *   - MiSans  : CJK 可变字体（wght 150–700，GB2312 一级 3755 字
+ *               + 站点文案子集，约 1.4MB）
+ *   - Geist Mono : mono 标签/数据
+ * 字重说明：font-medium(500)→DINOT Medium+MiSans 500 实例，
+ *   font-semibold(600)→DINOT Bold(700 就近)+MiSans 600 实例。
+ * ============================================================ */
+
+/* DINOT Light 300 — latin（正文默认字重，比 Regular 细一档）*/
+@font-face {
+  font-family: 'DINOT';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(./DINOT-Light.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* DINOT Regular 400 — latin */
+@font-face {
+  font-family: 'DINOT';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./DINOT-Regular.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* DINOT Medium 500 — latin（font-medium 加粗位）*/
+@font-face {
+  font-family: 'DINOT';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(./DINOT-Medium.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* DINOT Bold 700 — latin（font-semibold 600 就近匹配到此）*/
+@font-face {
+  font-family: 'DINOT';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./DINOT-Bold.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* MiSans 可变字体 150–700 — CJK + 全角标点
+   （一个文件覆盖全部字重：400 正文 / 500 加粗 / 600 semibold）*/
+@font-face {
+  font-family: 'MiSans';
+  font-style: normal;
+  font-weight: 150 700;
+  font-display: swap;
+  src: url(./MiSans-VF.woff2) format('woff2');
+  unicode-range: U+2018-201F, U+2025-2026, U+00B7, U+2013-2014, U+3000-303F, U+3400-4DBF, U+4E00-9FFF, U+FF00-FFEF;
+}
+
+/* Doto normal 100-900 — latin（Preferences 里可选购点阵字体，非默认） */
+@font-face {
+  font-family: 'Doto';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(./Doto-normal-100-900.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+/* Geist Mono normal 300-900 — latin（mono 标签/数据）*/
+@font-face {
+  font-family: 'Geist Mono';
+  font-style: normal;
+  font-weight: 300 900;
+  font-display: swap;
+  src: url(./GeistMono-normal-300-900.woff2) format('woff2');
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}

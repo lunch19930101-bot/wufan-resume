@@ -1,0 +1,741 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============================================================
+ * 字体栈 —— DINOT（拉丁）+ MiSans（CJK，可变字体 150–700）
+ *   - DINOT               : 正文 / 标题 / UI 拉丁字族（400/500/700）
+ *   - MiSans              : CJK + 全角标点（可变字体，全字重）
+ *   - Geist Mono          : mono 标签 / 数据
+ *   （用户 2026-08-19 提供 DINOT OTF + MiSans VF TTF，
+ *    子集化后自托管于 public/fonts/，零外链，GitHub Pages 可用）
+ * ============================================================ */
+
+/* ============================================================
+ * Design Tokens — 1:1 对齐 atom63.io 真实测量值
+ *   背景 #111 / 主文字 #eee / 次文字 #b4b4b4 / 强调蓝 #2c7fff
+ * ============================================================ */
+
+:root,
+[data-theme='dark'] {
+  color-scheme: dark;
+
+  /* --- Background layers（atom63.io #111 系）--- */
+  --color-bg-canvas: #111111;
+  --color-bg-surface: #161616;
+  --color-bg-elevated: #1c1c1c;
+  --color-bg-overlay: rgba(0, 0, 0, 0.8);
+  /* atom63 surface-muted —— 项目卡片占位底色（n1-dark-3 #222）*/
+  --color-bg-muted: #222222;
+  --color-bg-card: #1a1a1a;
+  /* atom63 accent —— row hover（surface-control-hover）*/
+  --color-bg-accent: rgba(255, 255, 255, 0.04);
+
+  /* --- Borders --- */
+  /* 1:1 对齐 atom63.io —— 纯色实值（n1-dark-{5,6,7}），不再用半透 rgba。
+     dashed 横线/竖线视觉更稳，不随背景明暗漂移。 */
+  --color-border-subtle: #313131; /* n1-dark-5 —— 弱分隔（卡片描边） */
+  --color-border-default: #3a3a3a; /* n1-dark-6 —— 主要虚线（body::after + grid-rule + nav border） */
+  --color-border-strong: #484848; /* n1-dark-7 —— 强调描边（control edge） */
+
+  /* --- Text（双灰阶 + 50% 半透）--- */
+  --color-text-primary: #eeeeee;
+  --color-text-secondary: #b4b4b4;
+  --color-text-tertiary: rgba(180, 180, 180, 0.5);
+  --color-text-inverse: #111111;
+
+  /* --- Accents（改语义为品牌蓝；键名保留 lime 兼容旧引用）--- */
+  --color-accent-lime: #2c7fff;
+  --color-accent-lime-dim: rgba(44, 127, 255, 0.18);
+  --color-accent-vermillion: #ff5c28;
+  --color-accent-vermillion-dim: rgba(255, 92, 40, 0.18);
+
+  /* --- 品牌色（atom63 logo 渐变）--- */
+  --color-b1-400: #5b9bff;
+  --color-b1-500: #2c7fff;
+  --color-b1-700: #1a5bd9;
+  --color-b1-950: #00001e;
+
+  /* --- Shadows (dark) --- */
+  --shadow-elev-1: inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  --shadow-elev-2: 0 8px 24px -8px rgba(0, 0, 0, 0.6);
+  --shadow-elev-3: 0 24px 60px -12px rgba(0, 0, 0, 0.8);
+  --shadow-elev-4: 0 40px 120px -24px rgba(0, 0, 0, 0.9);
+  --shadow-glow-lime: 0 0 40px rgba(44, 127, 255, 0.2);
+  --shadow-glow-vermillion: 0 0 32px rgba(255, 92, 40, 0.22);
+
+  /* --- Glass --- */
+  --glass-bg: rgba(17, 17, 17, 0.8);
+  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-highlight: rgba(255, 255, 255, 0.14);
+}
+
+[data-theme='light'],
+html:has(.live-resume) {
+  color-scheme: light;
+
+  --color-bg-canvas: #fafafa;
+  --color-bg-surface: #ffffff;
+  --color-bg-elevated: #ffffff;
+  --color-bg-overlay: rgba(255, 255, 255, 0.8);
+  /* atom63 surface-muted —— 项目卡片占位底色（n1-light-3 #f0f0f0）*/
+  --color-bg-muted: #f0f0f0;
+  --color-bg-card: #f9f9f9;
+  /* atom63 accent —— row hover */
+  --color-bg-accent: rgba(0, 0, 0, 0.04);
+
+  /* 1:1 对齐 atom63.io —— 纯色实值（n1-light-{3,4,5}） */
+  --color-border-subtle: #f0f0f0; /* n1-light-3 */
+  --color-border-default: #e8e8e8; /* n1-light-4 */
+  --color-border-strong: #e0e0e0; /* n1-light-5 */
+
+  --color-text-primary: #0a0a0a;
+  --color-text-secondary: #555555;
+  --color-text-tertiary: rgba(85, 85, 85, 0.5);
+  --color-text-inverse: #fafafa;
+
+  --color-accent-lime: #2c7fff;
+  --color-accent-lime-dim: rgba(44, 127, 255, 0.18);
+  --color-accent-vermillion: #e0451a;
+  --color-accent-vermillion-dim: rgba(224, 69, 26, 0.12);
+
+  --color-b1-400: #5b9bff;
+  --color-b1-500: #2c7fff;
+  --color-b1-700: #1a5bd9;
+  --color-b1-950: #00001e;
+
+  --shadow-elev-1: 0 1px 2px rgba(0, 0, 0, 0.04);
+  --shadow-elev-2: 0 8px 24px -8px rgba(0, 0, 0, 0.08);
+  --shadow-elev-3: 0 24px 60px -12px rgba(0, 0, 0, 0.12);
+  --shadow-elev-4: 0 40px 120px -24px rgba(0, 0, 0, 0.16);
+  --shadow-glow-lime: 0 0 40px rgba(44, 127, 255, 0.22);
+  --shadow-glow-vermillion: 0 0 32px rgba(224, 69, 26, 0.16);
+
+  --glass-bg: rgba(255, 255, 255, 0.7);
+  --glass-border: rgba(0, 0, 0, 0.06);
+  --glass-highlight: rgba(255, 255, 255, 0.6);
+}
+
+/* ============================================================
+ * Spacing — 4px base unit
+ * ============================================================ */
+:root {
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+  --space-10: 128px;
+  --space-11: 192px;
+  --space-12: 256px;
+}
+
+/* ============================================================
+ * Type Scale — atom63.io 实测值
+ *   body 16/24 · p 17/27.625 · h1 27/37.125 · irvine 15.625/1
+ * ============================================================ */
+:root {
+  --text-display-xl: clamp(2.75rem, 5vw + 1rem, 5.5rem);
+  --text-display-l: clamp(2.25rem, 3.5vw + 1rem, 3.75rem);
+  --text-display-m: clamp(1.75rem, 2vw + 1rem, 2.75rem);
+  --text-heading-l: clamp(1.5rem, 1.2vw + 1rem, 2.25rem);
+  --text-heading-m: clamp(1.25rem, 0.8vw + 1rem, 1.5rem);
+  --text-heading-s: 1.125rem;
+  --text-body-l: 1.125rem;
+  --text-body: 1rem; /* 16px — atom63 body 基准 */
+  --text-body-s: 0.875rem;
+  --text-caption: 0.8125rem;
+  --text-mono-micro: 0.75rem; /* 12px —— atom63 footer label */
+
+  /* atom63 真实规格 */
+  --text-hero-h1: 1.6875rem; /* 27px */
+  --leading-hero-h1: 2.3203125rem; /* 37.125px */
+  --tracking-hero-h1: -0.042em; /* -0.675px */
+
+  --text-essay-p: 1.0625rem; /* 17px */
+  --leading-essay-p: 1.7265625rem; /* 27.625px */
+
+  --text-irvine: 0.9765625rem; /* 15.625px */
+
+  /* 兼容旧引用 */
+  --text-essay: clamp(1.0625rem, 0.4vw + 1rem, 1.25rem);
+
+  --tracking-display-xl: -0.04em;
+  --tracking-display-l: -0.03em;
+  --tracking-display-m: -0.02em;
+  --tracking-heading-l: -0.02em;
+  --tracking-heading-m: -0.01em;
+  --tracking-heading-s: -0.01em;
+}
+
+/* ============================================================
+ * Radius
+ * ============================================================ */
+:root {
+  --radius-xs: 4px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
+}
+
+/* ============================================================
+ * Motion — Easing & Duration
+ * ============================================================ */
+:root {
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-out-quart: cubic-bezier(0.25, 1, 0.5, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-emphasis: cubic-bezier(0.7, 0, 0.15, 1);
+
+  --dur-instant: 80ms;
+  --dur-micro: 120ms;
+  --dur-fast: 200ms;
+  --dur-base: 320ms;
+  --dur-slow: 480ms;
+  --dur-cinematic: 800ms;
+  --dur-hero: 1200ms;
+}
+
+/* ============================================================
+ * Base styles
+ * ============================================================ */
+@layer base {
+  * {
+    border-color: var(--color-border-default);
+  }
+
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    scroll-behavior: auto; /* 原生滚动 */
+  }
+
+  body {
+    background-color: var(--color-bg-canvas);
+    color: var(--color-text-primary);
+    /* DINOT（拉丁）+ MiSans（CJK 可变字体）——font-medium 500 正常加粗 */
+    font-family: 'DINOT', 'MiSans', -apple-system, BlinkMacSystemFont,
+      'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Source Han Sans SC',
+      'Noto Sans CJK SC', system-ui, sans-serif;
+    /* 正文默认细一档（DINOT Light + MiSans VF@300）；
+       加粗位（font-medium 500 / semibold 600）不受影响 */
+    font-weight: 300;
+    font-size: var(--text-body);
+    line-height: 1.5;
+    letter-spacing: -0.005em;
+    overflow-x: hidden;
+    font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+  }
+
+  /* atom63.io 全高左右虚线 —— max-w-xl 内容容器视觉导引
+     与 .grid-rule 横线使用同一 token（--color-border-default），
+     这样竖线 / 横线 / 交汇菱形颜色完全一致。 */
+  body::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 100%;
+    max-width: calc(36rem * var(--a63-type-scale, 1)); /* max-w-xl × type-scale */
+    border-left: 1px dashed var(--color-border-default);
+    border-right: 1px dashed var(--color-border-default);
+    pointer-events: none;
+    z-index: 55;
+  }
+
+  ::selection {
+    background-color: rgba(44, 127, 255, 0.25);
+    color: var(--color-text-primary);
+  }
+
+  /* Custom cursor 隐藏系统光标（仅 pointer: fine） */
+  @media (pointer: fine) {
+    body {
+      cursor: none;
+    }
+    a,
+    button,
+    [role='button'],
+    [data-cursor] {
+      cursor: none;
+    }
+  }
+
+  /* Focus visible — 无障碍 */
+  :focus-visible {
+    outline: 2px solid var(--color-accent-lime);
+    outline-offset: 2px;
+  }
+
+  /* 标题默认字族 —— DINOT + MiSans（无衬线，DIN 风格 display） */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: 'DINOT', 'MiSans', Georgia, 'Times New Roman', sans-serif;
+    font-weight: 400;
+    line-height: 1.15;
+    letter-spacing: -0.015em;
+  }
+
+  /* mono 小标签保持 400 —— 正文全局 300 会把 10-12px 大写标签变得过细 */
+  .font-mono {
+    font-weight: 400;
+  }
+
+  /* Reduced motion — 全站尊重 */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}
+
+/* ============================================================
+ * Component utilities
+ * ============================================================ */
+@layer components {
+  /* Glass 效果 */
+  .glass {
+    background: var(--glass-bg);
+    -webkit-backdrop-filter: blur(24px) saturate(180%);
+    backdrop-filter: blur(24px) saturate(180%);
+    border: 1px solid var(--glass-border);
+    box-shadow: var(--shadow-elev-2);
+  }
+
+  .glass::before {
+    content: '';
+    position: absolute;
+    inset: 0 0 auto 0;
+    height: 1px;
+    background: var(--glass-highlight);
+    pointer-events: none;
+  }
+
+  /* Grid rule —— atom63 footer/nav 虚线横线 + 两端 4px 实心菱形
+     - 1px dashed 横线（full-bleed，width:100%）
+     - 两端各 1 个 4px 旋转 45° 的实心菱形，颜色同虚线
+     - 菱形位置 = body::after 的两条竖虚线（max-w-xl 边缘），
+       不在 viewport 边缘——这样横线 / 竖线 / 菱形构成完整十字交汇
+     - 关键：calc 不带 type-scale 乘数。
+       body::after 在 :root 层不被 zoom，竖线在 50% ± 18rem × scale（视觉像素）。
+       footer 是 body > *，被 zoom: scale 影响，内部的 CSS 单位会被 × scale 渲染。
+       写 `calc(50% - 18rem - 2px)`，让 zoom 自然缩放偏移量，
+       最终视觉位置 = 50% - 18rem×scale - 2px×scale，与 body::after 竖线对齐。
+  */
+  .grid-rule {
+    position: relative;
+    height: 0;
+    border-top: 1px dashed var(--color-border-default);
+    background-color: transparent;
+  }
+  .grid-rule::before,
+  .grid-rule::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    width: 4px;
+    height: 4px;
+    transform: translate(0, -50%) rotate(45deg);
+    background-color: var(--color-border-default);
+    pointer-events: none;
+  }
+  .grid-rule::before {
+    /* 左侧菱形：与 body::after 的左竖线（max-w-xl 左边缘）对齐 */
+    left: calc(50% - 18rem - 2px);
+  }
+  .grid-rule::after {
+    /* 右侧菱形：与 body::after 的右竖线（max-w-xl 右边缘）对齐 */
+    right: calc(50% - 18rem - 2px);
+  }
+}
+
+/* ============================================================
+ * Helpers
+ * ============================================================ */
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+  .text-pretty {
+    text-wrap: pretty;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  /* 轮播图片切换淡入（key 重挂载触发） */
+  .tile-fade {
+    animation: tile-fade 450ms ease-out;
+  }
+}
+
+@keyframes tile-fade {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* atom63 DotMarquee —— 点阵跑马灯（LED 板，a63-DotMarquee 逆向 1:1）
+   点阵字由点亮/未点亮的小方块组成（非字体、非棋盘底纹）；
+   本站取 pitch 7px / 点 3.5px（用户指定「稍微小一点点」） */
+.dot-marquee {
+  --dot-pitch: 7px;
+  --dot-size: 3.5px;
+  --dot-rows: 7;
+  --dot-pad-y: 18px;
+  --dot-lit: rgba(0, 0, 0, 0.88);
+  --dot-unlit: rgba(0, 0, 0, 0.14);
+  --dot-fade: 70ms;
+  --dot-mask-x: 16px;
+
+  box-sizing: border-box;
+  width: 100%;
+  min-height: calc(var(--dot-pitch) * var(--dot-rows) + var(--dot-pad-y) * 2);
+  padding: var(--dot-pad-y) 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  contain: layout paint style;
+}
+
+/* viewport 两端 16px 渐隐（atom63 同款 mask） */
+.dot-marquee-viewport {
+  width: 100%;
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--dot-mask-x),
+    #000 calc(100% - var(--dot-mask-x)),
+    transparent
+  );
+  mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 var(--dot-mask-x),
+    #000 calc(100% - var(--dot-mask-x)),
+    transparent
+  );
+}
+
+.dot-marquee-panel {
+  display: flex;
+  width: max-content;
+  gap: 0;
+}
+
+/* 一列 = 7 行点格，宽 = pitch */
+.dot-marquee-col {
+  flex: none;
+  width: var(--dot-pitch);
+  display: grid;
+  grid-template-rows: repeat(var(--dot-rows), var(--dot-pitch));
+}
+
+/* 点格：中央 size 大小的方块，未点亮隐约 / 点亮成字，
+   70ms 过渡形成字母流过的淡入淡出波 */
+.dot-marquee-dot {
+  box-sizing: border-box;
+  width: var(--dot-pitch);
+  height: var(--dot-pitch);
+  display: grid;
+  place-items: center;
+}
+.dot-marquee-dot::before {
+  content: '';
+  width: var(--dot-size);
+  height: var(--dot-size);
+  background: var(--dot-unlit);
+  border-radius: 0;
+  transition: background-color var(--dot-fade) linear;
+}
+.dot-marquee-dot[data-lit]::before {
+  background: var(--dot-lit);
+}
+@media (prefers-reduced-motion: reduce) {
+  .dot-marquee-dot::before {
+    transition: none;
+  }
+}
+
+:root,
+[data-theme='dark'] {
+  /* atom63 Command popup —— surface-overlay #2a2a2a + 扫描线 */
+  --menu-surface-overlay: #2a2a2a;
+  --menu-scanline: rgba(255, 255, 255, 0.04);
+  --menu-panel-border: rgba(255, 255, 255, 0.06);
+}
+[data-theme='light'],
+html:has(.live-resume) {
+  --menu-surface-overlay: #fcfcfc;
+  --menu-scanline: rgba(0, 0, 0, 0.025);
+  --menu-panel-border: rgba(0, 0, 0, 0.06);
+}
+
+/* ============================================================
+ * atom63.io Preferences —— data-a63-* token 系统
+ *   <html> 上的 data-a63-brand / theme / radius / font / type-scale
+ *   属性驱动这些变量。1:1 对齐 atom63.io 真实实现。
+ * ============================================================ */
+:root {
+  /* 默认值（未应用 Preferences 时也安全） */
+  --a63-brand-current: #2c7fff;
+  --a63-brand-current-dim: rgba(44, 127, 255, 0.18);
+  --a63-radius-actual: var(--radius-md);
+  --a63-type-scale: 1;
+  --a63-surface-tint: 0%;
+  /* radius token 默认值 + 派生 panel radius（跟随 showcase-radius 联动） */
+  --showcase-radius: 16px;
+  --control-radius: 10px;
+  --panel-radius: max(0px, calc(var(--showcase-radius) - 8px));
+}
+
+/* --- Primary / Brand（6 色 + auto）--- */
+[data-a63-brand='auto'] {
+  --a63-brand-current: #2c7fff;
+  --a63-brand-current-dim: rgba(44, 127, 255, 0.18);
+}
+[data-a63-brand='b1'] {
+  --a63-brand-current: #2c7fff;
+  --a63-brand-current-dim: rgba(44, 127, 255, 0.18);
+}
+[data-a63-brand='b2'] {
+  --a63-brand-current: #f7670d;
+  --a63-brand-current-dim: rgba(247, 103, 13, 0.18);
+}
+[data-a63-brand='b3'] {
+  --a63-brand-current: #2aaf76;
+  --a63-brand-current-dim: rgba(42, 175, 118, 0.18);
+}
+[data-a63-brand='b4'] {
+  --a63-brand-current: #e6438d;
+  --a63-brand-current-dim: rgba(230, 67, 141, 0.18);
+}
+[data-a63-brand='b5'] {
+  --a63-brand-current: #7836f2;
+  --a63-brand-current-dim: rgba(120, 54, 242, 0.18);
+}
+[data-a63-brand='b6'] {
+  --a63-brand-current: #fd3f5c;
+  --a63-brand-current-dim: rgba(253, 63, 92, 0.18);
+}
+
+/* --- Theme —— 4 个主题色调（modern 默认；aqua/retro/terminal 改背景）--- */
+[data-a63-theme='modern'][data-a63-mode='dark'] {
+  --color-bg-canvas: #111111;
+}
+[data-a63-theme='modern'][data-a63-mode='light'] {
+  --color-bg-canvas: #fafafa;
+}
+[data-a63-theme='aqua'][data-a63-mode='dark'] {
+  --color-bg-canvas: #0b1220;
+  --color-text-primary: #e6f1ff;
+  --color-text-secondary: #9fb2cc;
+}
+[data-a63-theme='aqua'][data-a63-mode='light'] {
+  --color-bg-canvas: #f0f7ff;
+  --color-text-primary: #0b1a33;
+  --color-text-secondary: #4a6280;
+}
+[data-a63-theme='retro'][data-a63-mode='dark'] {
+  --color-bg-canvas: #1a0f2e;
+  --color-text-primary: #ffe66d;
+  --color-text-secondary: #b58eff;
+}
+[data-a63-theme='retro'][data-a63-mode='light'] {
+  --color-bg-canvas: #fff5d6;
+  --color-text-primary: #3a1a5e;
+  --color-text-secondary: #7a4ab8;
+}
+[data-a63-theme='terminal'][data-a63-mode='dark'] {
+  --color-bg-canvas: #000000;
+  --color-text-primary: #00ff66;
+  --color-text-secondary: #66cc99;
+  --color-border-subtle: rgba(0, 255, 102, 0.15);
+  --color-border-default: rgba(0, 255, 102, 0.25);
+}
+[data-a63-theme='terminal'][data-a63-mode='light'] {
+  --color-bg-canvas: #f8f8f0;
+  --color-text-primary: #006622;
+  --color-text-secondary: #4a8c66;
+}
+
+/* --- Radius --- */
+[data-a63-radius='none'] {
+  --a63-radius-actual: 0px;
+  --showcase-radius: 0px;
+  --control-radius: 0px;
+}
+[data-a63-radius='subtle'] {
+  --a63-radius-actual: 2px;
+  --showcase-radius: 6px;
+  --control-radius: 4px;
+}
+[data-a63-radius='default'] {
+  --a63-radius-actual: var(--radius-md);
+  --showcase-radius: 16px;
+  --control-radius: 10px;
+}
+[data-a63-radius='round'] {
+  --a63-radius-actual: var(--radius-xl);
+  --showcase-radius: 28px;
+  --control-radius: 9999px;
+}
+
+/* --- Font —— 切换全站字族 --- */
+[data-a63-font='serif'] body,
+[data-a63-font='serif'] h1,
+[data-a63-font='serif'] h2,
+[data-a63-font='serif'] h3 {
+  font-family: Georgia, 'MiSans', 'Times New Roman', serif !important;
+}
+[data-a63-font='mono'] body {
+  font-family: 'Geist Mono', 'MiSans', ui-monospace, monospace !important;
+}
+[data-a63-font='pixel'] body {
+  font-family: 'Doto', 'Geist Mono', monospace !important;
+}
+
+/* --- font-digital —— atom63 点阵看板字（zoned-clock / weather board）
+       Doto 变量字重 100–900，ROND 100 = 方点（与参考站一致）--- */
+.font-digital {
+  font-family: 'Doto', 'Geist Mono', ui-monospace, monospace;
+  font-variation-settings: 'ROND' 100;
+}
+
+/* --- Type scale —— zoom 作用于页面壳（Nav/main/Footer），
+     但 PreferencesDialog 与 CommandMenu 与 Cursor 不随之缩放，
+     这样在弹窗里调 type scale 时弹窗自身保持稳定。 --- */
+[data-a63-type-scale='compact'] {
+  --a63-type-scale: 0.9;
+}
+[data-a63-type-scale='normal'] {
+  --a63-type-scale: 1;
+}
+[data-a63-type-scale='comfortable'] {
+  --a63-type-scale: 1.1;
+}
+[data-a63-type-scale='large'] {
+  --a63-type-scale: 1.25;
+}
+
+[data-a63-type-scale] body > *:not([data-slot='site-config-popover']):not([data-slot='command-root']):not([data-cursor-root]) {
+  zoom: var(--a63-type-scale);
+}
+
+/* --- Surface —— 6 级灰阶（n1 最浅 → n6 最深），覆盖主题背景 --- */
+/* 加 [data-a63-theme] 提升 specificity 以覆盖 theme+mode 规则 */
+[data-a63-theme][data-a63-surface='n1'] {
+  --color-bg-canvas: #fafafa;
+}
+[data-a63-theme][data-a63-surface='n2'] {
+  --color-bg-canvas: #f0f0f0;
+}
+[data-a63-theme][data-a63-surface='n3'] {
+  --color-bg-canvas: #e0e0e0;
+}
+[data-a63-theme][data-a63-surface='n4'] {
+  --color-bg-canvas: #2a2a2a;
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #b4b4b4;
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+  --color-border-default: rgba(255, 255, 255, 0.16);
+}
+[data-a63-theme][data-a63-surface='n5'] {
+  --color-bg-canvas: #181818;
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #a4a4a4;
+  --color-border-subtle: rgba(255, 255, 255, 0.08);
+  --color-border-default: rgba(255, 255, 255, 0.16);
+}
+[data-a63-theme][data-a63-surface='n6'] {
+  --color-bg-canvas: #0a0a0a;
+  --color-text-primary: #fafafa;
+  --color-text-secondary: #949494;
+  --color-border-subtle: rgba(255, 255, 255, 0.06);
+  --color-border-default: rgba(255, 255, 255, 0.14);
+}
+
+/* --- Surface tint —— 全局 overlay 半透明叠加 --- */
+html[data-a63-surface]::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: var(--a63-brand-current);
+  opacity: calc(var(--a63-surface-tint) * 0.01);
+  mix-blend-mode: soft-light;
+}
+
+/* --- 当用户在 Preferences 中切换主题时，把 logo 句点也跟随 --- */
+.text-\[var\(--a63-brand-current\)\] {
+  color: var(--a63-brand-current);
+}
+
+/* --- Preferences 顶部 Design-system 提示条
+ *   bg / border 跟 Primary 品牌色（var(--a63-brand-current)）
+ *   radius 跟 Radius 偏好（var(--a63-radius-actual)） --- */
+:root {
+  --notice-bg: var(--a63-brand-current);
+  --notice-border: color-mix(in srgb, var(--a63-brand-current) 32%, transparent);
+  --notice-fg: #ffffff;
+  --notice-radius: var(--a63-radius-actual);
+}
+
+/* --- Custom Cursor —— 用 CSS 类替代 inline style，避免 React 19 hydration 报错
+ *   性能要点：
+ *     - 不用 mix-blend-mode（强制合成层 + blend pass，60fps 下视觉延迟 1 帧）
+ *     - contain: layout style paint —— 隔离 layout/paint，避免触发外层重排
+ *     - will-change: transform —— 提升独立合成层
+ *     - 颜色用 --color-text-primary（自适应 dark/light 主题，免去 blend 也能高对比）
+ */
+.custom-cursor-dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 8px;
+  height: 8px;
+  margin-left: -4px;
+  margin-top: -4px;
+  border-radius: 9999px;
+  background-color: var(--color-text-primary);
+  opacity: 0;
+  will-change: transform;
+  contain: layout style paint;
+}
+
+.custom-cursor-dot[data-state='press'] {
+  width: 24px;
+  height: 24px;
+  margin-left: -12px;
+  margin-top: -12px;
+}
+
+.custom-cursor-dot[data-shown='true'] {
+  opacity: 1;
+}
