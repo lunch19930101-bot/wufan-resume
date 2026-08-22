@@ -5,6 +5,7 @@ import { createPortal } from 'react-dom';
 
 import { site } from '@/lib/config';
 import { cn, withBasePath } from '@/lib/utils';
+import { scrollToTarget } from '@/components/motion/SmoothScroll';
 
 /**
  * CommandMenu —— atom63.io Nav 顶部的命令面板风格弹出菜单
@@ -303,14 +304,23 @@ export function CommandMenu({
 /* ============================================================ */
 
 function goTo(href: string) {
-  if (window.location.pathname !== '/' || !href.includes('#')) {
-    window.location.href = href;
+  const target = withBasePath(href);
+  if (!href.includes('#')) {
+    window.location.href = target;
     return;
   }
-  // 同页 anchor 滚动
+  // 首页判断需兼容 basePath（本地 '/' / 线上 '/wufan-resume/'）
+  const home = withBasePath('/');
+  const p = window.location.pathname;
+  const onHome = p === '/' || p === home || p === `${home}/`;
+  if (!onHome) {
+    // 跨页：整页加载后浏览器自动落到锚点
+    window.location.href = target;
+    return;
+  }
+  // 同页 anchor 滚动（Lenis 优先，58px Nav 补偿）
   const id = href.split('#')[1] || '';
-  const el = id ? document.getElementById(id) : null;
-  if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  if (id && document.getElementById(id)) scrollToTarget(`#${id}`, -58);
   else window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 

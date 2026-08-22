@@ -73,7 +73,7 @@ export function SmoothScroll({ children }: { children: ReactNode }) {
  * 平滑滚动到目标。无 Lenis 时回退到原生。
  * 用 easeOutCubic + 1.4s —— 比 lerp 默认更干脆，避免「无止境」感。
  */
-export function scrollToTarget(target: string | number) {
+export function scrollToTarget(target: string | number, offset = 0) {
   const lenis = (window as unknown as { __lenis?: Lenis }).__lenis;
   if (lenis) {
     lenis.scrollTo(target, {
@@ -81,6 +81,8 @@ export function scrollToTarget(target: string | number) {
       duration: 1.4,
       easing: (t: number) => 1 - Math.pow(1 - t, 3),
       force: true,
+      // offset —— 固定 Nav (58px) 遮挡补偿
+      ...(offset ? { offset } : {}),
     });
   } else if (typeof target === 'string') {
     const el = document.querySelector(target);
