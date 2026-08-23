@@ -30,7 +30,7 @@ import { DotMarquee } from '@/components/motion/DotMarquee';
  *   - IntersectionObserver 驱动播放：进视口才播（muted loop），滑出即暂停
  *   - lightbox 打开时后台卡全部挂起
  *
- * 微细节：底边 2px 循环进度线（accent-lime）· 右下时长 chip · hover scale 1.03
+ * 微细节：底边 2px 循环进度线（accent-lime）· hover scale 1.03（右下时长 chip 已移除，用户指定）
  *
  * 影院式 Lightbox（atom63 figure-lightbox 风，无原生控件）：
  *   播放/暂停 · 点击/拖拽 seek · 时间码 · 前后切换 · Space / ← → / Esc 键盘
@@ -273,7 +273,7 @@ export function ShowcaseCarousel() {
 
 /* ============================================================
  * SlideCard —— 16:10 横版视频卡（直角，靠外框圆角裁切）
- *   IO 门控静音循环预览 + 底边进度线 + 右下时长 chip
+ *   IO 门控静音循环预览 + 底边进度线
  * ============================================================ */
 function SlideCard({
   item,
@@ -289,7 +289,6 @@ function SlideCard({
   onOpen: () => void;
 }) {
   const videoRef = useRef<HTMLVideoElement>(null);
-  const [duration, setDuration] = useState(0);
   const [progress, setProgress] = useState(0);
 
   /* IntersectionObserver 播放门控 —— atom63 lazy-video 同款行为 */
@@ -307,7 +306,12 @@ function SlideCard({
            play() 被 pause() 打断会以 AbortError 拒绝并被吞掉，
            视频就此冻住（曾致 1、3 号视频不播） */
         if (entry.isIntersecting) {
-          if (v.paused) v.play().catch(() => {});
+          if (v.paused) {
+            /* 显式补设 muted —— 同 Lightbox：部分内核不认 React 的 muted prop，
+               按「有声」拒绝 play()，视频冻结 */
+            v.muted = true;
+            v.play().catch(() => {});
+          }
         } else if (!v.paused) {
           v.pause();
         }
@@ -353,7 +357,6 @@ function SlideCard({
           autoPlay
           playsInline
           preload="metadata"
-          onLoadedMetadata={(e) => setDuration(e.currentTarget.duration)}
           onTimeUpdate={(e) => {
             const v = e.currentTarget;
             if (Number.isFinite(v.duration) && v.duration > 0)
@@ -406,19 +409,6 @@ function SlideCard({
           {item.caption}
         </p>
       </div>
-
-      {/* 右下时长 chip —— loadedmetadata 实测 */}
-      {duration > 0 && (
-        <span
-          className={cn(
-            'absolute bottom-3 right-3 z-10 rounded-[var(--control-radius)]',
-            'bg-black/35 px-1.5 py-0.5 font-mono text-[10px] tabular-nums',
-            'text-white/80 backdrop-blur-sm',
-          )}
-        >
-          {fmtTime(duration)}
-        </span>
-      )}
 
       {/* 底边循环进度线 —— 2px accent-lime，随 timeupdate 走 */}
       <div className="absolute inset-x-0 bottom-0 z-10 h-0.5 bg-white/10" aria-hidden>
@@ -504,6 +494,18 @@ function CinemaLightbox({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [index, total]);
 
+  /* 自动播放兜底 —— autoPlay 属性在部分移动内核（尤其 iOS）上被拦截：
+     React 的 muted prop 不一定落成 attribute，视频被按「有声」判定拒绝
+     自动播放 → 无 poster 黑屏。这里显式补设 muted 后用 play() 发起
+     （真静音视频不受手势限制）；仍被拦截则亮出中央播放键，点击即播。
+     切换视频（key 重挂载）时重跑 */
+  useEffect(() => {
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    v.play().catch(() => setPlaying(false));
+  }, [item.video]);
+
   const pct = duration > 0 ? (current / duration) * 100 : 0;
 
   return (
@@ -544,6 +546,7 @@ function CinemaLightbox({
             loop
             playsInline
             muted
+            preload="auto"
             onClick={togglePlay}
             data-cursor="link"
             onLoadedMetadata={(e) => {
@@ -584,11 +587,11 @@ function CinemaLightbox({
             >
               <div
                 className={cn(
-                  'flex size-12 items-center justify-center rounded-full',
+                  'flex size-[40px] items-center justify-center rounded-full',
                   'border border-white/20 bg-black/40 text-white backdrop-blur-md',
                 )}
               >
-                <PlayIcon className="size-4 translate-x-0.5" />
+                <PlayIcon className="size-[20px] translate-x-[1px]" />
               </div>
             </div>
           )}
@@ -602,15 +605,15 @@ function CinemaLightbox({
             data-cursor="link"
             onClick={togglePlay}
             className={cn(
-              'inline-flex size-7 shrink-0 items-center justify-center rounded-full',
+              'inline-flex size-[32px] shrink-0 items-center justify-center rounded-full',
               'border border-white/15 bg-white/10 text-white backdrop-blur-md',
               'transition-colors duration-micro ease-out-quart hover:bg-white/20',
             )}
           >
             {playing ? (
-              <PauseIcon className="size-3" />
+              <PauseIcon className="size-[13px]" />
             ) : (
-              <PlayIcon className="size-3 translate-x-px" />
+              <PlayIcon className="size-[13px] translate-x-[1px]" />
             )}
           </button>
 
@@ -646,12 +649,12 @@ function CinemaLightbox({
               data-cursor="link"
               onClick={() => go(-1)}
               className={cn(
-                'inline-flex size-7 items-center justify-center rounded-full',
+                'inline-flex size-[32px] items-center justify-center rounded-full',
                 'border border-white/15 bg-white/10 text-white backdrop-blur-md',
                 'transition-colors duration-micro ease-out-quart hover:bg-white/20',
               )}
             >
-              <ChevronLeftIcon className="size-3.5" />
+              <ChevronLeftIcon className="size-[14px]" />
             </button>
             <button
               type="button"
@@ -659,12 +662,12 @@ function CinemaLightbox({
               data-cursor="link"
               onClick={() => go(1)}
               className={cn(
-                'inline-flex size-7 items-center justify-center rounded-full',
+                'inline-flex size-[32px] items-center justify-center rounded-full',
                 'border border-white/15 bg-white/10 text-white backdrop-blur-md',
                 'transition-colors duration-micro ease-out-quart hover:bg-white/20',
               )}
             >
-              <ChevronRightIcon className="size-3.5" />
+              <ChevronRightIcon className="size-[14px]" />
             </button>
             <button
               type="button"
@@ -672,12 +675,12 @@ function CinemaLightbox({
               data-cursor="link"
               onClick={onClose}
               className={cn(
-                'inline-flex size-7 items-center justify-center rounded-full',
+                'inline-flex size-[32px] items-center justify-center rounded-full',
                 'border border-white/15 bg-white/10 text-white backdrop-blur-md',
                 'transition-colors duration-micro ease-out-quart hover:bg-white/20',
               )}
             >
-              <CloseIcon className="size-3" />
+              <CloseIcon className="size-[13px]" />
             </button>
           </div>
         </div>
