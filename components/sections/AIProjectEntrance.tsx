@@ -13,11 +13,11 @@ import { cn } from '@/lib/utils';
  *   │   描述……                                  │
  *   └──────────────────────────────────────────┘
  *   ┌────────────────────┐ ┌────────────────────┐
- *   │ 02 AI 项目二 [soon]│ │ 03 AI 项目三 [soon]│  ← MiniCard（并排）
+ *   │ 02 AI 项目二 [soon]│ │ 03 AI 项目三 [soon]│  ← MiniCard（md+ 并排，手机单列）
  *   │ 描述…… [↗] [⌥]    │ │ 描述…… [↗] [⌥]    │
  *   └────────────────────┘ └────────────────────┘
  *
- * - grid-cols-2 gap-3（同 ShowcaseDuo）
+ * - grid-cols-1 gap-3，md:grid-cols-2（手机单列，小卡太窄会挤压按钮行）
  * - 第一张 col-span-2（占满顶部）
  * - 卡片视觉：border + bg-bg-elevated，rounded-[var(--showcase-radius)]
  * - 按钮风格：atom63 outline variant，h-[30px]，rounded-lg
@@ -85,8 +85,10 @@ export function AIProjectEntrance() {
 
   return (
     <section aria-label="AI 协作项目" className="w-full">
-      {/* Grid: 1 top (col-span-2) + 2 bottom */}
-      <div className="grid grid-cols-2 gap-3">
+      {/* Grid: 1 top (占满) + 2 bottom。
+          手机单列 —— 两列时小卡仅 ~150px 宽，按钮行（try live+github 约 166px）
+          被挤压错位且横向溢出卡片；md 起恢复两列 */}
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         {featured && <FeaturedCard project={featured} />}
         {rest.map((p) => (
           <MiniCard key={p.id} project={p} />
@@ -106,7 +108,7 @@ function FeaturedCard({ project }: { project: AIProject }) {
     <article
       style={{ backgroundImage: project.accent }}
       className={cn(
-        'col-span-2 flex flex-col gap-4 p-5 md:p-6',
+        'col-span-1 md:col-span-2 flex flex-col gap-4 p-5 md:p-6',
         'rounded-[var(--showcase-radius)]',
         'border border-border-subtle bg-bg-elevated',
         'transition-colors duration-micro ease-out-quart',
