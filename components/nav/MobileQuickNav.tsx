@@ -3,32 +3,19 @@
 import { useEffect, useRef, useState } from 'react';
 
 import { scrollToTarget } from '@/components/motion/SmoothScroll';
-
 import { cn } from '@/lib/utils';
 
 /**
- * MobileQuickNav —— 手机端快捷章节导航
+ * MobileQuickNav —— v3「章节索引带」
  *
- * 首页长文流在手机上段落多、缺乏结构感（用户反馈「阅读性差」）。
- * 这条 sticky chip 导航让用户一眼看到章节骨架、一键直达：
+ * 设计意图（对齐 atom63 式编辑感 chrome）：
+ *   - 每项带 mono 双位序号（01—05），与 Nav 的 mono 微标签同语言
+ *   - 选中态是一枚墨色胶囊「滑块」，随激活项平移 + 伸缩（非静态换底）
+ *   - 底边框用虚线，与 58px Nav 的 dashed 主分隔同母题
+ *   - 滑块位于滚动轨道内容坐标系内，随轨道横向滚动同步移动
  *
- *   ┌──────────────────────────────────┐
- *   │ 精选视频  统信软件 ▍平安银行 …   │  ← 横滑，当前章节反色高亮
- *   └──────────────────────────────────┘
- *
- * 样式（v2 —— 用户反馈首版「不好看」后重构）：
- *   - 与 Nav 的层次区分：Nav 用 dashed 主分隔，本条降为 border-subtle
- *     细实线 + 更实的底（/90），叠在一起不再出现「双虚线」的厚重感
- *   - chip 去边框化：未选中 = 纯文字（tertiary），不再描边；
- *     选中 = 反色墨点 pill（bg-text-primary + inverse 文字）——
- *     与 Nav 右侧 Menu 实底按钮同一对比档位，选中态一眼可辨
- *   - 轨道左右 24px 渐隐 mask，暗示可横滑
- *
- * 行为不变：
- *   - 仅手机显示（md:hidden）；sticky 在 58px Nav 之下
- *   - 跳转 scrollToTarget（Lenis/原生双兼容）+ 104px 头部补偿
- *   - IntersectionObserver 高亮当前章节，chip 自动滚入可视
- *   - 条高锁 46px —— HEADER_OFFSET / 各锚点 scroll-mt-[104px] 依赖此值
+ * 几何锁：条高 46px —— HEADER_OFFSET / 各锚点 scroll-mt-[104px] 依赖此值，
+ * 只做视觉重塑，不改高度与吸附/滚动侦测逻辑。
  */
 const LINKS = [
   { id: 'showcase', label: '精选视频' },
@@ -38,85 +25,138 @@ const LINKS = [
   { id: 'timeline', label: '项目合集' },
 ] as const;
 
-/** Nav 58px + 本条 46px —— 锚点落点补偿 */
 const HEADER_OFFSET = -(58 + 46);
 
 export function MobileQuickNav() {
   const [active, setActive] = useState<string>(LINKS[0].id);
   const trackRef = useRef<HTMLDivElement>(null);
+  const chipRefs = useRef<(HTMLButtonElement | null)[]>([]);
+  const indicatorRef = useRef<HTMLSpanElement>(null);
 
-  /* 高亮当前章节 —— 视口上部 30%–40% 带内取最靠上的锚点 */
+  /* 滑块定位：内容坐标系 x = chip 相对轨道 border-box 左缘 + scrollLeft。
+     （left:0 锚在 padding-box 缘 = border 0 时的 border-box 缘，padding 无需扣除；
+      各 rect 均为 zoom 后 CSS px，坐标自洽，不手动乘 type-scale。） */
+  const moveIndicator = () => {
+    const track = trackRef.current;
+    const indicator = indicatorRef.current;
+    const idx = LINKS.findIndex((l) => l.id === active);
+    const chip = chipRefs.current[idx];
+    if (!track || !indicator || !chip) return;
+    const trackRect = track.getBoundingClientRect();
+    const chipRect = chip.getBoundingClientRect();
+    const x = chipRect.left - trackRect.left + track.scrollLeft;
+    indicator.style.width = `${chipRect.width}px`;
+    indicator.style.transform = `translate3d(${x}px, -50%, 0)`;
+    indicator.style.opacity = '1';
+  };
+
+  /* 滚动侦测：视口中上部命中的最靠上锚点获胜（与 v2 一致） */
   useEffect(() => {
-    const els = LINKS.map((l) => document.getElementById(l.id)).filter(
-      (el): el is HTMLElement => !!el,
-    );
-    if (!els.length) return;
-
-    const io = new IntersectionObserver(
+    const IO = window.IntersectionObserver;
+    if (!IO) return;
+    const visible = new Set<string>();
+    const observer = new IO(
       (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
-        if (visible[0]) setActive(visible[0].target.id);
+        for (const e of entries) {
+          const id = e.target.getAttribute('id') ?? '';
+          if (e.isIntersecting) visible.add(id);
+          else visible.delete(id);
+        }
+        const topmost = LINKS.find((l) => visible.has(l.id));
+        if (topmost) setActive(topmost.id);
       },
       { rootMargin: '-30% 0px -60% 0px' },
     );
-    els.forEach((el) => io.observe(el));
-    return () => io.disconnect();
+    for (const l of LINKS) {
+      const el = document.getElementById(l.id);
+      if (el) observer.observe(el);
+    }
+    return () => observer.disconnect();
   }, []);
 
-  /* 高亮变化时把对应 chip 滚入可视（只横滚，不动页面竖滚） */
+  /* 激活项变化：滑块跟随 + 激活 chip 滚到轨道中央；字体就绪/旋转后复测 */
   useEffect(() => {
-    const track = trackRef.current;
-    const chip = track?.querySelector<HTMLButtonElement>(
-      `[data-nav-id="${active}"]`,
-    );
-    chip?.scrollIntoView({
+    const idx = LINKS.findIndex((l) => l.id === active);
+    chipRefs.current[idx]?.scrollIntoView({
       behavior: 'smooth',
-      inline: 'center',
       block: 'nearest',
+      inline: 'center',
     });
+    const raf = requestAnimationFrame(moveIndicator);
+    const onResize = () => moveIndicator();
+    window.addEventListener('resize', onResize);
+    document.fonts?.ready?.then(moveIndicator).catch(() => {});
+    return () => {
+      cancelAnimationFrame(raf);
+      window.removeEventListener('resize', onResize);
+    };
   }, [active]);
 
   const go = (id: string) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    const top = el.getBoundingClientRect().top + window.scrollY + HEADER_OFFSET;
-    scrollToTarget(Math.max(0, top));
+    scrollToTarget(`#${id}`, HEADER_OFFSET);
   };
 
   return (
     <div className="sticky top-[58px] z-40 -mx-6 md:hidden">
-      {/* 底衬：细实线（subtle）+ 更实的毛玻璃 —— 刻意比 Nav 的 dashed 轻一档 */}
-      <div className="h-[46px] border-b border-border-subtle bg-bg-canvas/90 backdrop-blur-md">
+      <div className="h-[46px] border-b border-dashed border-border-default bg-bg-canvas/90 backdrop-blur-md">
         <div
           ref={trackRef}
           className={cn(
-            'mx-auto flex h-full max-w-xl items-center gap-2 overflow-x-auto px-6',
+            'relative mx-auto flex h-full max-w-xl items-center gap-1 overflow-x-auto px-6',
             '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
-            // 左右渐隐，暗示可横滑；静止时渐隐区正好落在 24px 内边距上
             '[mask-image:linear-gradient(to_right,transparent,black_24px,black_calc(100%_-_24px),transparent)]',
             '[-webkit-mask-image:linear-gradient(to_right,transparent,black_24px,black_calc(100%_-_24px),transparent)]',
           )}
         >
-          {LINKS.map((l) => (
-            <button
-              key={l.id}
-              data-nav-id={l.id}
-              onClick={() => go(l.id)}
-              aria-current={active === l.id ? 'true' : undefined}
-              className={cn(
-                'shrink-0 rounded-pill px-3 py-[6px]',
-                'font-mono text-[11px] leading-4 tracking-wider',
-                'transition-colors duration-micro ease-out-quart',
-                active === l.id
-                  ? 'bg-text-primary text-text-inverse'
-                  : 'text-text-tertiary hover:text-text-secondary',
-              )}
-            >
-              {l.label}
-            </button>
-          ))}
+          {/* 墨色滑块 —— 内容坐标系内绝对定位，随轨道滚动同步平移 */}
+          <span
+            ref={indicatorRef}
+            aria-hidden
+            className={cn(
+              'pointer-events-none absolute left-0 top-1/2 h-[30px] rounded-pill bg-text-primary',
+              'opacity-0 transition-[width,transform,opacity] duration-base ease-out-quart',
+            )}
+            style={{ width: 0, transform: 'translate3d(0, -50%, 0)' }}
+          />
+
+          {LINKS.map((l, i) => {
+            const isActive = active === l.id;
+            return (
+              <button
+                key={l.id}
+                ref={(el) => {
+                  chipRefs.current[i] = el;
+                }}
+                data-nav-id={l.id}
+                onClick={() => go(l.id)}
+                aria-current={isActive ? 'true' : undefined}
+                className={cn(
+                  'relative z-10 flex h-[30px] shrink-0 items-center gap-1.5 rounded-pill px-3',
+                  'transition-colors duration-fast ease-out-quart',
+                )}
+              >
+                <span
+                  aria-hidden
+                  className={cn(
+                    'font-mono text-[10px] leading-none tracking-wider tabular-nums transition-colors duration-fast ease-out-quart',
+                    isActive ? 'text-text-inverse/60' : 'text-text-tertiary',
+                  )}
+                >
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                <span
+                  className={cn(
+                    'text-[12px] leading-none transition-colors duration-fast ease-out-quart',
+                    isActive
+                      ? 'font-medium text-text-inverse'
+                      : 'text-text-secondary',
+                  )}
+                >
+                  {l.label}
+                </span>
+              </button>
+            );
+          })}
         </div>
       </div>
     </div>
