@@ -94,6 +94,29 @@ export function applyPreferences(p: Preferences): void {
 }
 
 /* ------------------------------------------------------------------ */
+/*  setMode —— 供 ThemeToggle 等入口切换明暗                            */
+/*    必须走偏好存储 + applyPreferences（同时写 data-theme 与           */
+/*    data-a63-mode），只翻 data-theme 会导致 a63 规则错档、刷新即丢。  */
+/* ------------------------------------------------------------------ */
+export function setMode(mode: Exclude<Mode, 'system'>): void {
+  if (typeof document === 'undefined') return;
+  let prefs = { ...PREFERENCES_DEFAULT };
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) prefs = { ...prefs, ...(JSON.parse(raw) as Partial<Preferences>) };
+  } catch {
+    /* 存储损坏 —— 用默认值 */
+  }
+  prefs.mode = mode;
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(prefs));
+  } catch {
+    /* 隐私模式 —— 忽略 */
+  }
+  applyPreferences(prefs);
+}
+
+/* ------------------------------------------------------------------ */
 /*  usePreferences —— state + 持久化 + 自动 apply                      */
 /* ------------------------------------------------------------------ */
 

@@ -684,6 +684,21 @@ html:has(.live-resume) {
   --color-border-default: rgba(255, 255, 255, 0.14);
 }
 
+/* --- 深色模式下 n1–n3 映射为近黑灰阶 ---
+   修复：n1–n3 原本无条件钉死浅底（#fafafa 系），深色模式下文字已翻成
+   #eeeeee → 浅字配浅底 ≈1.1:1 全隐形（「深色模式看不清」根因）。
+   n4–n6 自带浅色文字，双模式自洽，无需处理。
+   :not(:has(.live-resume)) —— /resume 页强制亮底画布，不被覆盖。 */
+html[data-theme='dark'][data-a63-theme][data-a63-surface='n1']:not(:has(.live-resume)) {
+  --color-bg-canvas: #111111;
+}
+html[data-theme='dark'][data-a63-theme][data-a63-surface='n2']:not(:has(.live-resume)) {
+  --color-bg-canvas: #151515;
+}
+html[data-theme='dark'][data-a63-theme][data-a63-surface='n3']:not(:has(.live-resume)) {
+  --color-bg-canvas: #1a1a1a;
+}
+
 /* --- Surface tint —— 全局 overlay 半透明叠加 --- */
 html[data-a63-surface]::before {
   content: '';

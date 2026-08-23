@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 
 import { cn } from '@/lib/utils';
+import { setMode } from '@/lib/preferences';
 
 type Theme = 'dark' | 'light';
 
@@ -12,7 +13,8 @@ type Theme = 'dark' | 'light';
  * 工作机制：
  *   1. layout.tsx 的内联脚本在 paint 之前从 localStorage / prefers-color-scheme
  *      决定初始主题，写入 <html data-theme="...">。本组件只需读取当前 data-theme。
- *   2. 点击时翻转 data-theme，同时持久化到 localStorage。
+ *   2. 点击时经 setMode() 写偏好存储并全量应用（data-theme + data-a63-mode
+ *      同步翻转，刷新后由 no-flash 脚本读回同一份偏好）。
  *   3. SSR 安全：服务端不渲染具体状态，只渲染骨架；客户端首帧 useEffect 同步状态。
  *
  * 可访问性：
@@ -33,12 +35,9 @@ export function ThemeToggle({ className }: { className?: string }) {
 
   const toggle = () => {
     const next: Theme = theme === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    try {
-      localStorage.setItem('theme', next);
-    } catch {
-      /* 隐私模式 / localStorage 禁用 —— 忽略 */
-    }
+    // 走偏好存储 + applyPreferences：同步 data-theme 与 data-a63-mode，
+    // 并持久化到 personalization-settings（刷新后 no-flash 脚本读同一份）
+    setMode(next);
     // 同步主题色 meta（如果有）
     const meta = document.querySelector('meta[name="theme-color"]');
     if (meta) meta.setAttribute('content', next === 'dark' ? '#111111' : '#fafafa');
