@@ -3,6 +3,7 @@
 import { type ReactNode } from 'react';
 
 import { withBasePath } from '@/lib/utils';
+import { MobileQuickNav } from '@/components/nav/MobileQuickNav';
 import { ShowcaseCarousel } from '@/components/sections/ShowcaseCarousel';
 import { ShowcaseStacked } from '@/components/sections/ShowcaseStacked';
 import { AIProjectEntrance } from '@/components/sections/AIProjectEntrance';
@@ -12,8 +13,9 @@ import { ProjectShowcase } from '@/components/sections/ProjectShowcase';
  * HomeMain —— atom63.io 长文式主体（1:1 复刻）
  *
  * 容器：max-w-xl (576px) + px-6 (24px) → 内文 528px
- * 段间距：space-y-6 (24px)
- * 段落：17px / 27.625 / Geist / #b4b4b4
+ * 段间距：md space-y-6 (32px)，手机 space-y-[40px]（段落多，小屏更松）
+ * 段落：17px / Geist / #b4b4b4；手机行高 1.85，md 起 1.625
+ * 手机端：MobileQuickNav 章节快捷导航（PC 隐藏）
  *
  * 章节顺序（基于吴帆简历重写）：
  *   1. ShowcaseCarousel（统信时期项目横向轮播）
@@ -31,17 +33,26 @@ import { ProjectShowcase } from '@/components/sections/ProjectShowcase';
 export function HomeMain() {
   return (
     <main className="mx-auto max-w-xl px-6">
-      <article className="space-y-6 py-16">
+      {/* 手机端快捷章节导航 —— sticky 吸附在 Nav 之下（PC 隐藏） */}
+      <MobileQuickNav />
+      <article className="space-y-[40px] py-16 md:space-y-6">
         {/* 1. 统信时期项目轮播 —— 横向滑动作品展示 */}
-        <ShowcaseCarousel />
+        <div id="showcase" className="scroll-mt-[104px]">
+          <ShowcaseCarousel />
+        </div>
 
         {/* 2. 统信开篇 */}
-        <EssayParagraph>
-          曾在
-          <Favicon src="/images/clients/uniontech.svg" alt="统信软件" />
-          <Strong> 统信软件</Strong>
-          担任网页设计组组长与资深 UI 设计师（武汉，2021–2025）——负责公司官网设计与改版、主页面风格、<Strong>3D 视频制作</Strong>、交互梳理，以及<Strong>后台管理端</Strong>界面与<Strong>组件库</Strong>建设。
-        </EssayParagraph>
+        <div id="uniontech" className="scroll-mt-[104px]">
+          <EssayParagraph>
+            曾在
+            <Favicon src="/images/clients/uniontech.svg" alt="统信软件" />
+            <Strong> 统信软件</Strong>
+            担任网页设计组组长与资深
+            UI 设计师（武汉，2021–2025）——负责公司官网设计与改版、主页面风格、
+            <Strong>3D 视频制作</Strong>、交互梳理，以及<Strong>后台管理端</Strong>界面与
+            <Strong>组件库</Strong>建设。
+          </EssayParagraph>
+        </div>
 
         {/* 3. ShowcaseStacked —— 1 大 3 小自动轮换（统信时期精选） */}
         <ShowcaseStacked />
@@ -57,12 +68,17 @@ export function HomeMain() {
         </EssayParagraph>
 
         {/* 5. 平安银行时代 */}
-        <EssayParagraph>
-          更早之前，我在
-          <Favicon src="/images/clients/pingan.ico" alt="平安银行" />
-          <Strong> 平安银行</Strong>
-          度过了四年（深圳，2016–2020）——担任设计组组长与高级 UI 设计师。从口袋银行家 UI、主页面风格优化，到<Strong>数字化网点 PC 端</Strong>、<Strong>组件库</Strong>建设，这段经历塑造了我对 <Strong>B 端复杂业务系统</Strong>的理解。
-        </EssayParagraph>
+        <div id="pingan" className="scroll-mt-[104px]">
+          <EssayParagraph>
+            更早之前，我在
+            <Favicon src="/images/clients/pingan.ico" alt="平安银行" />
+            <Strong> 平安银行</Strong>
+            度过了四年（深圳，2016–2020）——担任设计组组长与高级
+            UI 设计师。从口袋银行家
+            UI、主页面风格优化，到<Strong>数字化网点 PC 端</Strong>、<Strong>组件库</Strong>
+            建设，这段经历塑造了我对 <Strong>B 端复杂业务系统</Strong>的理解。
+          </EssayParagraph>
+        </div>
 
         {/* 6. 平安时期代表作（精简——上一段工作经历） */}
         <EssayParagraph>
@@ -99,11 +115,13 @@ export function HomeMain() {
 
 /* ============================================================
  * EssayParagraph —— atom63 长文段落
- *   17px / 27.625 / Geist 400 / #b4b4b4
+ *   17px / Geist 400 / #b4b4b4
+ *   手机端行高放宽到 1.85（中文排版比拉丁需要更松的节奏，
+ *   1.625 在小屏上显得密），md 起恢复 atom63 原版 1.625
  * ============================================================ */
 function EssayParagraph({ children }: { children: ReactNode }) {
   return (
-    <p className="text-essay-p text-text-secondary">
+    <p className="text-pretty text-essay-p leading-[1.85] text-text-secondary md:leading-[1.625]">
       {children}
     </p>
   );

@@ -232,7 +232,10 @@ html:has(.live-resume) {
     font-size: var(--text-body);
     line-height: 1.5;
     letter-spacing: -0.005em;
+    /* 锁死横向滚动：clip 优先（不产生滚动容器，body 内 position:sticky
+       —— 如手机端 MobileQuickNav —— 才能正常吸附），老内核回退 hidden */
     overflow-x: hidden;
+    overflow-x: clip;
     font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
   }
 

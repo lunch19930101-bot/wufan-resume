@@ -84,7 +84,7 @@ export function AIProjectEntrance() {
   const [featured, ...rest] = projects;
 
   return (
-    <section aria-label="AI 协作项目" className="w-full">
+    <section id="ai-projects" aria-label="AI 协作项目" className="w-full scroll-mt-[104px]">
       {/* Grid: 1 top (占满) + 2 bottom。
           手机单列 —— 两列时小卡仅 ~150px 宽，按钮行（try live+github 约 166px）
           被挤压错位且横向溢出卡片；md 起恢复两列 */}
