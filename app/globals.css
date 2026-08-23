@@ -214,6 +214,9 @@ html:has(.live-resume) {
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
     scroll-behavior: auto; /* 原生滚动 */
+    /* 锁死横向滚动：clip 优先（不产生滚动容器，sticky 不受影响），老内核回退 hidden */
+    overflow-x: hidden;
+    overflow-x: clip;
   }
 
   body {
@@ -256,18 +259,7 @@ html:has(.live-resume) {
     color: var(--color-text-primary);
   }
 
-  /* Custom cursor 隐藏系统光标（仅 pointer: fine） */
-  @media (pointer: fine) {
-    body {
-      cursor: none;
-    }
-    a,
-    button,
-    [role='button'],
-    [data-cursor] {
-      cursor: none;
-    }
-  }
+  /* 2026-08-23 起使用系统原生光标 —— 自定义圆点跟随光标（移动有延迟）已移除 */
 
   /* Focus visible — 无障碍 */
   :focus-visible {
@@ -647,6 +639,15 @@ html:has(.live-resume) {
   zoom: var(--a63-type-scale);
 }
 
+/* 手机端（<768px）禁用 type-scale zoom —— 375px 视口曾被整体放大到 478px，
+   导致整页可左右滑动。手机回到 zoom:1 设计基准宽度，
+   配合 html 层 overflow-x: clip 双保险。 */
+@media (max-width: 767px) {
+  [data-a63-type-scale] body > *:not([data-slot='site-config-popover']):not([data-slot='command-root']):not([data-cursor-root]) {
+    zoom: 1;
+  }
+}
+
 /* --- Surface —— 6 级灰阶（n1 最浅 → n6 最深），覆盖主题背景 --- */
 /* 加 [data-a63-theme] 提升 specificity 以覆盖 theme+mode 规则 */
 [data-a63-theme][data-a63-surface='n1'] {
@@ -707,35 +708,6 @@ html[data-a63-surface]::before {
   --notice-radius: var(--a63-radius-actual);
 }
 
-/* --- Custom Cursor —— 用 CSS 类替代 inline style，避免 React 19 hydration 报错
- *   性能要点：
- *     - 不用 mix-blend-mode（强制合成层 + blend pass，60fps 下视觉延迟 1 帧）
- *     - contain: layout style paint —— 隔离 layout/paint，避免触发外层重排
- *     - will-change: transform —— 提升独立合成层
- *     - 颜色用 --color-text-primary（自适应 dark/light 主题，免去 blend 也能高对比）
- */
-.custom-cursor-dot {
-  position: fixed;
-  left: 0;
-  top: 0;
-  width: 8px;
-  height: 8px;
-  margin-left: -4px;
-  margin-top: -4px;
-  border-radius: 9999px;
-  background-color: var(--color-text-primary);
-  opacity: 0;
-  will-change: transform;
-  contain: layout style paint;
-}
-
-.custom-cursor-dot[data-state='press'] {
-  width: 24px;
-  height: 24px;
-  margin-left: -12px;
-  margin-top: -12px;
-}
-
-.custom-cursor-dot[data-shown='true'] {
-  opacity: 1;
-}
+/* --- Custom Cursor 已于 2026-08-23 移除（改用系统原生光标）。
+       组件文件保留在 components/cursor/CustomCursor.tsx，要恢复时：
+       layout.tsx 重新挂载 + 还原本文件的 cursor:none 媒体查询与 .custom-cursor-dot 三段样式 */

@@ -5,7 +5,6 @@ import './globals.css';
 import { site } from '@/lib/config';
 import { withBasePath } from '@/lib/utils';
 
-import { CustomCursor } from '@/components/cursor/CustomCursor';
 import { MainArea } from '@/components/layout/MainArea';
 import { Nav } from '@/components/nav/Nav';
 import { Footer } from '@/components/sections/Footer';
@@ -84,7 +83,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         suppressHydrationWarning
       >
         <SkipLink />
-        <CustomCursor />
         <Nav />
         <MainArea>
           <SiteNotice />
