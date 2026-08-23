@@ -13,13 +13,22 @@ import { cn } from '@/lib/utils';
  * 这条 sticky chip 导航让用户一眼看到章节骨架、一键直达：
  *
  *   ┌──────────────────────────────────┐
- *   │ [精选视频] [统信软件] [平安银行] … │  ← 横滑，当前章节高亮
+ *   │ 精选视频  统信软件 ▍平安银行 …   │  ← 横滑，当前章节反色高亮
  *   └──────────────────────────────────┘
  *
- * - 仅手机显示（md:hidden）；PC 端保持原样（用户确认 PC 没问题）
- * - sticky 在 58px Nav 之下，同款 dashed 边 + 毛玻璃底
- * - 跳转用 scrollToTarget（Lenis/原生双兼容）+ 104px 头部补偿
- * - IntersectionObserver 高亮当前章节，chip 自动滚入可视
+ * 样式（v2 —— 用户反馈首版「不好看」后重构）：
+ *   - 与 Nav 的层次区分：Nav 用 dashed 主分隔，本条降为 border-subtle
+ *     细实线 + 更实的底（/90），叠在一起不再出现「双虚线」的厚重感
+ *   - chip 去边框化：未选中 = 纯文字（tertiary），不再描边；
+ *     选中 = 反色墨点 pill（bg-text-primary + inverse 文字）——
+ *     与 Nav 右侧 Menu 实底按钮同一对比档位，选中态一眼可辨
+ *   - 轨道左右 24px 渐隐 mask，暗示可横滑
+ *
+ * 行为不变：
+ *   - 仅手机显示（md:hidden）；sticky 在 58px Nav 之下
+ *   - 跳转 scrollToTarget（Lenis/原生双兼容）+ 104px 头部补偿
+ *   - IntersectionObserver 高亮当前章节，chip 自动滚入可视
+ *   - 条高锁 46px —— HEADER_OFFSET / 各锚点 scroll-mt-[104px] 依赖此值
  */
 const LINKS = [
   { id: 'showcase', label: '精选视频' },
@@ -78,12 +87,16 @@ export function MobileQuickNav() {
 
   return (
     <div className="sticky top-[58px] z-40 -mx-6 md:hidden">
-      <div className="border-b border-dashed border-border-default bg-bg-canvas/80 backdrop-blur-md">
+      {/* 底衬：细实线（subtle）+ 更实的毛玻璃 —— 刻意比 Nav 的 dashed 轻一档 */}
+      <div className="h-[46px] border-b border-border-subtle bg-bg-canvas/90 backdrop-blur-md">
         <div
           ref={trackRef}
           className={cn(
-            'mx-auto flex max-w-xl items-center gap-1.5 overflow-x-auto px-6 py-2',
+            'mx-auto flex h-full max-w-xl items-center gap-2 overflow-x-auto px-6',
             '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
+            // 左右渐隐，暗示可横滑；静止时渐隐区正好落在 24px 内边距上
+            '[mask-image:linear-gradient(to_right,transparent,black_24px,black_calc(100%_-_24px),transparent)]',
+            '[-webkit-mask-image:linear-gradient(to_right,transparent,black_24px,black_calc(100%_-_24px),transparent)]',
           )}
         >
           {LINKS.map((l) => (
@@ -93,12 +106,12 @@ export function MobileQuickNav() {
               onClick={() => go(l.id)}
               aria-current={active === l.id ? 'true' : undefined}
               className={cn(
-                'shrink-0 rounded-pill border px-3 py-[5px]',
-                'font-mono text-[12px] tracking-wider',
+                'shrink-0 rounded-pill px-3 py-[6px]',
+                'font-mono text-[11px] leading-4 tracking-wider',
                 'transition-colors duration-micro ease-out-quart',
                 active === l.id
-                  ? 'border-border-default bg-bg-surface text-text-primary'
-                  : 'border-border-subtle text-text-tertiary',
+                  ? 'bg-text-primary text-text-inverse'
+                  : 'text-text-tertiary hover:text-text-secondary',
               )}
             >
               {l.label}
