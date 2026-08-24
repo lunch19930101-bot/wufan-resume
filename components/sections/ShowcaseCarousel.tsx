@@ -288,45 +288,61 @@ function SlideCard({
   suspended: boolean;
   onOpen: () => void;
 }) {
+  const btnRef = useRef<HTMLButtonElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const inViewRef = useRef(false);
+  const [loaded, setLoaded] = useState(false);
   const [progress, setProgress] = useState(0);
 
-  /* IntersectionObserver 播放门控 —— atom63 lazy-video 同款行为 */
+  /* IntersectionObserver 播放门控 —— atom63 lazy-video 同款行为。
+     观察目标用按钮（永不缺席）：首次进视口才挂载 <video>（懒加载，
+     页面上存在隐藏副本时零请求），此后可见播放 / 离屏暂停 */
   useEffect(() => {
-    const v = videoRef.current;
-    if (!v) return;
+    const btn = btnRef.current;
+    if (!btn) return;
     if (suspended) {
-      v.pause();
+      inViewRef.current = false;
+      videoRef.current?.pause();
       return;
     }
     const io = new IntersectionObserver(
       ([entry]) => {
         if (!entry) return;
-        /* 幂等：paused 才 play / 播放中才 pause —— 快速滚动时
-           play() 被 pause() 打断会以 AbortError 拒绝并被吞掉，
-           视频就此冻住（曾致 1、3 号视频不播） */
+        inViewRef.current = entry.isIntersecting;
         if (entry.isIntersecting) {
-          if (v.paused) {
+          setLoaded(true);
+          const v = videoRef.current;
+          if (v && v.paused) {
             /* 显式补设 muted —— 同 Lightbox：部分内核不认 React 的 muted prop，
                按「有声」拒绝 play()，视频冻结 */
             v.muted = true;
             v.play().catch(() => {});
           }
-        } else if (!v.paused) {
-          v.pause();
+        } else {
+          videoRef.current?.pause();
         }
       },
       { threshold: 0.25 },
     );
-    io.observe(v);
+    io.observe(btn);
     return () => io.disconnect();
   }, [suspended]);
+
+  /* 视频挂载当帧补一次播放 —— IO 回调触发 setLoaded 时 videoRef 还没就位 */
+  useEffect(() => {
+    if (!loaded || !inViewRef.current) return;
+    const v = videoRef.current;
+    if (!v) return;
+    v.muted = true;
+    v.play().catch(() => {});
+  }, [loaded]);
 
   /* maskTop=0 → 16/9；源视频均为 1920×1080 */
   const masked = item.maskTop ?? 0;
 
   return (
     <button
+      ref={btnRef}
       type="button"
       data-card
       data-cursor="link"
@@ -340,7 +356,8 @@ function SlideCard({
         'aspect-[16/10]',
       )}
     >
-      {/* INNER 缩放层 —— 静音循环预览（IO 门控），object-cover 填满 */}
+      {/* INNER 缩放层 —— 静音循环预览（IO 门控），object-cover 填满。
+          video 首次进视口才挂载（懒加载，隐藏副本零请求） */}
       <div
         className={cn(
           'absolute inset-0 transition-transform duration-500 ease-out',
@@ -349,34 +366,38 @@ function SlideCard({
         )}
         aria-hidden
       >
-        <video
-          ref={videoRef}
-          src={withBasePath(item.video)}
-          muted
-          loop
-          autoPlay
-          playsInline
-          preload="metadata"
-          onTimeUpdate={(e) => {
-            const v = e.currentTarget;
-            if (Number.isFinite(v.duration) && v.duration > 0)
-              setProgress(v.currentTime / v.duration);
-          }}
-          className={
-            masked
-              ? // 遮罩版（1920×1080 源）：可视带 = 1920×(1080-nav)
-                // 视频放大到带高=卡高 → h 108%，上移 nav/1000=8%，左右溢出裁切
-                'absolute left-1/2 top-[-8%] h-[108%] w-auto -translate-x-1/2 object-cover'
-              : 'absolute inset-0 size-full object-cover'
-          }
-        />
-        {/* 文字贴图 —— 透明 PNG 居中叠加 */}
-        {item.overlay && (
-          <img
-            src={withBasePath(item.overlay)}
-            alt=""
-            className="absolute inset-0 size-full object-contain"
-          />
+        {loaded && (
+          <>
+            <video
+              ref={videoRef}
+              src={withBasePath(item.video)}
+              muted
+              loop
+              autoPlay
+              playsInline
+              preload="metadata"
+              onTimeUpdate={(e) => {
+                const v = e.currentTarget;
+                if (Number.isFinite(v.duration) && v.duration > 0)
+                  setProgress(v.currentTime / v.duration);
+              }}
+              className={
+                masked
+                  ? // 遮罩版（1920×1080 源）：可视带 = 1920×(1080-nav)
+                    // 视频放大到带高=卡高 → h 108%，上移 nav/1000=8%，左右溢出裁切
+                    'absolute left-1/2 top-[-8%] h-[108%] w-auto -translate-x-1/2 object-cover'
+                  : 'absolute inset-0 size-full object-cover'
+              }
+            />
+            {/* 文字贴图 —— 透明 PNG 居中叠加 */}
+            {item.overlay && (
+              <img
+                src={withBasePath(item.overlay)}
+                alt=""
+                className="absolute inset-0 size-full object-contain"
+              />
+            )}
+          </>
         )}
       </div>
 

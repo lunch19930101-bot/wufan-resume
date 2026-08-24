@@ -74,14 +74,17 @@ export function MobileQuickNav() {
     return () => observer.disconnect();
   }, []);
 
-  /* 激活项变化：滑块跟随 + 激活 chip 滚到轨道中央；字体就绪/旋转后复测 */
+  /* 激活项变化：滑块跟随 + 激活 chip 在轨道内横向居中；字体就绪/旋转后复测。
+     （只滚轨道自身 scrollLeft —— scrollIntoView 在章节条不在视口内时会
+      拖动整页滚动，轮播上移首屏后曾致加载即跳滚 397px） */
   useEffect(() => {
     const idx = LINKS.findIndex((l) => l.id === active);
-    chipRefs.current[idx]?.scrollIntoView({
-      behavior: 'smooth',
-      block: 'nearest',
-      inline: 'center',
-    });
+    const track = trackRef.current;
+    const chip = chipRefs.current[idx];
+    if (track && chip) {
+      const target = chip.offsetLeft - (track.clientWidth - chip.offsetWidth) / 2;
+      track.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
+    }
     const raf = requestAnimationFrame(moveIndicator);
     const onResize = () => moveIndicator();
     window.addEventListener('resize', onResize);

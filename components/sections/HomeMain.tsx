@@ -36,8 +36,9 @@ export function HomeMain() {
       {/* 手机端快捷章节导航 —— sticky 吸附在 Nav 之下（PC 隐藏） */}
       <MobileQuickNav />
       <article className="space-y-[40px] py-16 md:space-y-6">
-        {/* 1. 统信时期项目轮播 —— 横向滑动作品展示 */}
-        <div id="showcase" className="scroll-mt-[104px]">
+        {/* 1. 统信时期项目轮播 —— 横向滑动作品展示。
+            PC 副本：手机端轮播已上移到 Hero 第一屏（#showcase 锚点在那边） */}
+        <div className="hidden scroll-mt-[104px] md:block">
           <ShowcaseCarousel />
         </div>
 

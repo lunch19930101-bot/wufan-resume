@@ -2,6 +2,7 @@
 
 import { site } from '@/lib/config';
 import { withBasePath } from '@/lib/utils';
+import { ShowcaseCarousel } from '@/components/sections/ShowcaseCarousel';
 
 /**
  * Hero — atom63.io 1:1 复刻开场
@@ -13,6 +14,10 @@ import { withBasePath } from '@/lib/utils';
  *     行 3:  设计工程师 (at) [msft.png 32×32 inline] Microsoft      (muted/50)
  *
  * 字号 27px / 行高 37.125px / DINOT + MiSans
+ *
+ * 手机端（用户 2026-08-24 指定）：动态作品轮播上移到 h1 之后、介绍长文之前，
+ * 第一屏即见作品展示；PC 维持原序（介绍在前，轮播在 HomeMain 首位）。
+ * #showcase 锚点随之放在手机副本上（MobileQuickNav「精选视频」跳转目标）。
  */
 export function Hero() {
   return (
@@ -31,9 +36,15 @@ export function Hero() {
         </span>
       </h1>
 
+      {/* 手机端：动态作品轮播上移到第一屏（h1 之后、介绍之前）——
+          PC 隐藏（原位副本在 HomeMain，hidden md:block） */}
+      <div id="showcase" className="mt-8 scroll-mt-[104px] md:hidden">
+        <ShowcaseCarousel />
+      </div>
+
       {/* 个人介绍 —— atom63 开场长文（按 \n\n 分段，**词** 渲染为加粗强调） */}
       {site.intro ? (
-        <div className="mt-6 max-w-xl space-y-4 text-essay-p leading-[27.625px] text-text-secondary">
+        <div className="mt-10 max-w-xl space-y-4 text-essay-p leading-[27.625px] text-text-secondary md:mt-6">
           {site.intro.split('\n\n').map((para, i) => (
             <p key={i}>{renderBold(para)}</p>
           ))}
