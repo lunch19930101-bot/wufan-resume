@@ -779,15 +779,9 @@ html[data-a63-surface]::before {
   color: var(--a63-brand-current);
 }
 
-/* --- Preferences 顶部 Design-system 提示条
- *   bg / border 跟 Primary 品牌色（var(--a63-brand-current)）
- *   radius 跟 Radius 偏好（var(--a63-radius-actual)） --- */
-:root {
-  --notice-bg: var(--a63-brand-current);
-  --notice-border: color-mix(in srgb, var(--a63-brand-current) 32%, transparent);
-  --notice-fg: #ffffff;
-  --notice-radius: var(--a63-radius-actual);
-}
+/* --- SiteNotice（Design-system 提示条）已于 2026-08-24 移除——
+       用户反馈手机首屏太占空间。--notice-* 变量一并清理，
+       要恢复：layout.tsx 重新挂载 + 还原本块与 components/sections/SiteNotice.tsx */
 
 /* --- Custom Cursor 已于 2026-08-23 移除（改用系统原生光标）。
        组件文件保留在 components/cursor/CustomCursor.tsx，要恢复时：

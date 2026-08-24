@@ -8,7 +8,6 @@ import { withBasePath } from '@/lib/utils';
 import { MainArea } from '@/components/layout/MainArea';
 import { Nav } from '@/components/nav/Nav';
 import { Footer } from '@/components/sections/Footer';
-import { SiteNotice } from '@/components/sections/SiteNotice';
 
 /**
  * No-flash theme script —— 在首帧 paint 之前应用 Preferences。
@@ -84,10 +83,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       >
         <SkipLink />
         <Nav />
-        <MainArea>
-          <SiteNotice />
-          {children}
-        </MainArea>
+        <MainArea>{children}</MainArea>
         <Footer />
       </body>
     </html>
