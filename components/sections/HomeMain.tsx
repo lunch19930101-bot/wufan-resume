@@ -12,7 +12,7 @@ import { ProjectShowcase } from '@/components/sections/ProjectShowcase';
  * HomeMain —— atom63.io 长文式主体（1:1 复刻）
  *
  * 容器：max-w-xl (576px) + px-6 (24px) → 内文 528px
- * 段间距：md space-y-6 (32px)，手机 space-y-[40px]（段落多，小屏更松）
+ * 段间距：手机两档制 40px（节间）/ 24px（节内），md space-y-6 (32px)
  * 段落：17px / Geist / #b4b4b4；手机行高 1.85，md 起 1.625
  * 手机端章节导航 MobileQuickNav 已上移至 app/page.tsx 顶层（Hero 之前）
  *
@@ -32,7 +32,10 @@ import { ProjectShowcase } from '@/components/sections/ProjectShowcase';
 export function HomeMain() {
   return (
     <main className="mx-auto max-w-xl px-6">
-      <article className="space-y-[40px] py-16 md:space-y-6">
+      {/* 手机端垂直节奏两档制（用户 2026-08-24）：节间距 40px、节内相关内容 24px。
+          手机 pt-0 —— 与 Hero 的 40px 底距合并为单一 40px 节距（原来 64+64=128 过宽）；
+          md 维持原值（pt/pb 64px、space-y 32px），scale 阶梯不可用于 px 精确值 */}
+      <article className="space-y-[40px] pt-0 pb-[40px] md:space-y-6 md:pt-16 md:pb-16">
         {/* 1. 统信时期项目轮播 —— 横向滑动作品展示。
             PC 副本：手机端轮播已上移到 Hero 第一屏（#showcase 锚点在那边） */}
         <div className="hidden scroll-mt-[104px] md:block">

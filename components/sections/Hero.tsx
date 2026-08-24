@@ -20,8 +20,14 @@ import { ShowcaseCarousel } from '@/components/sections/ShowcaseCarousel';
  * #showcase 锚点随之放在手机副本上（MobileQuickNav「精选视频」跳转目标）。
  */
 export function Hero() {
+  /* 手机端垂直节奏统一两档（用户 2026-08-24 指定）：24px / 40px。
+     注意本项目 spacing scale 已重定义（p-7=48、mt-8=64、mt-10=128），
+     必须用任意值写 px，不能用 scale 阶梯。
+       Nav→h1 24 · h1→视频 24 · 视频→文案 40
+     手机 Hero 底距为 0 —— 与 HomeMain 首节的 40px 节距会叠加成 80，
+     由 space-y-[40px] 单独承担；md 维持原值（pt 64 / pb 64） */
   return (
-    <section className="mx-auto max-w-xl px-6 pt-7 pb-16 md:pt-8">
+    <section className="mx-auto max-w-xl px-6 pt-[24px] pb-0 md:pt-8 md:pb-16">
       <h1 className="text-hero-h1 text-text-primary">
         <span className="block">
           Hola, 我是
@@ -38,13 +44,13 @@ export function Hero() {
 
       {/* 手机端：动态作品轮播上移到第一屏（h1 之后、介绍之前）——
           PC 隐藏（原位副本在 HomeMain，hidden md:block） */}
-      <div id="showcase" className="mt-8 scroll-mt-[104px] md:hidden">
+      <div id="showcase" className="mt-[24px] scroll-mt-[104px] md:hidden">
         <ShowcaseCarousel />
       </div>
 
       {/* 个人介绍 —— atom63 开场长文（按 \n\n 分段，**词** 渲染为加粗强调） */}
       {site.intro ? (
-        <div className="mt-10 max-w-xl space-y-4 text-essay-p leading-[27.625px] text-text-secondary md:mt-6">
+        <div className="mt-[40px] max-w-xl space-y-[24px] text-essay-p leading-[27.625px] text-text-secondary md:mt-6 md:space-y-4">
           {site.intro.split('\n\n').map((para, i) => (
             <p key={i}>{renderBold(para)}</p>
           ))}
