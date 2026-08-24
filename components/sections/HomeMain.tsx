@@ -3,7 +3,6 @@
 import { type ReactNode } from 'react';
 
 import { withBasePath } from '@/lib/utils';
-import { MobileQuickNav } from '@/components/nav/MobileQuickNav';
 import { ShowcaseCarousel } from '@/components/sections/ShowcaseCarousel';
 import { ShowcaseStacked } from '@/components/sections/ShowcaseStacked';
 import { AIProjectEntrance } from '@/components/sections/AIProjectEntrance';
@@ -15,7 +14,7 @@ import { ProjectShowcase } from '@/components/sections/ProjectShowcase';
  * 容器：max-w-xl (576px) + px-6 (24px) → 内文 528px
  * 段间距：md space-y-6 (32px)，手机 space-y-[40px]（段落多，小屏更松）
  * 段落：17px / Geist / #b4b4b4；手机行高 1.85，md 起 1.625
- * 手机端：MobileQuickNav 章节快捷导航（PC 隐藏）
+ * 手机端章节导航 MobileQuickNav 已上移至 app/page.tsx 顶层（Hero 之前）
  *
  * 章节顺序（基于吴帆简历重写）：
  *   1. ShowcaseCarousel（统信时期项目横向轮播）
@@ -33,8 +32,6 @@ import { ProjectShowcase } from '@/components/sections/ProjectShowcase';
 export function HomeMain() {
   return (
     <main className="mx-auto max-w-xl px-6">
-      {/* 手机端快捷章节导航 —— sticky 吸附在 Nav 之下（PC 隐藏） */}
-      <MobileQuickNav />
       <article className="space-y-[40px] py-16 md:space-y-6">
         {/* 1. 统信时期项目轮播 —— 横向滑动作品展示。
             PC 副本：手机端轮播已上移到 Hero 第一屏（#showcase 锚点在那边） */}

@@ -16,6 +16,10 @@ import { cn } from '@/lib/utils';
  *
  * 几何锁：条高 46px —— HEADER_OFFSET / 各锚点 scroll-mt-[104px] 依赖此值，
  * 只做视觉重塑，不改高度与吸附/滚动侦测逻辑。
+ *
+ * 挂载位置：app/page.tsx 顶层（不在 HomeMain 文章流里）——轮播上移首屏后，
+ * 文章流里的自然位置被压到长文之后，滚动很久才轮到吸附；顶层位置
+ * 保证自然位置就在首屏内，轻微下滚即吸附到 Nav 下方并一路钉到底。
  */
 const LINKS = [
   { id: 'showcase', label: '精选视频' },
@@ -100,7 +104,9 @@ export function MobileQuickNav() {
   };
 
   return (
-    <div className="sticky top-[58px] z-40 -mx-6 md:hidden">
+    /* 顶层渲染在 MainArea <main> 内（通知条之下、Hero 之上），父级无横向
+       padding —— 直接全宽，无需 -mx-6 破容器 */
+    <div className="sticky top-[58px] z-40 md:hidden">
       <div className="h-[46px] border-b border-dashed border-border-default bg-bg-canvas/90 backdrop-blur-md">
         <div
           ref={trackRef}
