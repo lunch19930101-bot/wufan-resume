@@ -6,20 +6,23 @@ import { scrollToTarget } from '@/components/motion/SmoothScroll';
 import { cn } from '@/lib/utils';
 
 /**
- * MobileQuickNav —— v3「章节索引带」
+ * MobileQuickNav —— v4「滚动唤起章节条」
  *
- * 设计意图（对齐 atom63 式编辑感 chrome）：
- *   - 每项带 mono 双位序号（01—05），与 Nav 的 mono 微标签同语言
- *   - 选中态是一枚墨色胶囊「滑块」，随激活项平移 + 伸缩（非静态换底）
- *   - 底边框用虚线，与 58px Nav 的 dashed 主分隔同母题
- *   - 滑块位于滚动轨道内容坐标系内，随轨道横向滚动同步移动
+ * 行为（v4，用户反馈三连改）：
+ *   - 默认不显示、不占文档流：fixed 挂在 Nav 下方，首屏内容无它占位
+ *   - 往下滑动越过首屏标题区（scrollY > 140，即条自然位置恰好越过 Nav
+ *     的瞬间）滑入；滚回顶部滑出隐藏
+ *   - 选中态胶囊改为声明式 per-chip 渲染：v3 的 JS 测量滑块在真机上会因
+ *     字体替换 / 布局时机错位而落不到 chip 后面，选中文字（text-inverse）
+ *     叠在同色画布上「隐形」。per-chip absolute inset-0 零测量，永不失配
+ *   - 胶囊圆角走 var(--control-radius)：跟随 html[data-a63-radius] 主题偏好
+ *     （none / subtle / default / round → 0 / 4 / 10 / 9999px）
  *
- * 几何锁：条高 46px —— HEADER_OFFSET / 各锚点 scroll-mt-[104px] 依赖此值，
- * 只做视觉重塑，不改高度与吸附/滚动侦测逻辑。
+ * 视觉语言延续：mono 双位序号 01—05、墨色胶囊、dashed 底边框（与 58px
+ * Nav 同母题）、滚动轨道两端 24px mask 渐隐。
  *
- * 挂载位置：app/page.tsx 顶层（不在 HomeMain 文章流里）——轮播上移首屏后，
- * 文章流里的自然位置被压到长文之后，滚动很久才轮到吸附；顶层位置
- * 保证自然位置就在首屏内，轻微下滚即吸附到 Nav 下方并一路钉到底。
+ * 几何锁：条高 46px —— HEADER_OFFSET / 各锚点 scroll-mt-[104px] 依赖此值。
+ * 挂载位置：app/page.tsx 顶层（fixed，不占 HomeMain 文章流）。
  */
 const LINKS = [
   { id: 'showcase', label: '精选视频' },
@@ -31,30 +34,25 @@ const LINKS = [
 
 const HEADER_OFFSET = -(58 + 46);
 
+/* 滑入阈值：条原先自然位置 151–197px，滚到其顶部触 Nav（151 - 58 ≈ 140）
+   的那一刻唤起——恰好是「该出现的时候」 */
+const SHOW_AFTER = 140;
+
 export function MobileQuickNav() {
   const [active, setActive] = useState<string>(LINKS[0].id);
+  const [shown, setShown] = useState(false);
   const trackRef = useRef<HTMLDivElement>(null);
   const chipRefs = useRef<(HTMLButtonElement | null)[]>([]);
-  const indicatorRef = useRef<HTMLSpanElement>(null);
 
-  /* 滑块定位：内容坐标系 x = chip 相对轨道 border-box 左缘 + scrollLeft。
-     （left:0 锚在 padding-box 缘 = border 0 时的 border-box 缘，padding 无需扣除；
-      各 rect 均为 zoom 后 CSS px，坐标自洽，不手动乘 type-scale。） */
-  const moveIndicator = () => {
-    const track = trackRef.current;
-    const indicator = indicatorRef.current;
-    const idx = LINKS.findIndex((l) => l.id === active);
-    const chip = chipRefs.current[idx];
-    if (!track || !indicator || !chip) return;
-    const trackRect = track.getBoundingClientRect();
-    const chipRect = chip.getBoundingClientRect();
-    const x = chipRect.left - trackRect.left + track.scrollLeft;
-    indicator.style.width = `${chipRect.width}px`;
-    indicator.style.transform = `translate3d(${x}px, -50%, 0)`;
-    indicator.style.opacity = '1';
-  };
+  /* 唤起/收起：越过阈值滑入，回到顶部滑出（passive，不阻塞滚动） */
+  useEffect(() => {
+    const onScroll = () => setShown(window.scrollY > SHOW_AFTER);
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
-  /* 滚动侦测：视口中上部命中的最靠上锚点获胜（与 v2 一致） */
+  /* 滚动侦测：视口中上部命中的最靠上锚点获胜 */
   useEffect(() => {
     const IO = window.IntersectionObserver;
     if (!IO) return;
@@ -78,9 +76,9 @@ export function MobileQuickNav() {
     return () => observer.disconnect();
   }, []);
 
-  /* 激活项变化：滑块跟随 + 激活 chip 在轨道内横向居中；字体就绪/旋转后复测。
-     （只滚轨道自身 scrollLeft —— scrollIntoView 在章节条不在视口内时会
-      拖动整页滚动，轮播上移首屏后曾致加载即跳滚 397px） */
+  /* 激活项变化：激活 chip 在轨道内横向居中。
+     （只滚轨道自身 scrollLeft —— scrollIntoView 在条不在视口内时会
+      拖动整页滚动） */
   useEffect(() => {
     const idx = LINKS.findIndex((l) => l.id === active);
     const track = trackRef.current;
@@ -89,14 +87,6 @@ export function MobileQuickNav() {
       const target = chip.offsetLeft - (track.clientWidth - chip.offsetWidth) / 2;
       track.scrollTo({ left: Math.max(0, target), behavior: 'smooth' });
     }
-    const raf = requestAnimationFrame(moveIndicator);
-    const onResize = () => moveIndicator();
-    window.addEventListener('resize', onResize);
-    document.fonts?.ready?.then(moveIndicator).catch(() => {});
-    return () => {
-      cancelAnimationFrame(raf);
-      window.removeEventListener('resize', onResize);
-    };
   }, [active]);
 
   const go = (id: string) => {
@@ -104,30 +94,26 @@ export function MobileQuickNav() {
   };
 
   return (
-    /* 顶层渲染在 MainArea <main> 内（通知条之下、Hero 之上），父级无横向
-       padding —— 直接全宽，无需 -mx-6 破容器 */
-    <div className="sticky top-[58px] z-40 md:hidden">
+    /* fixed 挂 Nav 之下：默认 -translate-y-full + opacity-0 收起，
+       唤起时滑入。隐藏态切断交互与焦点，避免「看不见但可点」 */
+    <div
+      aria-hidden={!shown}
+      className={cn(
+        'fixed inset-x-0 top-[58px] z-40 md:hidden',
+        'transition-[transform,opacity] duration-base ease-out-quart',
+        shown ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-full opacity-0',
+      )}
+    >
       <div className="h-[46px] border-b border-dashed border-border-default bg-bg-canvas/90 backdrop-blur-md">
         <div
           ref={trackRef}
           className={cn(
-            'relative mx-auto flex h-full max-w-xl items-center gap-1 overflow-x-auto px-6',
+            'mx-auto flex h-full max-w-xl items-center gap-1 overflow-x-auto px-6',
             '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
             '[mask-image:linear-gradient(to_right,transparent,black_24px,black_calc(100%_-_24px),transparent)]',
             '[-webkit-mask-image:linear-gradient(to_right,transparent,black_24px,black_calc(100%_-_24px),transparent)]',
           )}
         >
-          {/* 墨色滑块 —— 内容坐标系内绝对定位，随轨道滚动同步平移 */}
-          <span
-            ref={indicatorRef}
-            aria-hidden
-            className={cn(
-              'pointer-events-none absolute left-0 top-1/2 h-[30px] rounded-pill bg-text-primary',
-              'opacity-0 transition-[width,transform,opacity] duration-base ease-out-quart',
-            )}
-            style={{ width: 0, transform: 'translate3d(0, -50%, 0)' }}
-          />
-
           {LINKS.map((l, i) => {
             const isActive = active === l.id;
             return (
@@ -139,26 +125,34 @@ export function MobileQuickNav() {
                 data-nav-id={l.id}
                 onClick={() => go(l.id)}
                 aria-current={isActive ? 'true' : undefined}
+                tabIndex={shown ? 0 : -1}
                 className={cn(
-                  'relative z-10 flex h-[30px] shrink-0 items-center gap-1.5 rounded-pill px-3',
-                  'transition-colors duration-fast ease-out-quart',
+                  'relative flex h-[30px] shrink-0 items-center gap-1.5 px-3',
                 )}
               >
+                {/* 墨色胶囊 —— 声明式渲染在激活 chip 内，零测量；
+                    圆角跟随主题 --control-radius */}
+                {isActive && (
+                  <span
+                    aria-hidden
+                    className="absolute inset-0 rounded-[var(--control-radius)] bg-text-primary"
+                  />
+                )}
                 <span
                   aria-hidden
                   className={cn(
-                    'font-mono text-[10px] leading-none tracking-wider tabular-nums transition-colors duration-fast ease-out-quart',
-                    isActive ? 'text-text-inverse/60' : 'text-text-tertiary',
+                    'relative font-mono text-[10px] leading-none tracking-wider tabular-nums transition-colors duration-fast ease-out-quart',
+                    // opacity 属性而非 /60 修饰符 —— token 色上的透明度
+                    // 修饰符不生效，会回退继承 text-primary 与胶囊同色隐形
+                    isActive ? 'text-text-inverse opacity-60' : 'text-text-tertiary',
                   )}
                 >
                   {String(i + 1).padStart(2, '0')}
                 </span>
                 <span
                   className={cn(
-                    'text-[12px] leading-none transition-colors duration-fast ease-out-quart',
-                    isActive
-                      ? 'font-medium text-text-inverse'
-                      : 'text-text-secondary',
+                    'relative text-[12px] leading-none transition-colors duration-fast ease-out-quart',
+                    isActive ? 'font-medium text-text-inverse' : 'text-text-secondary',
                   )}
                 >
                   {l.label}
