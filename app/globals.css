@@ -642,12 +642,75 @@ html:has(.live-resume) {
   zoom: var(--a63-type-scale);
 }
 
-/* 手机端（<768px）禁用 type-scale zoom —— 375px 视口曾被整体放大到 478px，
-   导致整页可左右滑动。手机回到 zoom:1 设计基准宽度，
-   配合 html 层 overflow-x: clip 双保险。 */
+/* 手机端（<768px）：不做整壳 zoom —— 375px 视口曾被整体放大到 478px，
+   导致整页可左右滑动。改用 atom63 上游同款「字号级缩放」：只把排版
+   token 乘 --a63-type-scale（行高同步、盒模型不动），布局零溢出风险。
+   导航 / 章节条等 UI 铬件用的是任意值 text-[Npx]，天然不参与缩放，
+   几何锁（58px Nav / 46px 章节条）不受影响。 */
 @media (max-width: 767px) {
   [data-a63-type-scale] body > *:not([data-slot='site-config-popover']):not([data-slot='command-root']):not([data-cursor-root]) {
     zoom: 1;
+  }
+
+  /* 特异性：html 上的 [data-a63-type-scale] (0,1,0) 与 :root 同级，
+     媒体查询块在文件更靠后 → 覆盖生效。桌面端不受影响（zoom 已整体
+     缩放，这里若生效会双重缩放，故严格限定在手机媒体查询内）。 */
+  [data-a63-type-scale] {
+    --text-display-xl: calc(clamp(2.75rem, 5vw + 1rem, 5.5rem) * var(--a63-type-scale, 1));
+    --text-display-l: calc(clamp(2.25rem, 3.5vw + 1rem, 3.75rem) * var(--a63-type-scale, 1));
+    --text-display-m: calc(clamp(1.75rem, 2vw + 1rem, 2.75rem) * var(--a63-type-scale, 1));
+    --text-heading-l: calc(clamp(1.5rem, 1.2vw + 1rem, 2.25rem) * var(--a63-type-scale, 1));
+    --text-heading-m: calc(clamp(1.25rem, 0.8vw + 1rem, 1.5rem) * var(--a63-type-scale, 1));
+    --text-heading-s: calc(1.125rem * var(--a63-type-scale, 1));
+    --text-body-l: calc(1.125rem * var(--a63-type-scale, 1));
+    --text-body: calc(1rem * var(--a63-type-scale, 1));
+    --text-body-s: calc(0.875rem * var(--a63-type-scale, 1));
+    --text-caption: calc(0.8125rem * var(--a63-type-scale, 1));
+    --text-mono-micro: calc(0.75rem * var(--a63-type-scale, 1));
+
+    /* atom63 真实规格 —— 字号与 px 行高成对缩放，防裁字 */
+    --text-hero-h1: calc(1.6875rem * var(--a63-type-scale, 1));
+    --leading-hero-h1: calc(2.3203125rem * var(--a63-type-scale, 1));
+    --text-essay-p: calc(1.0625rem * var(--a63-type-scale, 1));
+    --leading-essay-p: calc(1.7265625rem * var(--a63-type-scale, 1));
+    --text-irvine: calc(0.9765625rem * var(--a63-type-scale, 1));
+    --text-essay: calc(clamp(1.0625rem, 0.4vw + 1rem, 1.25rem) * var(--a63-type-scale, 1));
+  }
+
+  /* Tailwind 默认字号 utility（text-sm 等，extend 来的固定 rem）同样跟随
+     —— AI 项目区 / 展示字幕 / Footer 混用它们，不覆盖则同页行为割裂。
+     字号+行高成对缩放；特异性 (0,2,0) 稳压单类 utility。 */
+  [data-a63-type-scale] .text-xs {
+    font-size: calc(0.75rem * var(--a63-type-scale, 1));
+    line-height: calc(1rem * var(--a63-type-scale, 1));
+  }
+  [data-a63-type-scale] .text-sm {
+    font-size: calc(0.875rem * var(--a63-type-scale, 1));
+    line-height: calc(1.25rem * var(--a63-type-scale, 1));
+  }
+  [data-a63-type-scale] .text-base {
+    font-size: calc(1rem * var(--a63-type-scale, 1));
+    line-height: calc(1.5rem * var(--a63-type-scale, 1));
+  }
+  [data-a63-type-scale] .text-lg {
+    font-size: calc(1.125rem * var(--a63-type-scale, 1));
+    line-height: calc(1.75rem * var(--a63-type-scale, 1));
+  }
+  [data-a63-type-scale] .text-xl {
+    font-size: calc(1.25rem * var(--a63-type-scale, 1));
+    line-height: calc(1.75rem * var(--a63-type-scale, 1));
+  }
+  [data-a63-type-scale] .text-2xl {
+    font-size: calc(1.5rem * var(--a63-type-scale, 1));
+    line-height: calc(2rem * var(--a63-type-scale, 1));
+  }
+  [data-a63-type-scale] .text-3xl {
+    font-size: calc(1.875rem * var(--a63-type-scale, 1));
+    line-height: calc(2.25rem * var(--a63-type-scale, 1));
+  }
+  [data-a63-type-scale] .text-4xl {
+    font-size: calc(2.25rem * var(--a63-type-scale, 1));
+    line-height: calc(2.5rem * var(--a63-type-scale, 1));
   }
 }
 
