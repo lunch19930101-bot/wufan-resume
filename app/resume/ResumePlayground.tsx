@@ -2,6 +2,8 @@
 
 import { useEffect, useMemo, useState } from 'react';
 
+import { cn } from '@/lib/utils';
+
 import { ResumeEditor } from './ResumeEditor';
 import { ResumePreview } from './ResumePreview';
 import { ResumeToolbar } from './ResumeToolbar';
@@ -26,12 +28,15 @@ const STORAGE_KEY = 'resume-draft-v2';
 
 type PaperSize = 'letter' | 'a4';
 type Mode = 'resume' | 'cv';
+/** 手机端（≤820px）分段视图：编辑 / 预览 二选一，桌面端该状态无效（CSS 隐藏 tabs） */
+type MobileView = 'edit' | 'preview';
 
 export function ResumePlayground() {
   const [mdx, setMdx] = useState(DEFAULT_TEMPLATE);
   const [paper, setPaper] = useState<PaperSize>('letter');
   const [zoom, setZoom] = useState(100);
   const [mode, setMode] = useState<Mode>('resume');
+  const [mobileView, setMobileView] = useState<MobileView>('edit');
   const [hydrated, setHydrated] = useState(false);
 
   // Load draft
@@ -74,7 +79,36 @@ export function ResumePlayground() {
   }, [mdx]);
 
   return (
-    <div className="live-resume">
+    <div className="live-resume" data-mobile-view={mobileView}>
+      {/* 手机端 编辑/预览 分段（桌面 display:none，样式在 resume.css §7） */}
+      <div className="live-mobile-tabs" role="tablist" aria-label="视图切换">
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mobileView === 'edit'}
+          data-cursor="link"
+          onClick={() => setMobileView('edit')}
+          className={cn(
+            'live-mobile-tab',
+            mobileView === 'edit' && 'live-mobile-tab-active',
+          )}
+        >
+          编辑
+        </button>
+        <button
+          type="button"
+          role="tab"
+          aria-selected={mobileView === 'preview'}
+          data-cursor="link"
+          onClick={() => setMobileView('preview')}
+          className={cn(
+            'live-mobile-tab',
+            mobileView === 'preview' && 'live-mobile-tab-active',
+          )}
+        >
+          预览
+        </button>
+      </div>
       <aside className="live-source">
         <ResumeToolbar
           mode={mode}
@@ -98,6 +132,7 @@ export function ResumePlayground() {
           zoom={zoom}
           setZoom={setZoom}
           mode={mode}
+          mobileView={mobileView}
         />
       </main>
     </div>

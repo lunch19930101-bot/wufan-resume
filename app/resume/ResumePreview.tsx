@@ -24,8 +24,11 @@ import { resumeMdxComponents } from './mdx-components';
  */
 type PaperSize = 'letter' | 'a4';
 type Mode = 'resume' | 'cv';
+type MobileView = 'edit' | 'preview';
 
 const ZOOM_OPTIONS = [50, 75, 100, 125, 150] as const;
+/** 纸张未缩放布局宽（96dpi）：letter 8.5in=816px；a4 210mm≈794px */
+const PAPER_LAYOUT_W: Record<PaperSize, number> = { letter: 816, a4: 794 };
 
 export function ResumePreview({
   mdx,
@@ -34,6 +37,7 @@ export function ResumePreview({
   zoom,
   setZoom,
   mode,
+  mobileView,
 }: {
   mdx: string;
   paper: PaperSize;
@@ -41,9 +45,12 @@ export function ResumePreview({
   zoom: number;
   setZoom: (z: number) => void;
   mode: Mode;
+  mobileView: MobileView;
 }) {
   const [compiled, setCompiled] = useState<MDXRemoteSerializeResult | null>(null);
   const [error, setError] = useState<string | null>(null);
+  // fit 模式：手机端纸张自动缩放到满宽可读；手动 cycleZoom 后本轮退出 fit
+  const [fitMode, setFitMode] = useState(true);
 
   const components = useMemo(
     () => resumeMdxComponents as Record<string, React.ComponentType<unknown>>,
@@ -71,7 +78,37 @@ export function ResumePreview({
 
   const handlePrint = () => window.print();
 
+  // 手机端（≤820px）fit-to-width：纸张缩放到视口满宽（扣掉 stage 左右 1rem）。
+  // 桌面端不介入；回到桌面时若仍处于 fit 模式则恢复 100%。
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 820px)');
+    const apply = () => {
+      if (!mq.matches || !fitMode) return;
+      const avail = window.innerWidth - 32;
+      const fit = Math.min(
+        100,
+        Math.max(25, Math.round((avail / PAPER_LAYOUT_W[paper]) * 100)),
+      );
+      setZoom(fit);
+    };
+    apply();
+    const onChange = (e: MediaQueryListEvent) => {
+      if (!e.matches) {
+        if (fitMode) setZoom(100);
+        return;
+      }
+      apply();
+    };
+    mq.addEventListener('change', onChange);
+    window.addEventListener('resize', apply);
+    return () => {
+      mq.removeEventListener('change', onChange);
+      window.removeEventListener('resize', apply);
+    };
+  }, [paper, fitMode, setZoom]);
+
   const cycleZoom = () => {
+    setFitMode(false); // 用户接管缩放，停止自动适配
     const idx = ZOOM_OPTIONS.indexOf(zoom as (typeof ZOOM_OPTIONS)[number]);
     const next = idx === -1 ? 2 : (idx + 1) % ZOOM_OPTIONS.length;
     setZoom(ZOOM_OPTIONS[next] ?? 100);
@@ -120,7 +157,7 @@ export function ResumePreview({
             disabled
             title="v1 仅支持单页"
             aria-pressed="true"
-            className="resume-viewer-btn resume-viewer-btn-active"
+            className="resume-viewer-btn resume-viewer-btn-active live-single-toggle"
           >
             单页
           </button>

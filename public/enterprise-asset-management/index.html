@@ -9441,5 +9441,65 @@ document.addEventListener('click',function(e){
   }
 });
 </script>
+<!-- ====== 移动端适配层（≤768px 生效，PC 布局不变）：侧边栏抽屉 + 表格横滚 + 卡片降列 ====== -->
+<style>
+.mnav-btn,.mnav-mask{display:none}
+@media (max-width:768px){
+  .top-nav{position:relative!important}
+  .top-nav-brand{padding-left:46px!important;min-width:0;margin-right:8px!important}
+  .top-nav-brand h1,.top-nav-brand p,.top-nav-brand-text{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .top-nav-items{padding-bottom:2px}
+  .sidebar{position:fixed!important;top:0!important;left:0!important;bottom:0!important;width:min(78vw,300px)!important;min-width:0!important;max-width:min(78vw,300px)!important;flex:none!important;z-index:2100!important;transform:translateX(-102%);transition:transform .28s ease;overflow-y:auto!important;-webkit-overflow-scrolling:touch;box-shadow:0 0 40px rgba(0,0,0,.28)}
+  body.mnav-open .sidebar{transform:none}
+  body.mnav-open{overflow:hidden}
+  .layout{width:100%!important;min-width:0!important}
+  .main{width:100%!important;min-width:0!important}
+  .stat-cards{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+  .grid-2{grid-template-columns:1fr!important}
+  .theme-color-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  .content{padding:12px!important}
+  .page-panel,.page-panel.active{padding:12px!important}
+  .mtbl-wrap{overflow-x:auto;-webkit-overflow-scrolling:touch;max-width:100%}
+  .mnav-btn{display:flex;position:absolute;top:8px;left:8px;z-index:2210;width:40px;height:40px;border:0;border-radius:10px;background:rgba(255,255,255,.16);align-items:center;justify-content:center;flex-direction:column;gap:4px;cursor:pointer;padding:0}
+  .mnav-btn span{display:block;width:17px;height:2px;border-radius:2px;background:#fff}
+  .mnav-mask{display:none;position:fixed;inset:0;z-index:2050;background:rgba(0,0,0,.45)}
+  body.mnav-open .mnav-mask{display:block}
+}
+</style>
+<script>
+(function(){
+  var nav=document.querySelector('.top-nav');
+  if(nav){
+    var btn=document.createElement('button');
+    btn.type='button';btn.className='mnav-btn';btn.setAttribute('aria-label','打开菜单');
+    btn.innerHTML='<span></span><span></span><span></span>';
+    nav.insertBefore(btn,nav.firstChild);
+    var mask=document.createElement('div');mask.className='mnav-mask';
+    document.body.appendChild(mask);
+    btn.addEventListener('click',function(){
+      var open=document.body.classList.toggle('mnav-open');
+      btn.setAttribute('aria-label',open?'关闭菜单':'打开菜单');
+    });
+    mask.addEventListener('click',function(){document.body.classList.remove('mnav-open')});
+  }
+  var sb=document.querySelector('.sidebar');
+  if(sb)sb.addEventListener('click',function(e){
+    if(e.target.closest('[data-page],.nav-item,.nav-child,a,button'))document.body.classList.remove('mnav-open');
+  });
+  function wrapTables(){
+    if(!window.matchMedia('(max-width:768px)').matches)return;
+    document.querySelectorAll('table').forEach(function(t){
+      if(t.closest('.mtbl-wrap'))return;
+      var w=document.createElement('div');w.className='mtbl-wrap';
+      t.parentNode.insertBefore(w,t);w.appendChild(t);
+      var cols=t.querySelectorAll('thead th').length||t.querySelectorAll('tr:first-child th,tr:first-child td').length;
+      if(cols>4)t.style.minWidth='560px';
+    });
+  }
+  wrapTables();
+  window.addEventListener('resize',wrapTables);
+  new MutationObserver(function(){setTimeout(wrapTables,30)}).observe(document.body,{childList:true,subtree:true});
+})();
+</script>
 </body>
 </html>
