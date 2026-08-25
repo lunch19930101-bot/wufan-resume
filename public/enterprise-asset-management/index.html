@@ -832,6 +832,19 @@ body:not(.light) .prop-tree-item.active{background:rgba(10,132,255,0.12);color:v
 <!-- DYNAMIC SIDEBAR -->
 <aside class="sidebar" id="dynamicSidebar">
   <nav class="sidebar-nav" id="sidebarNav"></nav>
+  <!-- 移动端抽屉功能区：顶栏「我的/换肤/扫一扫/消息」收纳于此（PC 隐藏） -->
+  <div class="mnav-extras">
+    <div class="me-cell" onclick="toggleProfile(event)">
+      <span class="me-avatar">张</span>
+      <span class="me-info"><b>张建国</b><i>资产管理部 · 管理员</i></span>
+      <svg viewBox="0 0 24 24" fill="none" style="width:16px;height:16px;flex-shrink:0;opacity:.5"><path d="M9 6l6 6-6 6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </div>
+    <div class="fn-row">
+      <div class="fn-cell" onclick="toggleThemePanel(event)"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="square" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"/><circle cx="8" cy="10" r="1.5" fill="currentColor"/><circle cx="12.5" cy="7.5" r="1.5" fill="currentColor"/><circle cx="16" cy="10.5" r="1.5" fill="currentColor"/><circle cx="9.5" cy="15.5" r="1.5" fill="currentColor"/></svg><span>换肤</span></div>
+      <div class="fn-cell" onclick="showToast('扫一扫','info')"><svg viewBox="0 0 24 24" fill="none"><path d="M3 7V5a2 2 0 012-2h2M17 3h2a2 2 0 012 2v2M21 17v2a2 2 0 01-2 2h-2M7 21H5a2 2 0 01-2-2v-2" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg><span>扫一扫</span></div>
+      <div class="fn-cell" onclick="showToast('消息','info')"><svg viewBox="0 0 24 24" fill="none"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg><span>消息</span></div>
+    </div>
+  </div>
   <div class="sidebar-toggle" onclick="toggleSidebar()" title="收起侧边栏">
     <svg class="sidebar-toggle-icon-expand" viewBox="0 0 24 24" width="20" height="20"><path d="M3 4H2v2h20V4H3Zm6 7H8v2h14v-2H9Zm-7 7h20v2H2v-2Zm3.805-5.293L6.512 12l-.707-.707l-1.768-1.768l-.707-.707l-1.414 1.414l.707.708L3.683 12l-1.06 1.06l-.707.708l1.414 1.414l.707-.707l1.768-1.768Z"/></svg>
     <svg class="sidebar-toggle-icon-collapse" viewBox="0 0 24 24" width="20" height="20"><path d="M2 4v2h20V4H2Zm6 7v2h14v-2H8Zm-6 7h20v2H2v-2Zm3.805-5.293L4.414 12l1.768-1.768l1.414-1.414L8.951 11.6l.707.707l.707.707l-1.414 1.414l-.707-.707l-1.768-1.768Z"/></svg>
@@ -891,6 +904,13 @@ body:not(.light) .prop-tree-item.active{background:rgba(10,132,255,0.12);color:v
             <div class="qn-item" data-qnid="经营分析"><div class="qn-icon-wrap" style="width:72px;height:72px;background:linear-gradient(135deg,#FF3D3D,#FE8281)"><svg width="32" height="32" viewBox="0 0 24 24" fill="none"><path fill="white" d="M4 2v18h3V9h5v11h3V5h5v15h2v2H2V2z"/></svg></div><span class="qn-label">经营分析</span></div>
           </div>
         </div>
+      </div>
+      <div class="card" id="mapCard" style="padding:0;overflow:hidden;margin-bottom:32px">
+        <div style="display:flex;align-items:center;justify-content:space-between;padding:8px 16px;border-bottom:1px solid rgba(0,0,0,0.08)">
+          <div style="padding:8px 12px;font-size:16px;color:rgba(0,0,0,0.9);font-weight:500;display:flex;align-items:center;gap:8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" style="flex-shrink:0"><path fill="var(--theme-primary)" d="M7.5 2.717L2 5.926V21.5l5.5-2.267zm2 16.193l5 2.952V5.09l-5-2.953zm7-14.143v16.516l5.5-3.209V2.5z"/></svg>资产分布地图<span style="font-size:12px;color:rgba(0,0,0,0.4);font-weight:400;margin-left:4px">长阳土家族自治县</span></div>
+          <div style="display:flex;align-items:center;gap:4px;color:var(--theme-primary);font-size:14px;cursor:pointer">更多<svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 4L10 8L6 12" stroke="var(--theme-primary)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        </div>
+        <img class="map-img" src="map.webp" alt="长阳土家族自治县资产分布地图" style="width:100%;display:block">
       </div>
             <div class="grid-2" style="margin-bottom:32px">
         <div class="card" style="padding:0;overflow:hidden">
@@ -9444,6 +9464,8 @@ document.addEventListener('click',function(e){
 <!-- ====== 移动端适配层（≤768px 生效，PC 布局不变）：侧边栏抽屉 + 表格横滚 + 卡片降列 ====== -->
 <style>
 .mnav-btn,.mnav-mask{display:none}
+.map-img{max-height:520px;object-fit:contain;background:#ECF5FC}
+.mnav-extras{display:none}
 @media (max-width:768px){
   .top-nav{position:relative!important}
   .top-nav-brand{padding-left:46px!important;min-width:0;margin-right:8px!important}
@@ -9479,6 +9501,36 @@ document.addEventListener('click',function(e){
   .qn-icon-wrap{width:48px!important;height:48px!important;border-radius:14px!important}
   .qn-icon-wrap svg{width:24px!important;height:24px!important}
   .qn-label{font-size:12px!important;margin-top:6px!important}
+  /* —— 抽屉放大（对齐 TDesign Mobile：项高 52 / 字号 16 / 图标 22） —— */
+  .sidebar{width:min(82vw,340px)!important;max-width:min(82vw,340px)!important}
+  .sidebar-nav{padding:12px!important;gap:4px!important}
+  .nav-group{font-size:14px!important;padding:14px 16px 6px!important}
+  .nav-item{height:52px!important;font-size:16px!important;padding:0 16px!important;border-radius:12px!important}
+  .nav-icon{width:24px!important;height:24px!important}
+  .nav-icon svg{width:22px!important;height:22px!important}
+  .nav-badge{min-width:20px!important;height:20px!important;border-radius:10px!important;font-size:12px!important}
+  .nav-child{height:48px!important;font-size:15px!important;padding:0 16px 0 44px!important}
+  .sidebar-toggle{display:none!important}
+  /* —— 顶栏「我的/换肤/扫一扫/消息」收纳进抽屉 —— */
+  .top-nav-right{display:none!important}
+  .mnav-extras{display:flex;flex-direction:column;gap:12px;padding:16px;border-top:1px solid rgba(0,0,0,0.08)}
+  .me-cell{display:flex;align-items:center;gap:12px;padding:12px;border-radius:12px;background:rgba(0,122,255,0.06);cursor:pointer;color:rgba(0,0,0,0.6)}
+  .me-cell:active{background:rgba(0,122,255,0.12)}
+  .me-avatar{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:16px;background:linear-gradient(135deg,#007AFF,#366EF4);flex-shrink:0}
+  .me-info{display:flex;flex-direction:column;min-width:0;flex:1}
+  .me-info b{font-size:16px;font-weight:600;line-height:22px;color:rgba(0,0,0,0.9);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .me-info i{font-style:normal;font-size:12px;line-height:18px;color:rgba(0,0,0,0.45);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .fn-row{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+  .fn-cell{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 4px;border-radius:12px;background:rgba(0,0,0,0.03);color:rgba(0,0,0,0.6);font-size:12px;cursor:pointer}
+  .fn-cell:active{background:rgba(0,122,255,0.1)}
+  .fn-cell svg{width:22px;height:22px}
+  body:not(.light) .mnav-extras{border-top-color:rgba(255,255,255,0.08)}
+  body:not(.light) .me-cell{background:rgba(10,132,255,0.14);color:rgba(255,255,255,0.6)}
+  body:not(.light) .me-info b{color:rgba(255,255,255,0.9)}
+  body:not(.light) .me-info i{color:rgba(255,255,255,0.45)}
+  body:not(.light) .fn-cell{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6)}
+  /* —— 我的/换肤弹层 → 底部抽屉化（≤768px 时面板已移至 body） —— */
+  .theme-panel,.profile-popup{position:fixed!important;top:auto!important;right:auto!important;left:12px!important;bottom:12px!important;width:auto!important;min-width:0!important;max-width:none!important;max-height:calc(100dvh - 24px)!important;overflow-y:auto!important;z-index:2300!important;border-radius:16px!important}
 }
 </style>
 <script>
@@ -9496,6 +9548,10 @@ document.addEventListener('click',function(e){
       btn.setAttribute('aria-label',open?'关闭菜单':'打开菜单');
     });
     mask.addEventListener('click',function(){document.body.classList.remove('mnav-open')});
+  }
+  /* 弹层移至 body：顶栏触发器隐藏后，面板从抽屉触发也要能以底部抽屉呈现 */
+  if(window.matchMedia('(max-width:768px)').matches){
+    ['themePanel','profilePopup'].forEach(function(id){var el=document.getElementById(id);if(el)document.body.appendChild(el)});
   }
   var sb=document.querySelector('.sidebar');
   if(sb)sb.addEventListener('click',function(e){
