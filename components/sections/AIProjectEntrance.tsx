@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import { useRef, useState } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -85,22 +86,193 @@ export function AIProjectEntrance() {
 
   return (
     <section id="ai-projects" aria-label="AI 协作项目" className="w-full scroll-mt-[104px]">
-      {/* 手机端眉题 —— 给三卡一个文字锚点，避免页面突然跳进卡片堆（PC 无眉题，维持原状） */}
-      <p className="mb-[16px] font-mono text-[11px] uppercase tracking-wider text-text-tertiary md:hidden">
-        AI 协作 · build in public
-      </p>
-      {/* Grid: 1 top (占满) + 2 bottom。
-          手机单列 —— 两列时小卡仅 ~150px 宽，按钮行（try live+github 约 166px）
-          被挤压错位且横向溢出卡片；md 起恢复两列。
-          手机端触控改造（2026-08-25）：卡距 12→16px，按钮升 44px 触控档
-          （primary 满宽 + github 方形图标钮）——md 档全部不变 */}
-      <div className="grid grid-cols-1 gap-[16px] md:grid-cols-2 md:gap-3">
+      {/* 手机端：竖向单卡 + 分段切换（参考移动端工作台 / 国资管家的 tab+卡片语言）；
+          PC 维持 atom63 双列网格，md 档全部不变 */}
+      <MobileProjectDeck projects={projects} />
+      {/* Grid: 1 top (占满) + 2 bottom。手机端由 MobileProjectDeck 接管（hidden），md 起恢复两列。 */}
+      <div className="hidden gap-3 md:grid md:grid-cols-2">
         {featured && <FeaturedCard project={featured} />}
         {rest.map((p) => (
           <MiniCard key={p.id} project={p} />
         ))}
       </div>
     </section>
+  );
+}
+
+/* ============================================================
+ * MobileProjectDeck —— 手机端竖向切换台（md:hidden）
+ *
+ * 参考两个移动端项目的排版语言：
+ *   · 国资管家工作台：顶部 pill 分段 tab（今日/近7天…）+ 白卡内容区
+ *   · 资产管理工作台：渐变底卡片 + 白色 pill 按钮 + 16px 圆角
+ *
+ * 结构：分段切换器（01/02/03，tablist）+ 单张全量竖卡视窗。
+ * 交互：tap 分段切换；卡上左右滑动切换（跟手拖拽 + 松手吸附，
+ *       边缘橡胶筋回弹）；touch-action: pan-y 不劫持纵向滚动。
+ * 三张卡等高（track 取最高者），切换时按钮位置稳定不跳动。
+ * ============================================================ */
+function MobileProjectDeck({ projects }: { projects: AIProject[] }) {
+  const total = projects.length;
+  const [active, setActive] = useState(0);
+  const [drag, setDrag] = useState<number | null>(null); // 拖拽中的 px 偏移；null = 未拖拽
+  const start = useRef<{ x: number; y: number; horizontal: boolean } | null>(null);
+
+  const step = (dir: 1 | -1) =>
+    setActive((a) => Math.min(total - 1, Math.max(0, a + dir)));
+
+  const onTouchStart = (e: React.TouchEvent) => {
+    const t = e.touches[0];
+    if (!t) return;
+    start.current = { x: t.clientX, y: t.clientY, horizontal: false };
+  };
+
+  const onTouchMove = (e: React.TouchEvent) => {
+    const s = start.current;
+    if (!s) return;
+    const t = e.touches[0];
+    if (!t) return;
+    const dx = t.clientX - s.x;
+    const dy = t.clientY - s.y;
+    // 横向意图判定后才接管；纵向滚动交还浏览器（pan-y）
+    if (!s.horizontal && Math.abs(dx) < Math.abs(dy)) return;
+    s.horizontal = true;
+    const atEdge = (active === 0 && dx > 0) || (active === total - 1 && dx < 0);
+    setDrag(atEdge ? dx * 0.35 : dx); // 边缘橡胶筋阻尼
+  };
+
+  const onTouchEnd = (e: React.TouchEvent) => {
+    const s = start.current;
+    start.current = null;
+    setDrag(null);
+    if (!s) return;
+    const t = e.changedTouches[0];
+    if (!t) return;
+    const dx = t.clientX - s.x;
+    const dy = t.clientY - s.y;
+    if (s.horizontal && Math.abs(dx) > 44 && Math.abs(dx) > Math.abs(dy)) {
+      step(dx < 0 ? 1 : -1);
+    }
+  };
+
+  // 轨道宽 = total × 视窗宽（百分比位移以轨道自身宽为基准），
+  // 每张卡占轨道 1/total，故每步位移 100/total %
+  const trackStyle = {
+    width: `${total * 100}%`,
+    transform: `translateX(calc(${(-active * 100) / total}% + ${drag ?? 0}px))`,
+  };
+
+  return (
+    <div className="md:hidden">
+      {/* 手机端眉题 —— 给模块一个文字锚点（PC 无眉题，维持原状） */}
+      <p className="mb-[16px] font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
+        AI 协作 · build in public
+      </p>
+
+      {/* 分段切换器 —— 国资管家式 pill tabs，44px 触控档 */}
+      <div
+        role="tablist"
+        aria-label="切换项目"
+        className="mb-[12px] flex rounded-full border border-border-subtle bg-bg-elevated p-[3px]"
+      >
+        {projects.map((p, i) => (
+          <button
+            key={p.id}
+            type="button"
+            role="tab"
+            aria-selected={i === active}
+            aria-label={`项目 ${p.index} ${p.title}`}
+            onClick={() => setActive(i)}
+            className={cn(
+              'flex h-[38px] flex-1 items-center justify-center rounded-full',
+              'font-mono text-xs uppercase tracking-wider tabular-nums',
+              'transition-colors duration-micro ease-out-quart',
+              i === active
+                ? 'bg-bg-surface text-text-primary shadow-[var(--shadow-elev-1)]'
+                : 'text-text-tertiary',
+            )}
+          >
+            {p.index}
+          </button>
+        ))}
+      </div>
+
+      {/* 竖向单卡视窗 —— 跟手滑动切换 */}
+      <div
+        className={cn(
+          'overflow-hidden rounded-[var(--showcase-radius)]',
+          'border border-border-subtle bg-bg-elevated',
+          '[touch-action:pan-y]',
+        )}
+        onTouchStart={onTouchStart}
+        onTouchMove={onTouchMove}
+        onTouchEnd={onTouchEnd}
+        onTouchCancel={onTouchEnd}
+      >
+        <div
+          style={trackStyle}
+          className={cn(
+            'flex',
+            drag === null
+              ? 'transition-transform duration-[420ms] ease-[var(--ease-out-expo)] motion-reduce:transition-none'
+              : 'transition-none',
+          )}
+        >
+          {projects.map((p, i) => (
+            <article
+              key={p.id}
+              aria-hidden={i !== active}
+              inert={i !== active}
+              style={{ width: `${100 / total}%`, backgroundImage: p.accent }}
+              className="flex shrink-0 flex-col gap-4 p-5"
+            >
+              {/* 头部：index + status + year（与 FeaturedCard 同构） */}
+              <div className="flex items-center justify-between gap-3">
+                <div className="flex items-baseline gap-3">
+                  <span className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary tabular-nums">
+                    {p.index}
+                  </span>
+                  <StatusPill status={p.status} />
+                </div>
+                <span className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary tabular-nums">
+                  {p.year}
+                </span>
+              </div>
+
+              {/* 标题 */}
+              <h3 className="text-balance text-xl font-medium tracking-tight text-text-primary">
+                {p.title}
+              </h3>
+
+              {/* 描述 —— 全量展示，不做行数钳制（内容不改动） */}
+              <p className="text-pretty text-sm leading-[1.75] text-text-secondary">
+                {p.description}
+              </p>
+
+              {/* 按钮组 —— 44px 触控档：primary 满宽 + github 方形图标钮 */}
+              <div className="mt-auto flex items-center gap-2 pt-1">
+                <ActionButton
+                  href={p.tryLiveHref}
+                  icon={<ExternalLinkIcon className="size-[16px]" />}
+                  label="try live"
+                  disabled={p.status === 'soon'}
+                  primary
+                  mobile="full"
+                  newTab
+                />
+                <ActionButton
+                  href={p.githubHref}
+                  icon={<GithubIcon className="size-[16px]" />}
+                  label="github"
+                  disabled={p.status === 'soon'}
+                  mobile="icon"
+                />
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
