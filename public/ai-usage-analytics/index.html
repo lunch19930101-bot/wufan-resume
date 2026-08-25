@@ -1595,6 +1595,26 @@ function logout() {
   .mnav-btn span{display:block;width:17px;height:2px;border-radius:2px;background:#fff}
   .mnav-mask{display:none;position:fixed;inset:0;z-index:2050;background:rgba(0,0,0,.45)}
   body.mnav-open .mnav-mask{display:block}
+  /* —— 数据卡：数字降号 32→20、藏图标（158px 窄卡放不下） —— */
+  .stat-card{padding:14px 16px!important;min-height:0!important}
+  .sc-label{font-size:12px!important;margin-bottom:4px!important}
+  .sc-value{font-size:20px!important;line-height:26px!important}
+  .sc-badge{font-size:11px!important}
+  .sc-icon{display:none!important}
+  /* —— 登录页：单列移动版（参考资产管理移动端 Figma 规格：24px 边距 / 48px 控件 / 16px 字号防 iOS 缩放） —— */
+  .login-wrap{flex-direction:column!important;height:auto!important;min-height:100vh;min-height:100dvh;overflow-y:auto!important}
+  .login-left{flex:none!important;padding:28px 24px 0!important;background:#fff!important}
+  .login-left::before,.login-left::after{display:none!important}
+  .login-hero{display:none!important}
+  .login-left>div:not(.login-brand):not(.login-hero){display:none!important}
+  .login-right{width:100%!important;flex:none!important;padding:8px 24px 48px!important;justify-content:flex-start!important;background:#fff!important}
+  .login-form{width:100%}
+  .login-form h3{font-size:24px;margin-top:32px}
+  .login-field{margin-top:20px}
+  .login-field label{font-size:14px}
+  .login-field input{width:100%!important;height:48px;font-size:16px;border-radius:8px}
+  .login-btn{width:100%!important;height:48px;border-radius:8px;font-size:16px;margin-top:24px}
+  .login-error{font-size:13px}
 }
 </style>
 <script>

@@ -9464,6 +9464,21 @@ document.addEventListener('click',function(e){
   .mnav-btn span{display:block;width:17px;height:2px;border-radius:2px;background:#fff}
   .mnav-mask{display:none;position:fixed;inset:0;z-index:2050;background:rgba(0,0,0,.45)}
   body.mnav-open .mnav-mask{display:block}
+  /* —— 数据卡：数字降号 30→20、收边、藏装饰圆标（158px 窄卡放不下） —— */
+  .stat-card{padding:14px 16px!important;min-height:0!important}
+  .sc-label{font-size:12px!important;line-height:18px!important}
+  .sc-value{font-size:20px!important;line-height:26px!important;margin-top:4px!important;letter-spacing:-.3px!important}
+  .stat-card>*:not(.sc-label):not(.sc-value){display:none!important}
+  /* —— 看板列表：标题在上（1 级），标签 + 时间做 2 级一行 —— */
+  .todo-item{flex-wrap:wrap;row-gap:4px;column-gap:8px;padding:10px 12px!important}
+  .todo-text{order:1;flex:1 1 100%;white-space:normal;line-height:20px}
+  .todo-tag{order:2}
+  .todo-time{order:3;font-size:12px!important;line-height:18px!important}
+  /* —— 快捷导航：4 列缩图标（72px 圆标在 351px 卡内溢出） —— */
+  #quickNavGrid{gap:12px 4px!important;padding:16px 12px!important}
+  .qn-icon-wrap{width:48px!important;height:48px!important;border-radius:14px!important}
+  .qn-icon-wrap svg{width:24px!important;height:24px!important}
+  .qn-label{font-size:12px!important;margin-top:6px!important}
 }
 </style>
 <script>
