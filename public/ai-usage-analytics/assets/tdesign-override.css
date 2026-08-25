@@ -1,0 +1,1255 @@
+/*!
+ * TDesign Style Override for AI资产管家系统
+ * Based on TDesign for Web design system
+ * Version: 1.0 | 2026-05-19
+ *
+ * 规范文档: /Users/alex/Desktop/skills/asset-skill-test/
+ */
+
+/* ═══════════════════════════════════════════════════════════
+   1. CSS 变量 — TDesign 色彩体系
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  /* 品牌色 */
+  --td-brand: #0052D9;
+  --td-brand-hover: #366EF4;
+  --td-brand-active: #003CAB;
+  --td-brand-light: #ECF2FE;
+  --td-brand-focus: #0052D9;
+  --td-brand-disabled: rgba(0, 82, 217, 0.30);
+  --td-brand-light-hover: #D9E1FF;
+
+  /* 功能色 */
+  --td-error: #D54941;
+  --td-error-hover: #F6685D;
+  --td-error-active: #AD352F;
+  --td-error-light: rgba(213, 73, 65, 0.08);
+
+  --td-warning: #E37318;
+  --td-warning-hover: #FA9550;
+  --td-warning-active: #BE5A00;
+  --td-warning-light: rgba(227, 115, 24, 0.08);
+
+  --td-success: #2BA471;
+  --td-success-hover: #56C08D;
+  --td-success-active: #008858;
+  --td-success-light: rgba(43, 164, 113, 0.08);
+
+  /* 灰阶 */
+  --td-gray-1: #F3F3F3;
+  --td-gray-2: #EEEEEE;
+  --td-gray-3: #E7E7E7;
+  --td-gray-4: #DCDCDC;
+  --td-gray-5: #C5C5C5;
+  --td-gray-6: #A6A6A6;
+  --td-gray-7: #8B8B8B;
+  --td-gray-8: #777777;
+  --td-gray-9: #5E5E5E;
+  --td-gray-10: #4B4B4B;
+  --td-gray-11: #383838;
+  --td-gray-12: #2C2C2C;
+  --td-gray-13: #242424;
+  --td-gray-14: #181818;
+
+  /* 文字色 */
+  --td-text-primary: rgba(0, 0, 0, 0.9);
+  --td-text-secondary: rgba(0, 0, 0, 0.6);
+  --td-text-placeholder: rgba(0, 0, 0, 0.4);
+  --td-text-disabled: rgba(0, 0, 0, 0.26);
+  --td-text-anti: #FFFFFF;
+
+  /* 背景色 */
+  --td-bg-page: #F3F3F3;
+  --td-bg-container: #FFFFFF;
+  --td-bg-container-hover: #F3F3F3;
+  --td-bg-container-active: #E7E7E7;
+  --td-bg-container-selected: #ECF2FE;
+
+  /* 边框 */
+  --td-border: #DCDCDC;
+  --td-border-hover: #B5B5B5;
+
+  /* 圆角 */
+  --td-radius-s: 3px;
+  --td-radius-m: 6px;
+  --td-radius-l: 8px;
+
+  /* 阴影 */
+  --td-shadow-1: 0 1px 10px rgba(0, 0, 0, 0.05), 0 4px 5px rgba(0, 0, 0, 0.08), 0 2px 4px -1px rgba(0, 0, 0, 0.12);
+  --td-shadow-2: 0 3px 14px 2px rgba(0, 0, 0, 0.05), 0 8px 10px 1px rgba(0, 0, 0, 0.06), 0 5px 5px -3px rgba(0, 0, 0, 0.1);
+  --td-shadow-3: 0 6px 30px 5px rgba(0, 0, 0, 0.05), 0 16px 24px 2px rgba(0, 0, 0, 0.04), 0 8px 10px -5px rgba(0, 0, 0, 0.08);
+
+  /* 顶栏 */
+  --td-nav-bg: #14338C;
+  --td-nav-bg-dark: #0f2566;
+
+  /* 字体 */
+  --td-font-family: 'MiSans', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --td-font-din: 'D-DIN', 'DIN Alternate', sans-serif;
+  --td-font-mono: 'Space Mono', monospace;
+
+  /* 覆写 shadcn/ui CSS 变量 */
+  --primary: #0052D9;
+  --primary-foreground: #FFFFFF;
+  --background: #F3F3F3;
+  --foreground: rgba(0, 0, 0, 0.9);
+  --card: #FFFFFF;
+  --card-foreground: rgba(0, 0, 0, 0.9);
+  --popover: #FFFFFF;
+  --popover-foreground: rgba(0, 0, 0, 0.9);
+  --secondary: #F3F3F3;
+  --secondary-foreground: rgba(0, 0, 0, 0.9);
+  --muted: #F3F3F3;
+  --muted-foreground: rgba(0, 0, 0, 0.6);
+  --accent: #ECF2FE;
+  --accent-foreground: #0052D9;
+  --destructive: #D54941;
+  --border: #DCDCDC;
+  --input: #DCDCDC;
+  --ring: #0052D9;
+  --radius: 0.375rem;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   2. 全局基础 — 字体 + 背景
+   ═══════════════════════════════════════════════════════════ */
+*,
+*::before,
+*::after {
+  font-family: var(--td-font-family);
+}
+
+body {
+  background-color: var(--td-bg-page);
+  color: var(--td-text-primary);
+  font-family: var(--td-font-family);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 最小字号 12px */
+html {
+  font-size: 14px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   3. 侧边栏 — TDesign 导航样式
+   ═══════════════════════════════════════════════════════════ */
+
+/* 侧边栏容器 */
+aside[class*="w-60"] {
+  background: var(--td-bg-container) !important;
+  border-right: 1px solid var(--td-border) !important;
+  width: 232px !important;
+  min-width: 232px;
+  box-shadow: none;
+}
+
+/* 侧边栏头部 (logo 区域) */
+aside .h-14 {
+  height: 60px !important;
+  background: var(--td-nav-bg) !important;
+  border-bottom: none;
+}
+
+aside .h-14 img {
+  border-radius: 6px;
+}
+
+aside .h-14 span,
+aside .h-14 [class*="font-semibold"] {
+  color: #FFFFFF !important;
+  font-family: var(--td-font-family);
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* 侧边栏导航区 */
+aside nav[class*="overflow"],
+aside [class*="overflow-y-auto"][class*="p-2"] {
+  padding: 8px !important;
+}
+
+/* 一级导航项 */
+aside nav button[class*="rounded-lg"],
+aside nav a[class*="rounded-lg"],
+aside nav [class*="flex items-center gap-2"][class*="rounded-lg"][class*="px-3"] {
+  border-radius: var(--td-radius-s) !important;
+  height: 36px;
+  padding: 7px 16px !important;
+  font-size: 14px;
+  transition: all 100ms ease-out;
+  color: var(--td-text-secondary);
+  position: relative;
+}
+
+/* 导航项 hover */
+aside nav button[class*="rounded-lg"]:hover,
+aside nav a[class*="rounded-lg"]:hover {
+  background: var(--td-brand-light) !important;
+  color: var(--td-brand) !important;
+}
+
+/* 导航项激活态 */
+aside nav button[class*="bg-slate-200"],
+aside nav button[class*="font-medium"][class*="text-blue-600"],
+aside nav a[class*="bg-slate-200"],
+aside nav a[class*="font-medium"][class*="text-blue-600"] {
+  background: var(--td-brand-light) !important;
+  color: var(--td-brand) !important;
+  font-weight: 500;
+}
+
+/* 二级导航子项 */
+aside nav [class*="ml-4"][class*="mt-1"] {
+  margin-left: 12px !important;
+  padding-left: 0 !important;
+}
+
+aside nav [class*="ml-4"] button,
+aside nav [class*="ml-4"] a {
+  border-radius: var(--td-radius-s) !important;
+  height: 36px;
+  padding: 7px 16px 7px 28px !important;
+  font-size: 14px;
+  color: var(--td-text-secondary);
+  transition: all 100ms ease-out;
+}
+
+aside nav [class*="ml-4"] button:hover,
+aside nav [class*="ml-4"] a:hover {
+  background: var(--td-brand-light) !important;
+  color: var(--td-brand) !important;
+}
+
+aside nav [class*="ml-4"] button[class*="bg-blue-50"],
+aside nav [class*="ml-4"] button[class*="font-medium"][class*="text-blue-600"] {
+  background: var(--td-brand-light) !important;
+  color: var(--td-brand) !important;
+  font-weight: 500;
+}
+
+/* 导航分组标签 */
+aside nav [class*="text-xs"][class*="uppercase"][class*="tracking-wide"] {
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--td-text-placeholder);
+  padding: 0 16px;
+  margin-top: 12px;
+  margin-bottom: 4px;
+}
+
+/* 导航图标 */
+aside nav svg[class*="size-4"],
+aside nav svg[class*="size-5"] {
+  width: 20px !important;
+  height: 20px !important;
+  color: inherit;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   4. 顶栏 — TDesign 样式
+   ═══════════════════════════════════════════════════════════ */
+
+/* 主顶栏 */
+header[class*="h-14"][class*="bg-white"] {
+  height: 48px !important;
+  background: var(--td-bg-container) !important;
+  border-bottom: 1px solid var(--td-border);
+  padding: 0 24px !important;
+}
+
+header[class*="h-14"][class*="bg-white"] h1,
+header[class*="h-14"][class*="bg-white"] [class*="font-semibold"][class*="text-slate-900"] {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--td-text-primary);
+}
+
+/* 用户角色徽章 */
+header [class*="rounded-full"][class*="bg-blue-100"] {
+  background: var(--td-brand-light) !important;
+  color: var(--td-brand) !important;
+  border-radius: var(--td-radius-s);
+  font-size: 12px;
+  padding: 2px 8px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   5. 内容区
+   ═══════════════════════════════════════════════════════════ */
+[class*="flex-1"][class*="overflow-auto"][class*="bg-slate-50"],
+[class*="flex-1"][class*="overflow-auto"][class*="p-6"] {
+  background: var(--td-bg-page) !important;
+  padding: 24px !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   6. 卡片 — TDesign 8px 圆角
+   ═══════════════════════════════════════════════════════════ */
+
+/* 通用卡片容器 */
+[class*="rounded-xl"][class*="border"][class*="bg-white"],
+[class*="rounded-lg"][class*="border"][class*="bg-white"][class*="p-4"],
+[class*="rounded-lg"][class*="border"][class*="bg-white"][class*="p-3"],
+[class*="group"][class*="rounded-lg"][class*="border"][class*="bg-white"] {
+  border-radius: var(--td-radius-l) !important;
+  border-color: var(--td-border);
+  background: var(--td-bg-container);
+  box-shadow: none;
+  transition: all 120ms ease-out;
+}
+
+[class*="group"][class*="rounded-lg"][class*="border"][class*="bg-white"]:hover {
+  border-color: var(--td-brand) !important;
+  box-shadow: 0 2px 8px rgba(0, 82, 217, 0.08);
+}
+
+/* 卡片头部 */
+[class*="flex"][class*="items-center"][class*="justify-between"][class*="pb-4"] {
+  padding-bottom: 12px !important;
+}
+
+/* 卡片标题 */
+[class*="text-lg"][class*="font-semibold"][class*="text-slate-900"] {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--td-text-primary);
+}
+
+/* 卡片描述 */
+[class*="text-sm"][class*="text-slate-500"] {
+  color: var(--td-text-secondary);
+  font-size: 14px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   7. 按钮 — TDesign 三变体
+   ═══════════════════════════════════════════════════════════ */
+
+/* 主按钮 (Primary) */
+button[class*="bg-primary"][class*="text-white"],
+button[class*="bg-primary"][class*="text-primary-foreground"],
+button[class*="h-11"][class*="bg-[#863bff]"] {
+  background: var(--td-brand) !important;
+  color: var(--td-text-anti) !important;
+  border-radius: var(--td-radius-s);
+  font-size: 14px;
+  font-weight: 500;
+  height: 32px !important;
+  padding: 5px 16px !important;
+  transition: all 100ms ease-out;
+  border: none;
+  box-shadow: none;
+}
+
+button[class*="bg-primary"][class*="text-white"]:hover,
+button[class*="bg-primary"][class*="text-primary-foreground"]:hover,
+button[class*="h-11"][class*="bg-[#863bff]"]:hover {
+  background: var(--td-brand-hover) !important;
+}
+
+button[class*="bg-primary"][class*="text-white"]:active,
+button[class*="h-11"][class*="bg-[#863bff]"]:active {
+  background: var(--td-brand-active) !important;
+  opacity: 1;
+}
+
+/* 次级/幽灵按钮 */
+button[class*="border"][class*="border-slate-200"]:not([class*="bg-"]),
+button[class*="bg-white"][class*="border"],
+button[class*="bg-secondary"],
+button[class*="hover:bg-muted"],
+button[class*="border"][class*="hover:bg-slate-50"],
+button[class*="border"][class*="hover:bg-slate-100"] {
+  background: transparent !important;
+  color: var(--td-text-primary) !important;
+  border: 1px solid var(--td-border) !important;
+  border-radius: var(--td-radius-s);
+  font-size: 14px;
+  font-weight: 500;
+  height: 32px;
+  padding: 5px 16px;
+  transition: all 100ms ease-out;
+  box-shadow: none !important;
+}
+
+button[class*="border"][class*="border-slate-200"]:not([class*="bg-"]):hover,
+button[class*="bg-white"][class*="border"]:hover,
+button[class*="bg-secondary"]:hover,
+button[class*="hover:bg-muted"]:hover {
+  border-color: var(--td-brand) !important;
+  color: var(--td-brand) !important;
+  background: transparent !important;
+}
+
+button[class*="border"][class*="border-slate-200"]:not([class*="bg-"]):active,
+button[class*="bg-secondary"]:active {
+  border-color: var(--td-brand-active) !important;
+  color: var(--td-brand-active) !important;
+}
+
+/* 文字/链接按钮 */
+button[class*="text-primary"],
+button[class*="text-blue-600"],
+button[class*="hover:text-blue-700"],
+button[class*="text-blue-600"][class*="hover:text-blue-800"] {
+  color: var(--td-brand) !important;
+  background: transparent !important;
+  border: none !important;
+  font-size: 14px;
+  padding: 5px 8px;
+  border-radius: var(--td-radius-s);
+  transition: all 100ms ease-out;
+}
+
+button[class*="text-primary"]:hover,
+button[class*="text-blue-600"]:hover {
+  color: var(--td-brand-hover) !important;
+  background: var(--td-brand-light) !important;
+}
+
+/* 危险按钮 */
+button[class*="text-red-"][class*="hover:bg-red"],
+button[class*="text-destructive"],
+button[class*="hover:text-destructive"] {
+  color: var(--td-error) !important;
+}
+
+button[class*="text-red-"][class*="hover:bg-red"]:hover,
+button[class*="hover:text-destructive"]:hover {
+  background: var(--td-error-light) !important;
+  color: var(--td-error) !important;
+}
+
+/* 小按钮 */
+button[class*="h-6"],
+button[class*="text-xs"][class*="px-2"] {
+  height: 24px !important;
+  padding: 2px 8px !important;
+  font-size: 12px !important;
+  border-radius: var(--td-radius-s);
+}
+
+/* 图标按钮 */
+button[class*="size-8"],
+button[class*="size-7"],
+button[class*="p-1"][class*="rounded-md"] {
+  border-radius: var(--td-radius-s) !important;
+  transition: all 100ms ease-out;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   8. 表格 — TDesign 规范
+   ═══════════════════════════════════════════════════════════ */
+
+/* 表格容器 */
+table[class*="w-full"][class*="border-collapse"] {
+  border-collapse: separate;
+  border-spacing: 0;
+  font-size: 14px;
+}
+
+/* 表头 */
+table thead tr[class*="bg-slate-50"],
+table thead tr {
+  background: transparent !important;
+}
+
+table thead th,
+table [class*="bg-slate-50"][class*="px-4"][class*="py-2"][class*="text-xs"][class*="font-medium"] {
+  font-size: 12px !important;
+  font-weight: 600 !important;
+  color: var(--td-text-secondary) !important;
+  background: transparent !important;
+  padding: 10px 14px !important;
+  border-bottom: 1px solid var(--td-gray-2);
+  text-align: left;
+}
+
+/* 表格单元格 */
+table td,
+table tbody td {
+  font-size: 14px;
+  color: var(--td-text-primary);
+  padding: 10px 14px !important;
+  border-bottom: 1px solid var(--td-gray-2);
+}
+
+/* 斑马纹 */
+table tbody tr:nth-child(even),
+table tbody tr[class*="even:bg-slate-50"] {
+  background: #FAFAFA;
+}
+
+/* 行悬停 */
+table tbody tr:hover {
+  background: var(--td-brand-light) !important;
+}
+
+/* 表格分隔线 */
+table [class*="border-l"][class*="border-slate-200"] {
+  border-color: var(--td-border) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   9. 表单 / 输入框 — TDesign 规范
+   ═══════════════════════════════════════════════════════════ */
+
+/* 文本输入 */
+input[type="text"],
+input[type="password"],
+input[type="email"],
+input[type="number"],
+input:not([type]),
+textarea[class*="font-mono"],
+textarea {
+  height: 32px;
+  border: 1px solid var(--td-border);
+  border-radius: var(--td-radius-s);
+  padding: 5px 8px;
+  font-size: 14px;
+  color: var(--td-text-primary);
+  background: var(--td-bg-container);
+  transition: all 100ms ease-out;
+  outline: none;
+  font-family: var(--td-font-family);
+}
+
+input:focus,
+textarea:focus {
+  border-color: var(--td-brand) !important;
+  box-shadow: 0 0 0 2px rgba(0, 82, 217, 0.2) !important;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--td-text-placeholder);
+}
+
+/* 大输入框 */
+input[class*="h-11"] {
+  height: 36px !important;
+  border-radius: var(--td-radius-s);
+}
+
+/* 小输入框 / 内联编辑 */
+input[class*="h-7"],
+input[class*="h-5"][class*="text-[11px]"] {
+  height: 28px !important;
+  font-size: 12px !important;
+  border-radius: var(--td-radius-s);
+}
+
+/* 表单标签 */
+label[class*="text-xs"][class*="font-medium"][class*="text-slate-500"],
+label[class*="text-xs"][class*="font-medium"][class*="text-slate-600"] {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--td-text-secondary);
+}
+
+/* Select 下拉框 */
+[class*="bg-white"][class*="rounded-md"][class*="border"][class*="px-2"][class*="text-xs"],
+[class*="h-7"][class*="rounded-md"][class*="border"][class*="bg-white"][class*="px-2"] {
+  border-color: var(--td-border);
+  border-radius: var(--td-radius-s);
+  font-size: 14px;
+  height: 32px;
+  transition: all 100ms ease-out;
+}
+
+/* 开关 / Toggle */
+[class*="h-4"][class*="w-7"][class*="rounded-full"][class*="bg-slate-200"] {
+  width: 28px;
+  height: 16px;
+  border-radius: 99px;
+  background: var(--td-border);
+  transition: all 120ms ease-out;
+}
+
+/* 已选中开关 */
+[class*="peer-checked:bg-primary"],
+.peer:checked + [class*="h-4"][class*="w-7"][class*="rounded-full"] {
+  background: var(--td-brand) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   10. 标签 / Badge — TDesign 标签样式
+   ═══════════════════════════════════════════════════════════ */
+
+/* 通用标签 */
+[class*="text-xs"][class*="font-medium"][class*="rounded-full"],
+[class*="text-[10px]"][class*="rounded"],
+[class*="text-[11px]"][class*="rounded-lg"] {
+  font-size: 12px;
+  padding: 2px 8px;
+  border-radius: var(--td-radius-s);
+  font-weight: 500;
+}
+
+/* 蓝色标签 → 品牌色 */
+[class*="bg-blue-50"][class*="text-blue-700"],
+[class*="bg-blue-100"][class*="text-blue-700"],
+[class*="bg-blue-50"][class*="text-blue-600"] {
+  background: rgba(0, 82, 217, 0.08) !important;
+  color: var(--td-brand) !important;
+}
+
+/* 绿色标签 → 成功 */
+[class*="bg-emerald-50"][class*="text-emerald-700"],
+[class*="bg-emerald-100"][class*="text-emerald-700"],
+[class*="bg-green-50"][class*="text-green-700"],
+[class*="bg-green-100"][class*="text-green-700"] {
+  background: rgba(43, 164, 113, 0.08) !important;
+  color: var(--td-success) !important;
+}
+
+/* 红色标签 → 错误 */
+[class*="bg-red-50"][class*="text-red-700"],
+[class*="bg-red-100"][class*="text-red-700"],
+[class*="bg-red-50"][class*="text-red-600"] {
+  background: rgba(213, 73, 65, 0.08) !important;
+  color: var(--td-error) !important;
+}
+
+/* 黄色/橙色标签 → 警告 */
+[class*="bg-amber-50"][class*="text-amber-700"],
+[class*="bg-amber-100"][class*="text-amber-700"],
+[class*="bg-yellow-50"][class*="text-yellow-700"],
+[class*="bg-yellow-100"][class*="text-yellow-700"] {
+  background: rgba(227, 115, 24, 0.08) !important;
+  color: var(--td-warning) !important;
+}
+
+/* 紫色标签 → 保持品牌色 */
+[class*="bg-violet-50"],
+[class*="bg-purple-50"],
+[class*="bg-indigo-50"] {
+  background: rgba(0, 82, 217, 0.08) !important;
+  color: var(--td-brand) !important;
+}
+
+/* 橙色标签 */
+[class*="bg-orange-50"][class*="text-orange-700"],
+[class*="bg-orange-100"][class*="text-orange-700"] {
+  background: rgba(227, 115, 24, 0.08) !important;
+  color: var(--td-warning) !important;
+}
+
+/* 灰色标签 */
+[class*="bg-slate-100"][class*="text-slate-600"],
+[class*="bg-slate-100"][class*="text-slate-700"] {
+  background: var(--td-gray-1) !important;
+  color: var(--td-text-secondary) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   11. 模态框 / Dialog — TDesign 弹窗
+   ═══════════════════════════════════════════════════════════ */
+
+/* 遮罩 */
+[class*="fixed"][class*="inset-0"][class*="z-50"][class*="bg-black"] {
+  background: rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 弹窗容器 */
+[class*="sm:max-w-"][class*="rounded-"],
+[class*="bg-background"][class*="rounded-"],
+[role="dialog"] > div {
+  border-radius: var(--td-radius-l) !important;
+  background: var(--td-bg-container) !important;
+  box-shadow: var(--td-shadow-3);
+  border: 1px solid var(--td-border);
+}
+
+/* 弹窗头部 */
+[role="dialog"] header,
+[role="dialog"] [class*="border-b"] {
+  padding: 16px 24px;
+  border-bottom: 1px solid var(--td-gray-2);
+}
+
+[role="dialog"] header h2,
+[role="dialog"] header [class*="font-semibold"],
+[role="dialog"] [class*="text-lg"][class*="font-semibold"] {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #000000 !important;
+}
+
+/* 弹窗关闭按钮 */
+[role="dialog"] button[class*="rounded-md"][class*="size-"],
+[role="dialog"] [aria-label="Close"] {
+  border-radius: var(--td-radius-s);
+  color: var(--td-text-placeholder);
+}
+
+/* 弹窗内容 */
+[role="dialog"] [class*="p-6"],
+[role="dialog"] [class*="overflow-auto"] {
+  padding: 24px !important;
+}
+
+/* 弹窗底部按钮区 */
+[role="dialog"] [class*="border-t"][class*="px-3"] {
+  padding: 12px 24px !important;
+  border-top: 1px solid var(--td-gray-2);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   12. 统计卡片 — Dashboard
+   ═══════════════════════════════════════════════════════════ */
+
+/* 统计数字 */
+[class*="text-3xl"][class*="font-bold"],
+[class*="text-2xl"][class*="font-bold"] {
+  font-family: var(--td-font-din);
+  font-size: 30px;
+  font-weight: 500;
+  letter-spacing: -0.6px;
+  color: var(--td-text-primary);
+}
+
+[class*="text-xl"][class*="font-bold"] {
+  font-family: var(--td-font-din);
+  font-size: 28px;
+  font-weight: 400;
+}
+
+/* 统计卡片变化指示 */
+[class*="text-[10px]"][class*="bg-"] {
+  font-size: 12px !important;
+  padding: 2px 6px;
+  border-radius: var(--td-radius-s);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   13. 登录页面 — TDesign 样式
+   ═══════════════════════════════════════════════════════════ */
+
+/* 登录主按钮 */
+button[class*="bg-[#863bff]"] {
+  background: var(--td-brand) !important;
+  border-radius: var(--td-radius-s);
+  height: 40px !important;
+}
+
+button[class*="bg-[#863bff]"]:hover {
+  background: var(--td-brand-hover) !important;
+}
+
+/* 登录页紫色文字 */
+[class*="text-[#863bff]"] {
+  color: var(--td-brand) !important;
+}
+
+/* 登录页特性标签 */
+[class*="inline-flex"][class*="bg-white"][class*="shadow-sm"][class*="border"] {
+  border-radius: var(--td-radius-m);
+  border-color: var(--td-border) !important;
+  box-shadow: none !important;
+}
+
+/* 登录页装饰圆 */
+[class*="bg-[#863bff]"][class*="rounded-full"] {
+  background: var(--td-brand-light) !important;
+}
+
+[class*="bg-[#47bfff]"][class*="rounded-full"] {
+  background: rgba(0, 82, 217, 0.05) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   14. 图标 — 统一风格
+   ═══════════════════════════════════════════════════════════ */
+
+svg[class*="size-4"] {
+  width: 16px;
+  height: 16px;
+}
+
+svg[class*="size-5"] {
+  width: 20px;
+  height: 20px;
+}
+
+svg[class*="size-6"] {
+  width: 24px;
+  height: 24px;
+}
+
+/* 蓝色图标 → 品牌色 */
+svg[class*="text-blue-500"],
+svg[class*="text-blue-600"] {
+  color: var(--td-brand) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   15. 下拉菜单 / Popover — TDesign 样式
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="fixed"][class*="z-"][class*="rounded-lg"][class*="border"][class*="bg-white"][class*="shadow"],
+[role="listbox"],
+[role="menu"] {
+  border-radius: var(--td-radius-m) !important;
+  border-color: var(--td-border);
+  background: var(--td-bg-container) !important;
+  box-shadow: var(--td-shadow-2) !important;
+  padding: 4px;
+}
+
+[role="option"],
+[role="menuitem"] {
+  border-radius: var(--td-radius-s);
+  font-size: 14px;
+  padding: 7px 12px;
+  transition: all 100ms ease-out;
+}
+
+[role="option"]:hover,
+[role="menuitem"]:hover {
+  background: var(--td-brand-light);
+}
+
+[role="option"][data-highlighted],
+[role="menuitem"][data-highlighted] {
+  background: var(--td-brand-light);
+  color: var(--td-brand);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   16. Tabs 标签页
+   ═══════════════════════════════════════════════════════════ */
+
+/* Tab 切换器 */
+[class*="flex"][class*="gap-1"][class*="rounded-lg"][class*="bg-slate-100"][class*="p-0.5"] {
+  background: var(--td-gray-1) !important;
+  border-radius: var(--td-radius-s);
+  padding: 2px;
+  gap: 0;
+}
+
+[class*="flex"][class*="gap-1"][class*="rounded-lg"][class*="bg-slate-100"] button {
+  border-radius: var(--td-radius-s);
+  font-size: 14px;
+  padding: 5px 16px;
+  transition: all 100ms ease-out;
+}
+
+[class*="flex"][class*="gap-1"][class*="rounded-lg"][class*="bg-slate-100"] button[class*="bg-white"],
+[class*="flex"][class*="gap-1"][class*="rounded-lg"][class*="bg-slate-100"] button[aria-selected="true"] {
+  background: var(--td-bg-container) !important;
+  color: var(--td-brand) !important;
+  font-weight: 500;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   17. 分隔线
+   ═══════════════════════════════════════════════════════════ */
+
+[role="separator"],
+hr,
+[class*="border-t"][class*="border-slate-"] {
+  border-color: var(--td-gray-3) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   18. 空状态
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="flex"][class*="items-center"][class*="justify-center"][class*="text-slate-400"] {
+  color: var(--td-text-placeholder);
+}
+
+[class*="flex"][class*="items-center"][class*="justify-center"][class*="text-slate-300"] {
+  color: var(--td-gray-5);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   19. 链接色统一
+   ═══════════════════════════════════════════════════════════ */
+
+a[class*="text-blue-600"],
+[class*="text-blue-600"][class*="hover:text-blue-800"][class*="cursor-pointer"] {
+  color: var(--td-brand) !important;
+}
+
+a[class*="text-blue-600"]:hover,
+[class*="text-blue-600"][class*="hover:text-blue-800"]:hover {
+  color: var(--td-brand-hover) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   20. 确认弹窗 (AlertDialog)
+   ═══════════════════════════════════════════════════════════ */
+
+/* 危险操作确认 */
+[class*="bg-red-50"][class*="border-red-200"][class*="rounded-lg"][class*="p-2.5"],
+[class*="bg-red-50"][class*="border-red-200"][class*="rounded-lg"][class*="p-3"] {
+  background: var(--td-error-light) !important;
+  border-color: rgba(213, 73, 65, 0.2) !important;
+  color: var(--td-error) !important;
+  border-radius: var(--td-radius-m) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   21. 加载动画
+   ═══════════════════════════════════════════════════════════ */
+
+svg[class*="animate-spin"] {
+  color: var(--td-brand) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   22. 信息提示条
+   ═══════════════════════════════════════════════════════════ */
+
+/* 蓝色信息条 */
+[class*="rounded-md"][class*="bg-blue-50"][class*="px-2"] {
+  background: var(--td-brand-light) !important;
+  color: var(--td-brand) !important;
+  border-radius: var(--td-radius-s);
+}
+
+/* 绿色提示条 */
+[class*="rounded-md"][class*="bg-emerald-50"][class*="px-2"] {
+  background: var(--td-success-light) !important;
+  color: var(--td-success) !important;
+  border-radius: var(--td-radius-s);
+}
+
+/* 橙色警告条 */
+[class*="rounded-md"][class*="bg-amber-50"][class*="px-2"] {
+  background: var(--td-warning-light) !important;
+  color: var(--td-warning) !important;
+  border-radius: var(--td-radius-s);
+}
+
+/* 灰色提示条 */
+[class*="rounded-md"][class*="bg-slate-50"][class*="px-2"] {
+  background: var(--td-gray-1) !important;
+  color: var(--td-text-secondary) !important;
+  border-radius: var(--td-radius-s);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   23. 搜索框
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="h-7"][class*="pl-7"][class*="text-xs"][class*="bg-slate-50"] {
+  background: var(--td-gray-1) !important;
+  border: 1px solid transparent;
+  border-radius: var(--td-radius-s);
+  padding-left: 32px !important;
+  height: 32px !important;
+  font-size: 14px !important;
+  transition: all 100ms ease-out;
+}
+
+[class*="h-7"][class*="pl-7"][class*="text-xs"][class*="bg-slate-50"]:focus {
+  background: var(--td-bg-container) !important;
+  border-color: var(--td-brand);
+  box-shadow: 0 0 0 2px rgba(0, 82, 217, 0.2);
+}
+
+/* ═══════════════════════════════════════════════════════════
+   24. 代码块
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="bg-slate-800"][class*="text-slate-200"][class*="rounded-md"] {
+  background: #1A1A1A !important;
+  color: #E7E7E7 !important;
+  border-radius: var(--td-radius-m) !important;
+  font-family: var(--td-font-mono);
+  font-size: 13px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   25. 模型配置卡片
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="grid"][class*="grid-cols-2"][class*="gap-0"][class*="rounded-lg"][class*="border"] {
+  border-radius: var(--td-radius-s) !important;
+  border-color: var(--td-border) !important;
+  overflow: hidden;
+}
+
+[class*="bg-slate-50"][class*="font-semibold"][class*="text-left"][class*="px-2.5"][class*="py-2"][class*="border"] {
+  background: var(--td-gray-1) !important;
+  color: var(--td-text-secondary) !important;
+  font-size: 13px;
+  font-weight: 500;
+  border-color: var(--td-border) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   26. 时间线 / 活动记录
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="border-l-3"][class*="border-blue-400"] {
+  border-left: 3px solid var(--td-brand) !important;
+  border-radius: 0 var(--td-radius-s) var(--td-radius-s) 0;
+  background: var(--td-gray-1) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   27. 滚动条 — TDesign 风格
+   ═══════════════════════════════════════════════════════════ */
+
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.1);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.2);
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.12) transparent;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   28. Tooltip / 浮层
+   ═══════════════════════════════════════════════════════════ */
+
+[data-radix-popper-content-wrapper] > div {
+  border-radius: var(--td-radius-m) !important;
+  border: 1px solid var(--td-border) !important;
+  box-shadow: var(--td-shadow-2) !important;
+  font-size: 12px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   29. 面包屑样式的时间戳
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="text-[10px]"][class*="text-slate-400"] {
+  font-size: 12px !important;
+  color: var(--td-text-placeholder) !important;
+}
+
+[class*="text-[11px]"][class*="text-slate-400"],
+[class*="text-[11px]"][class*="text-slate-500"] {
+  font-size: 12px !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   30. 状态点
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="size-1.5"][class*="rounded-full"][class*="bg-"] {
+  width: 6px;
+  height: 6px;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   31. 全局颜色替换 — 所有 blue 色调替换为品牌色
+   ═══════════════════════════════════════════════════════════ */
+
+.text-blue-600 { color: var(--td-brand) !important; }
+.text-blue-700 { color: var(--td-brand) !important; }
+.text-blue-500 { color: var(--td-brand-hover) !important; }
+.text-blue-400 { color: var(--td-brand) !important; }
+
+.bg-blue-50 { background: var(--td-brand-light) !important; }
+.bg-blue-100 { background: rgba(0, 82, 217, 0.08) !important; }
+.bg-blue-400 { background: var(--td-brand) !important; }
+.bg-blue-500 { background: var(--td-brand) !important; }
+
+.border-blue-100 { border-color: rgba(0, 82, 217, 0.15) !important; }
+.border-blue-200 { border-color: rgba(0, 82, 217, 0.20) !important; }
+.border-blue-400 { border-color: var(--td-brand) !important; }
+
+.hover\:text-blue-500:hover { color: var(--td-brand-hover) !important; }
+.hover\:text-blue-700:hover { color: var(--td-brand) !important; }
+.hover\:text-blue-800:hover { color: var(--td-brand-active) !important; }
+.hover\:bg-blue-50:hover { background: var(--td-brand-light) !important; }
+
+.border-t-blue-500 { border-top-color: var(--td-brand) !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   32. 绿色统一为 TDesign 成功色
+   ═══════════════════════════════════════════════════════════ */
+
+.text-emerald-600 { color: var(--td-success) !important; }
+.text-emerald-700 { color: var(--td-success) !important; }
+.text-emerald-500 { color: var(--td-success-hover) !important; }
+.text-emerald-400 { color: var(--td-success) !important; }
+.text-green-600 { color: var(--td-success) !important; }
+.text-green-700 { color: var(--td-success) !important; }
+
+.bg-emerald-50 { background: var(--td-success-light) !important; }
+.bg-emerald-100 { background: var(--td-success-light) !important; }
+.bg-green-50 { background: var(--td-success-light) !important; }
+.bg-green-100 { background: var(--td-success-light) !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   33. 红色统一为 TDesign 错误色
+   ═══════════════════════════════════════════════════════════ */
+
+.text-red-600 { color: var(--td-error) !important; }
+.text-red-700 { color: var(--td-error) !important; }
+.text-red-500 { color: var(--td-error-hover) !important; }
+.text-red-400 { color: var(--td-error) !important; }
+
+.bg-red-50 { background: var(--td-error-light) !important; }
+.bg-red-100 { background: var(--td-error-light) !important; }
+
+.border-red-200 { border-color: rgba(213, 73, 65, 0.20) !important; }
+.border-red-300:hover { border-color: rgba(213, 73, 65, 0.30) !important; }
+
+.hover\:text-red-400:hover,
+.hover\:text-red-500:hover { color: var(--td-error) !important; }
+.hover\:bg-red-50:hover { background: var(--td-error-light) !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   34. 橙色/黄色统一为 TDesign 警告色
+   ═══════════════════════════════════════════════════════════ */
+
+.text-amber-600 { color: var(--td-warning) !important; }
+.text-amber-700 { color: var(--td-warning) !important; }
+.text-amber-500 { color: var(--td-warning-hover) !important; }
+.text-amber-400 { color: var(--td-warning) !important; }
+.text-yellow-600 { color: var(--td-warning) !important; }
+.text-yellow-700 { color: var(--td-warning) !important; }
+.text-yellow-500 { color: var(--td-warning-hover) !important; }
+.text-orange-500 { color: var(--td-warning) !important; }
+
+.bg-amber-50 { background: var(--td-warning-light) !important; }
+.bg-amber-100 { background: var(--td-warning-light) !important; }
+.bg-yellow-50 { background: var(--td-warning-light) !important; }
+.bg-yellow-100 { background: var(--td-warning-light) !important; }
+.bg-orange-50 { background: var(--td-warning-light) !important; }
+.bg-orange-100 { background: var(--td-warning-light) !important; }
+
+.border-amber-200 { border-color: rgba(227, 115, 24, 0.20) !important; }
+.border-yellow-200 { border-color: rgba(227, 115, 24, 0.20) !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   35. 紫色 → 品牌色
+   ═══════════════════════════════════════════════════════════ */
+
+.text-purple-600 { color: var(--td-brand) !important; }
+.text-purple-700 { color: var(--td-brand) !important; }
+.text-violet-500 { color: var(--td-brand) !important; }
+.text-violet-600 { color: var(--td-brand) !important; }
+
+.bg-purple-50 { background: var(--td-brand-light) !important; }
+.bg-purple-100 { background: rgba(0, 82, 217, 0.08) !important; }
+.bg-violet-50 { background: var(--td-brand-light) !important; }
+.bg-indigo-50 { background: var(--td-brand-light) !important; }
+.bg-indigo-100 { background: rgba(0, 82, 217, 0.08) !important; }
+
+.border-violet-100 { border-color: rgba(0, 82, 217, 0.15) !important; }
+.border-purple-100 { border-color: rgba(0, 82, 217, 0.15) !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   36. Slate 灰阶 → TDesign 灰阶
+   ═══════════════════════════════════════════════════════════ */
+
+.text-slate-900 { color: var(--td-text-primary) !important; }
+.text-slate-800 { color: rgba(0, 0, 0, 0.8) !important; }
+.text-slate-700 { color: var(--td-text-secondary) !important; }
+.text-slate-600 { color: var(--td-text-secondary) !important; }
+.text-slate-500 { color: var(--td-text-placeholder) !important; }
+.text-slate-400 { color: var(--td-text-placeholder) !important; }
+.text-slate-300 { color: var(--td-gray-5) !important; }
+.text-slate-200 { color: var(--td-gray-4) !important; }
+
+.bg-slate-50 { background: var(--td-bg-page) !important; }
+.bg-slate-100 { background: var(--td-gray-1) !important; }
+.bg-slate-200 { background: var(--td-gray-3) !important; }
+
+.border-slate-100 { border-color: var(--td-gray-3) !important; }
+.border-slate-200 { border-color: var(--td-border) !important; }
+.border-slate-300 { border-color: var(--td-border-hover) !important; }
+
+/* 侧边栏 hover 不受灰色覆写影响 */
+aside button:hover,
+aside a:hover {
+  background: var(--td-brand-light) !important;
+}
+
+.hover\:bg-slate-50:hover:not(aside button):not(aside a) { background: var(--td-bg-page) !important; }
+.hover\:bg-slate-100:hover:not(aside button):not(aside a) { background: var(--td-gray-1) !important; }
+.hover\:bg-slate-200:hover:not(aside button):not(aside a) { background: var(--td-gray-3) !important; }
+
+.hover\:text-slate-600:hover { color: var(--td-text-secondary) !important; }
+.hover\:text-slate-700:hover { color: var(--td-text-secondary) !important; }
+.hover\:text-slate-900:hover { color: var(--td-text-primary) !important; }
+
+.hover\:border-slate-300:hover { border-color: var(--td-border-hover) !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   37. 圆角统一
+   ═══════════════════════════════════════════════════════════ */
+
+/* 大圆角 xl → 8px */
+.rounded-xl { border-radius: var(--td-radius-l) !important; }
+
+/* 中圆角 lg → 6px */
+.rounded-lg { border-radius: var(--td-radius-m) !important; }
+
+/* 小圆角 md → 3px */
+.rounded-md { border-radius: var(--td-radius-s) !important; }
+
+/* 极小圆角 sm → 3px */
+.rounded-sm { border-radius: var(--td-radius-s) !important; }
+
+/* 图片圆角恢复 */
+img.rounded-lg { border-radius: var(--td-radius-m) !important; }
+img.rounded-xl { border-radius: var(--td-radius-l) !important; }
+
+/* ═══════════════════════════════════════════════════════════
+   38. 数字统计对齐
+   ═══════════════════════════════════════════════════════════ */
+
+.tabular-nums {
+  font-family: var(--td-font-din);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   39. 覆写内联紫色 #863bff → 品牌色
+   ═══════════════════════════════════════════════════════════ */
+
+[style*="#863bff"],
+[style*="863bff"] {
+  color: var(--td-brand) !important;
+  background-color: var(--td-brand) !important;
+}
+
+[style*="#7535e6"] {
+  background-color: var(--td-brand-hover) !important;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   40. 覆写最小字号 — 不允许 10px/11px
+   ═══════════════════════════════════════════════════════════ */
+
+[class*="text-[10px]"] {
+  font-size: 12px !important;
+}
+
+[class*="text-[11px]"] {
+  font-size: 12px !important;
+}
+
+/* 例外：统计卡片的 tabular-nums 保持原样 */
+[class*="text-[10px]"].tabular-nums {
+  font-size: 12px !important;
+}

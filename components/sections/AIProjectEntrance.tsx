@@ -45,7 +45,8 @@ const projects: AIProject[] = [
     description:
       '企业级资产管理后台高保真可交互原型——覆盖资产台账、入库、盘点、维保、经营租赁、产权股权、资产地图、竞价与驾驶舱 10 大模块。',
     year: '2026',
-    tryLiveHref: 'https://lunch19930101-bot.github.io/enterprise-asset-management/',
+    // 镜像到 wufan.cc 子路径（github.io 大陆直连不可达），源站仍保留
+    tryLiveHref: '/enterprise-asset-management',
     githubHref: 'https://github.com/lunch19930101-bot/enterprise-asset-management',
     status: 'live',
     featured: true,
@@ -72,7 +73,7 @@ const projects: AIProject[] = [
     title: 'AI资产管家系统',
     description: 'AI 工具数据分析平台——员工使用趋势与效率提升，可视化驱动管理决策。',
     year: '2026',
-    tryLiveHref: 'https://lunch19930101-bot.github.io/ai-usage-analytics/',
+    tryLiveHref: '/ai-usage-analytics',
     githubHref: 'https://github.com/lunch19930101-bot/ai-usage-analytics',
     status: 'live',
     /* 紫绿双色 —— 顶部紫辉 + 右下数据绿，呼应可视化图表 */
