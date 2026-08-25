@@ -85,10 +85,16 @@ export function AIProjectEntrance() {
 
   return (
     <section id="ai-projects" aria-label="AI 协作项目" className="w-full scroll-mt-[104px]">
+      {/* 手机端眉题 —— 给三卡一个文字锚点，避免页面突然跳进卡片堆（PC 无眉题，维持原状） */}
+      <p className="mb-[16px] font-mono text-[11px] uppercase tracking-wider text-text-tertiary md:hidden">
+        AI 协作 · build in public
+      </p>
       {/* Grid: 1 top (占满) + 2 bottom。
           手机单列 —— 两列时小卡仅 ~150px 宽，按钮行（try live+github 约 166px）
-          被挤压错位且横向溢出卡片；md 起恢复两列 */}
-      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+          被挤压错位且横向溢出卡片；md 起恢复两列。
+          手机端触控改造（2026-08-25）：卡距 12→16px，按钮升 44px 触控档
+          （primary 满宽 + github 方形图标钮）——md 档全部不变 */}
+      <div className="grid grid-cols-1 gap-[16px] md:grid-cols-2 md:gap-3">
         {featured && <FeaturedCard project={featured} />}
         {rest.map((p) => (
           <MiniCard key={p.id} project={p} />
@@ -132,26 +138,28 @@ function FeaturedCard({ project }: { project: AIProject }) {
         {project.title}
       </h3>
 
-      {/* 描述 */}
-      <p className="text-pretty text-sm leading-relaxed text-text-secondary">
+      {/* 描述 —— 手机行高放宽到 1.75 便于滚动阅读 */}
+      <p className="text-pretty text-sm leading-[1.75] text-text-secondary md:leading-relaxed">
         {project.description}
       </p>
 
-      {/* 按钮组 */}
+      {/* 按钮组 —— 手机：primary 满宽 44px + github 44px 方形图标钮 */}
       <div className="mt-auto flex items-center gap-2 pt-1">
         <ActionButton
           href={project.tryLiveHref}
-          icon={<ExternalLinkIcon className="size-[14px]" />}
+          icon={<ExternalLinkIcon className="size-[16px] md:size-[14px]" />}
           label="try live"
           disabled={isSoon}
           primary
+          mobile="full"
           newTab
         />
         <ActionButton
           href={project.githubHref}
-          icon={<GithubIcon className="size-[14px]" />}
+          icon={<GithubIcon className="size-[16px] md:size-[14px]" />}
           label="github"
           disabled={isSoon}
+          mobile="icon"
         />
       </div>
     </article>
@@ -187,28 +195,30 @@ function MiniCard({ project }: { project: AIProject }) {
         {project.title}
       </h3>
 
-      {/* 描述 —— 钳制 2 行，入口高度随 2 行文案对齐 */}
-      <p className="line-clamp-2 text-[13px] leading-relaxed text-text-secondary">
+      {/* 描述 —— 钳制 2 行，入口高度随 2 行文案对齐；手机行高放宽 */}
+      <p className="line-clamp-2 text-[13px] leading-[1.7] text-text-secondary md:leading-relaxed">
         {project.description}
       </p>
 
-      {/* 按钮组 */}
-      <div className="mt-auto flex items-center gap-1.5 pt-1">
+      {/* 按钮组 —— 手机：与 Featured 相同的 44px 触控档，卡间距补到 8px */}
+      <div className="mt-auto flex items-center gap-[8px] pt-1 md:gap-1.5">
         <ActionButton
           href={project.tryLiveHref}
-          icon={<ExternalLinkIcon className="size-[12px]" />}
+          icon={<ExternalLinkIcon className="size-[16px] md:size-[12px]" />}
           label="try live"
           disabled={isSoon}
           primary
           compact
+          mobile="full"
           newTab
         />
         <ActionButton
           href={project.githubHref}
-          icon={<GithubIcon className="size-[12px]" />}
+          icon={<GithubIcon className="size-[16px] md:size-[12px]" />}
           label="github"
           disabled={isSoon}
           compact
+          mobile="icon"
         />
       </div>
     </article>
@@ -224,7 +234,8 @@ function StatusPill({ status }: { status: 'live' | 'soon' }) {
       <span
         className={cn(
           'inline-flex items-center gap-1.5 rounded-full',
-          'px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider',
+          'px-[10px] py-[4px] font-mono text-[11px] uppercase tracking-wider',
+          'md:px-2 md:py-0.5 md:text-[10px]',
           'border border-accent-lime/30 bg-accent-lime/10 text-accent-lime',
         )}
       >
@@ -237,7 +248,9 @@ function StatusPill({ status }: { status: 'live' | 'soon' }) {
     <span
       className={cn(
         'inline-flex items-center rounded-full border border-border-subtle',
-        'px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-text-tertiary',
+        'px-[10px] py-[4px] font-mono text-[11px] uppercase tracking-wider',
+        'md:px-2 md:py-0.5 md:text-[10px]',
+        'text-text-tertiary',
       )}
     >
       soon
@@ -250,7 +263,11 @@ function StatusPill({ status }: { status: 'live' | 'soon' }) {
  *   - primary（try live）：bg-bg-surface 强调
  *   - secondary（github）：bg-transparent
  *   - disabled：opacity 50%，cursor default
- *   - h-[30px]（featured）/ h-[26px]（compact）
+ *   - md 档：h-[30px]（featured）/ h-[26px]（compact）
+ *   - 手机触控档（mobile prop，2026-08-25）：
+ *       full = 44px 满宽主钮（flex-1 + 居中）
+ *       icon = 44px 方形图标钮（label 手机隐藏，保留 aria-label）
+ *     解决手机端 26–30px 按钮远低于 44px 触控标准的问题
  * ============================================================ */
 function ActionButton({
   href,
@@ -260,6 +277,7 @@ function ActionButton({
   primary,
   compact,
   newTab,
+  mobile,
 }: {
   href?: string;
   icon: React.ReactNode;
@@ -268,12 +286,24 @@ function ActionButton({
   primary?: boolean;
   compact?: boolean;
   newTab?: boolean;
+  mobile?: 'full' | 'icon';
 }) {
+  const mdSize = compact ? 'md:h-[26px] md:px-2' : 'md:h-[30px] md:px-2.5';
+  const size =
+    mobile === 'full'
+      ? cn('h-[44px] flex-1 justify-center px-4 md:flex-none', mdSize)
+      : mobile === 'icon'
+        ? cn('h-[44px] w-[44px] shrink-0 justify-center px-0 md:w-auto', mdSize)
+        : compact
+          ? 'h-[26px] px-2'
+          : 'h-[30px] px-2.5';
+
   const cls = cn(
     'inline-flex items-center gap-1.5 rounded-[var(--control-radius)]',
-    'font-mono text-[11px] uppercase tracking-wider',
+    'font-mono uppercase tracking-wider',
+    mobile ? 'text-xs md:text-[11px]' : 'text-[11px]',
     'transition-colors duration-micro ease-out-quart',
-    compact ? 'h-[26px] px-2' : 'h-[30px] px-2.5',
+    size,
     disabled
       ? 'border border-border-subtle bg-transparent text-text-tertiary opacity-50'
       : primary
@@ -284,13 +314,13 @@ function ActionButton({
   const content = (
     <>
       {icon}
-      <span>{label}</span>
+      <span className={mobile === 'icon' ? 'hidden md:inline' : undefined}>{label}</span>
     </>
   );
 
   if (disabled || !href) {
     return (
-      <span aria-disabled="true" className={cls}>
+      <span aria-disabled="true" aria-label={label} className={cls}>
         {content}
       </span>
     );
@@ -302,7 +332,7 @@ function ActionButton({
   // newTab 强制外部锚点行为：内部路径也用 <a target="_blank">
   if (isInternal && !newTab) {
     return (
-      <Link href={href} data-cursor="link" className={cls}>
+      <Link href={href} data-cursor="link" aria-label={label} className={cls}>
         {content}
       </Link>
     );
@@ -314,6 +344,7 @@ function ActionButton({
       target={isExternal || newTab ? '_blank' : undefined}
       rel={isExternal || newTab ? 'noopener noreferrer' : undefined}
       data-cursor="link"
+      aria-label={label}
       className={cls}
     >
       {content}
