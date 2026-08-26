@@ -35,6 +35,8 @@ type AIProject = {
   featured?: boolean;
   /** 仅手机端入口显示（PC 隐藏）——移动端专属演示项目 */
   mobileOnly?: boolean;
+  /** 手机端 Deck 卡圆角（px）——取自各项目自身设计系统的容器圆角，随切换联动 */
+  radius: number;
   /** 浅色渐变底 —— 叠在 bg-bg-elevated 之上，随明暗主题自适应 */
   accent: string;
 };
@@ -52,6 +54,7 @@ const projects: AIProject[] = [
     githubHref: 'https://github.com/lunch19930101-bot/enterprise-asset-management',
     status: 'live',
     featured: true,
+    radius: 8, /* TDesign Web —— 后台 Figma 卡片/统计盒 8px */
     /* 企业蓝 —— 双角辉光，呼应数据驾驶舱 */
     accent:
       'radial-gradient(110% 90% at 0% 0%, rgba(44,127,255,0.16) 0%, rgba(44,127,255,0) 58%), radial-gradient(80% 70% at 100% 100%, rgba(44,127,255,0.08) 0%, rgba(44,127,255,0) 55%)',
@@ -65,6 +68,7 @@ const projects: AIProject[] = [
     tryLiveHref: '/resume',
     githubHref: 'https://github.com/wufan-example/resume-playground',
     status: 'live',
+    radius: 2, /* 纸面编辑器 —— 纸边锐利 */
     /* 纸墨暖光 —— 右上角纸色渐染，呼应文档/纸面 */
     accent:
       'radial-gradient(110% 90% at 100% 0%, rgba(251,191,36,0.13) 0%, rgba(251,191,36,0) 60%)',
@@ -78,6 +82,7 @@ const projects: AIProject[] = [
     tryLiveHref: '/ai-usage-analytics',
     githubHref: 'https://github.com/lunch19930101-bot/ai-usage-analytics',
     status: 'live',
+    radius: 6, /* 数据看板 —— TDesign --td-radius-m 容器 6px */
     /* 紫绿双色 —— 顶部紫辉 + 右下数据绿，呼应可视化图表 */
     accent:
       'radial-gradient(110% 90% at 50% 0%, rgba(120,54,242,0.15) 0%, rgba(120,54,242,0) 62%), radial-gradient(70% 60% at 100% 100%, rgba(42,175,118,0.09) 0%, rgba(42,175,118,0) 55%)',
@@ -93,6 +98,7 @@ const projects: AIProject[] = [
     // 客户项目源码不公开
     status: 'live',
     mobileOnly: true,
+    radius: 12, /* TDesign Mobile —— --td-radius-extraLarge 12px */
     /* uni-app 青绿 —— 左下角单辉光，呼应移动端品牌色 */
     accent:
       'radial-gradient(110% 90% at 0% 100%, rgba(0,150,136,0.15) 0%, rgba(0,150,136,0) 58%)',
@@ -130,13 +136,18 @@ export function AIProjectEntrance() {
  * 结构：分段切换器（01/02/03，tablist）+ 单张全量竖卡视窗。
  * 交互：tap 分段切换；卡上左右滑动切换（跟手拖拽 + 松手吸附，
  *       边缘橡胶筋回弹）；touch-action: pan-y 不劫持纵向滚动。
- * 三张卡等高（track 取最高者），切换时按钮位置稳定不跳动。
+ * 各卡等高（track 取最高者），切换时按钮位置稳定不跳动。
+ * 圆角联动：视窗圆角取当前项目设计系统的容器圆角（8/2/6/12px），
+ *       拖拽时随手势与相邻卡插值，松手沿同一根 420ms 曲线吸附。
  * ============================================================ */
 function MobileProjectDeck({ projects }: { projects: AIProject[] }) {
   const total = projects.length;
   const [active, setActive] = useState(0);
   const [drag, setDrag] = useState<number | null>(null); // 拖拽中的 px 偏移；null = 未拖拽
   const start = useRef<{ x: number; y: number; horizontal: boolean } | null>(null);
+  const vpRef = useRef<HTMLDivElement>(null);
+
+  const radiusOf = (i: number) => projects[i]?.radius ?? 16;
 
   const step = (dir: 1 | -1) =>
     setActive((a) => Math.min(total - 1, Math.max(0, a + dir)));
@@ -182,6 +193,16 @@ function MobileProjectDeck({ projects }: { projects: AIProject[] }) {
     transform: `translateX(calc(${(-active * 100) / total}% + ${drag ?? 0}px))`,
   };
 
+  // 圆角跟随切换：拖拽时按手势进度在两卡圆角间线性插值（跟手），
+  // 松手/tap 后交给 transition 吸附到目标卡圆角
+  let radius = radiusOf(active);
+  if (drag !== null) {
+    const w = vpRef.current?.clientWidth || 375;
+    const p = Math.max(-1, Math.min(1, -drag / w)); // >0 = 拖向下一张
+    const to = p >= 0 ? Math.min(total - 1, active + 1) : Math.max(0, active - 1);
+    radius = radiusOf(active) + (radiusOf(to) - radiusOf(active)) * Math.abs(p);
+  }
+
   return (
     <div className="md:hidden">
       {/* 手机端眉题 —— 给模块一个文字锚点（PC 无眉题，维持原状） */}
@@ -217,12 +238,17 @@ function MobileProjectDeck({ projects }: { projects: AIProject[] }) {
         ))}
       </div>
 
-      {/* 竖向单卡视窗 —— 跟手滑动切换 */}
+      {/* 竖向单卡视窗 —— 跟手滑动切换；圆角随切换穿上当前项目的圆角语言 */}
       <div
+        ref={vpRef}
+        style={{ borderRadius: `${radius}px` }}
         className={cn(
-          'overflow-hidden rounded-[var(--showcase-radius)]',
+          'overflow-hidden',
           'border border-border-subtle bg-bg-elevated',
           '[touch-action:pan-y]',
+          drag === null
+            ? 'transition-[border-radius] duration-[420ms] ease-[var(--ease-out-expo)] motion-reduce:transition-none'
+            : 'transition-none',
         )}
         onTouchStart={onTouchStart}
         onTouchMove={onTouchMove}
