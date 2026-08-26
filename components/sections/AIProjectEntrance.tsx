@@ -33,6 +33,8 @@ type AIProject = {
   githubHref?: string;
   status: 'live' | 'soon';
   featured?: boolean;
+  /** 仅手机端入口显示（PC 隐藏）——移动端专属演示项目 */
+  mobileOnly?: boolean;
   /** 浅色渐变底 —— 叠在 bg-bg-elevated 之上，随明暗主题自适应 */
   accent: string;
 };
@@ -80,10 +82,27 @@ const projects: AIProject[] = [
     accent:
       'radial-gradient(110% 90% at 50% 0%, rgba(120,54,242,0.15) 0%, rgba(120,54,242,0) 62%), radial-gradient(70% 60% at 100% 100%, rgba(42,175,118,0.09) 0%, rgba(42,175,118,0) 55%)',
   },
+  {
+    id: 'asset-mobile',
+    index: '04',
+    title: '资产管理移动端',
+    description:
+      '基于 uni-app + Vue 2 的企业资产管理 App——数据看板、工作台、我的三大首页与资产详情页，按 Figma 设计稿逐页还原。演示数据已脱敏，移动端限定。',
+    year: '2026',
+    tryLiveHref: '/asset-mobile',
+    // 客户项目源码不公开
+    status: 'live',
+    mobileOnly: true,
+    /* uni-app 青绿 —— 左下角单辉光，呼应移动端品牌色 */
+    accent:
+      'radial-gradient(110% 90% at 0% 100%, rgba(0,150,136,0.15) 0%, rgba(0,150,136,0) 58%)',
+  },
 ];
 
 export function AIProjectEntrance() {
-  const [featured, ...rest] = projects;
+  // mobileOnly 项目（04 移动端限定）只在手机 Deck 出现，PC 网格过滤掉
+  const desktop = projects.filter((p) => !p.mobileOnly);
+  const [featured, ...rest] = desktop;
 
   return (
     <section id="ai-projects" aria-label="AI 协作项目" className="w-full scroll-mt-[104px]">

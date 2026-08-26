@@ -1,0 +1,125 @@
+.theme-color {
+  color: #305ee0 !important;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.red-color {
+  color: #eb053e !important;
+}
+
+.success-color {
+  color: #1A8F43;
+}
+
+.warning-color {
+  color: #FB8A00 !important;
+}
+
+.flex-center {
+  display: flex;
+  align-items: center;
+}
+
+.space-between {
+  justify-content: space-between;
+}
+
+.tag-primary-transparent {
+  background: #e6f1fa;
+  color: #305EE0;
+}
+
+.tag-success-transparent {
+  background: #f0f9eb;
+  color: #67c23a;
+}
+
+.tag-error-transparent {
+  background: #fef0f0;
+  color: #FF6969;
+}
+
+.tag-info-transparent {
+  background: #e7e7e7;
+  color: #909399;
+}
+
+.tag-primary {
+  background: #305EE0;
+  color: #fff;
+}
+
+.tag-warning {
+  background: #FB8A00;
+  color: #fff;
+}
+
+.tag-error {
+  background: #FF6969;
+  color: #fff;
+}
+
+.tag-info {
+  background: #D7D7D7;
+  color: #111;
+}
+
+.tag-success {
+  background: #1A8F43 !important;
+  color: #fff;
+}
+
+.tag-light-success {
+  background: #f0f9eb !important;
+  color: #1A8F43 !important;
+}
+
+
+
+
+.ellipsis-1-lines {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.ellipsis-2-lines {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  /* 限制文本为2行 */
+  overflow: hidden;
+}
+
+.status1 {
+  background: #e6a23c !important;
+  color: #ffffff !important;
+}
+
+.status2 {
+  background: #f56c6c !important;
+  color: #ffffff !important;
+}
+
+.status3 {
+  background: #67c23a !important;
+  color: #ffffff !important;
+}
+
+.status4 {
+  background: #fde2e2 !important;
+  color: #ffffff !important;
+}
+
+.status5 {
+  background: #305ee0 !important;
+  color: #ffffff !important;
+}
+
+.status6 {
+  background: #de19ba !important;
+  color: #ffffff !important;
+}

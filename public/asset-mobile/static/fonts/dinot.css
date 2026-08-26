@@ -1,0 +1,18 @@
+/* DINOT 字体定义 — 数据看板数字专用
+ * 来源：FF DIN Pro OpenType (Albert-Jan Pool)
+ * 对应 Figma 设计稿中的 DINOT:Bold / DINOT:Medium
+ */
+@font-face {
+  font-family: 'DINOT';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('/static/fonts/DINOT-Medium.otf') format('opentype');
+}
+@font-face {
+  font-family: 'DINOT';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/static/fonts/DINOT-Bold.otf') format('opentype');
+}
