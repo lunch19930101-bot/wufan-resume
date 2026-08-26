@@ -92,7 +92,7 @@ const projects: AIProject[] = [
     index: '04',
     title: '资产管理移动端',
     description:
-      '基于 uni-app + Vue 2 的企业资产管理 App——数据看板、工作台、我的三大首页与资产详情页，按 Figma 设计稿逐页还原。演示数据已脱敏，移动端限定。',
+      '基于 uni-app + Vue 2 的企业资产管理 App——登录、数据看板、工作台、我的与资产列表/详情页，按 Figma 设计稿逐页还原。内置脱敏演示账号，可完整走通登录流程，移动端限定。',
     year: '2026',
     tryLiveHref: '/asset-mobile',
     // 客户项目源码不公开
@@ -195,12 +195,15 @@ function MobileProjectDeck({ projects }: { projects: AIProject[] }) {
 
   // 圆角跟随切换：拖拽时按手势进度在两卡圆角间线性插值（跟手），
   // 松手/tap 后交给 transition 吸附到目标卡圆角
-  let radius = radiusOf(active);
+  let dragP = 0; // 拖拽进度（-1..1，>0 = 拖向下一张）——胶囊滑块与圆角共用
   if (drag !== null) {
     const w = vpRef.current?.clientWidth || 375;
-    const p = Math.max(-1, Math.min(1, -drag / w)); // >0 = 拖向下一张
-    const to = p >= 0 ? Math.min(total - 1, active + 1) : Math.max(0, active - 1);
-    radius = radiusOf(active) + (radiusOf(to) - radiusOf(active)) * Math.abs(p);
+    dragP = Math.max(-1, Math.min(1, -drag / w));
+  }
+  let radius = radiusOf(active);
+  if (dragP !== 0) {
+    const to = dragP >= 0 ? Math.min(total - 1, active + 1) : Math.max(0, active - 1);
+    radius = radiusOf(active) + (radiusOf(to) - radiusOf(active)) * Math.abs(dragP);
   }
 
   return (
@@ -210,12 +213,28 @@ function MobileProjectDeck({ projects }: { projects: AIProject[] }) {
         AI 协作 · build in public
       </p>
 
-      {/* 分段切换器 —— 国资管家式 pill tabs，44px 触控档 */}
+      {/* 分段切换器 —— 国资管家式 pill tabs，44px 触控档。
+          选中态为滑动圆角滑块：tap 时 420ms 滑到新槽位，拖卡时跟手移动 */}
       <div
         role="tablist"
         aria-label="切换项目"
-        className="mb-[12px] flex rounded-full border border-border-subtle bg-bg-elevated p-[3px]"
+        className="relative mb-[12px] flex rounded-full border border-border-subtle bg-bg-elevated p-[3px]"
       >
+        {/* 滑块 —— 占一个槽位宽，translateX 按槽位步进（与卡片滑动同一根曲线） */}
+        <span aria-hidden className="pointer-events-none absolute inset-[3px]">
+          <span
+            style={{
+              width: `${100 / total}%`,
+              transform: `translateX(${(active + dragP) * 100}%)`,
+            }}
+            className={cn(
+              'h-full rounded-full bg-bg-surface shadow-[var(--shadow-elev-1)]',
+              drag === null
+                ? 'transition-transform duration-[420ms] ease-[var(--ease-out-expo)] motion-reduce:transition-none'
+                : 'transition-none',
+            )}
+          />
+        </span>
         {projects.map((p, i) => (
           <button
             key={p.id}
@@ -225,12 +244,10 @@ function MobileProjectDeck({ projects }: { projects: AIProject[] }) {
             aria-label={`项目 ${p.index} ${p.title}`}
             onClick={() => setActive(i)}
             className={cn(
-              'flex h-[38px] flex-1 items-center justify-center rounded-full',
+              'relative flex h-[38px] flex-1 items-center justify-center rounded-full',
               'font-mono text-xs uppercase tracking-wider tabular-nums',
               'transition-colors duration-micro ease-out-quart',
-              i === active
-                ? 'bg-bg-surface text-text-primary shadow-[var(--shadow-elev-1)]'
-                : 'text-text-tertiary',
+              i === active ? 'text-text-primary' : 'text-text-tertiary',
             )}
           >
             {p.index}
