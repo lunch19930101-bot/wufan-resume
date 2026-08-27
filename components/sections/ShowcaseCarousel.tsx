@@ -187,13 +187,13 @@ export function ShowcaseCarousel() {
             'absolute left-[20px] top-1/2 z-30 hidden -translate-y-1/2',
             'inline-flex size-[32px] items-center justify-center',
             'rounded-full',
-            'border border-black/5 dark:border-white/10',
-            'bg-white/75 dark:bg-white/10',
+            'border border-black/5 dark:border-white/20',
+            'bg-white/75 dark:bg-black/55',
             'backdrop-blur-md',
             'shadow-[0_4px_12px_rgba(0,0,0,0.15)]',
-            'text-black/70 dark:text-text-primary',
+            'text-black/70 dark:text-white',
             'transition-colors duration-micro ease-out-quart',
-            'hover:bg-white/85 dark:hover:bg-white/15',
+            'hover:bg-white/85 dark:hover:bg-black/70',
             'md:inline-flex',
           )}
         >
@@ -208,13 +208,13 @@ export function ShowcaseCarousel() {
             'absolute right-[20px] top-1/2 z-30 hidden -translate-y-1/2',
             'inline-flex size-[32px] items-center justify-center',
             'rounded-full',
-            'border border-black/5 dark:border-white/10',
-            'bg-white/75 dark:bg-white/10',
+            'border border-black/5 dark:border-white/20',
+            'bg-white/75 dark:bg-black/55',
             'backdrop-blur-md',
             'shadow-[0_4px_12px_rgba(0,0,0,0.15)]',
-            'text-black/70 dark:text-text-primary',
+            'text-black/70 dark:text-white',
             'transition-colors duration-micro ease-out-quart',
-            'hover:bg-white/85 dark:hover:bg-white/15',
+            'hover:bg-white/85 dark:hover:bg-black/70',
             'md:inline-flex',
           )}
         >
@@ -627,8 +627,8 @@ function CinemaLightbox({
             onClick={togglePlay}
             className={cn(
               'inline-flex size-[32px] shrink-0 items-center justify-center rounded-full',
-              'border border-white/15 bg-white/10 text-white backdrop-blur-md',
-              'transition-colors duration-micro ease-out-quart hover:bg-white/20',
+              'border border-white/25 bg-black/45 text-white backdrop-blur-md',
+              'transition-colors duration-micro ease-out-quart hover:bg-black/65',
             )}
           >
             {playing ? (
@@ -671,8 +671,8 @@ function CinemaLightbox({
               onClick={() => go(-1)}
               className={cn(
                 'inline-flex size-[32px] items-center justify-center rounded-full',
-                'border border-white/15 bg-white/10 text-white backdrop-blur-md',
-                'transition-colors duration-micro ease-out-quart hover:bg-white/20',
+                'border border-white/25 bg-black/45 text-white backdrop-blur-md',
+                'transition-colors duration-micro ease-out-quart hover:bg-black/65',
               )}
             >
               <ChevronLeftIcon className="size-[14px]" />
@@ -684,8 +684,8 @@ function CinemaLightbox({
               onClick={() => go(1)}
               className={cn(
                 'inline-flex size-[32px] items-center justify-center rounded-full',
-                'border border-white/15 bg-white/10 text-white backdrop-blur-md',
-                'transition-colors duration-micro ease-out-quart hover:bg-white/20',
+                'border border-white/25 bg-black/45 text-white backdrop-blur-md',
+                'transition-colors duration-micro ease-out-quart hover:bg-black/65',
               )}
             >
               <ChevronRightIcon className="size-[14px]" />
@@ -697,8 +697,8 @@ function CinemaLightbox({
               onClick={onClose}
               className={cn(
                 'inline-flex size-[32px] items-center justify-center rounded-full',
-                'border border-white/15 bg-white/10 text-white backdrop-blur-md',
-                'transition-colors duration-micro ease-out-quart hover:bg-white/20',
+                'border border-white/25 bg-black/45 text-white backdrop-blur-md',
+                'transition-colors duration-micro ease-out-quart hover:bg-black/65',
               )}
             >
               <CloseIcon className="size-[13px]" />

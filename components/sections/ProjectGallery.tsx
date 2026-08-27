@@ -138,12 +138,12 @@ export function ProjectGallery({
               className={cn(
                 'absolute left-3 top-1/2 z-20 inline-flex size-[32px] -translate-y-1/2',
                 'items-center justify-center rounded-[var(--control-radius)]',
-                'border border-black/5 dark:border-white/10',
-                'bg-white/75 dark:bg-white/10 backdrop-blur-md',
+                'border border-black/5 dark:border-white/20',
+                'bg-white/75 dark:bg-black/55 backdrop-blur-md',
                 'shadow-[0_4px_12px_rgba(0,0,0,0.15)]',
-                'text-black/70 dark:text-text-primary',
+                'text-black/70 dark:text-white',
                 'transition-colors duration-micro ease-out-quart',
-                'hover:bg-white/85 dark:hover:bg-white/15',
+                'hover:bg-white/85 dark:hover:bg-black/70',
               )}
             >
               <ChevronLeftIcon className="size-[14px]" />
@@ -156,12 +156,12 @@ export function ProjectGallery({
               className={cn(
                 'absolute right-3 top-1/2 z-20 inline-flex size-[32px] -translate-y-1/2',
                 'items-center justify-center rounded-[var(--control-radius)]',
-                'border border-black/5 dark:border-white/10',
-                'bg-white/75 dark:bg-white/10 backdrop-blur-md',
+                'border border-black/5 dark:border-white/20',
+                'bg-white/75 dark:bg-black/55 backdrop-blur-md',
                 'shadow-[0_4px_12px_rgba(0,0,0,0.15)]',
-                'text-black/70 dark:text-text-primary',
+                'text-black/70 dark:text-white',
                 'transition-colors duration-micro ease-out-quart',
-                'hover:bg-white/85 dark:hover:bg-white/15',
+                'hover:bg-white/85 dark:hover:bg-black/70',
               )}
             >
               <ChevronRightIcon className="size-[14px]" />

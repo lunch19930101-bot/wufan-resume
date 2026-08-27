@@ -1,0 +1,72 @@
+/* ============================================================
+ * 演示页字体别名（01 企业资产管理 / 03 AI 使用分析）
+ * —— 零外链：把两页原先引用的国外 CDN 字体全部映射到站内自托管文件，
+ *    国内直连可载，加载速度与主页一致。
+ *
+ *   D-DIN       → DINOT（站内 DINOT-Light/Regular/Medium/Bold.woff2）
+ *   Space Mono  → SpaceMono-Regular/Bold.woff2（Google Fonts 同源文件）
+ *   Noto Sans SC→ MiSans-VF.woff2（CJK 兜底别名，实际渲染 MiSans）
+ *
+ * 需配合 /fonts/fonts.css 一起引入（DINOT / MiSans / GeistMono 本体）。
+ * ============================================================ */
+
+/* D-DIN 300 → DINOT Light */
+@font-face {
+  font-family: 'D-DIN';
+  font-style: normal;
+  font-weight: 300;
+  font-display: swap;
+  src: url(./DINOT-Light.woff2) format('woff2');
+}
+
+/* D-DIN 400 → DINOT Regular */
+@font-face {
+  font-family: 'D-DIN';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./DINOT-Regular.woff2) format('woff2');
+}
+
+/* D-DIN 500 → DINOT Medium */
+@font-face {
+  font-family: 'D-DIN';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url(./DINOT-Medium.woff2) format('woff2');
+}
+
+/* D-DIN 700 → DINOT Bold */
+@font-face {
+  font-family: 'D-DIN';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./DINOT-Bold.woff2) format('woff2');
+}
+
+/* Space Mono 400 / 700 —— 与 Google Fonts 同源文件，本地托管 */
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url(./SpaceMono-Regular.woff2) format('woff2');
+}
+@font-face {
+  font-family: 'Space Mono';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url(./SpaceMono-Bold.woff2) format('woff2');
+}
+
+/* Noto Sans SC → MiSans VF（可变字重全段映射） */
+@font-face {
+  font-family: 'Noto Sans SC';
+  font-style: normal;
+  font-weight: 100 900;
+  font-display: swap;
+  src: url(./MiSans-VF.woff2) format('woff2');
+}

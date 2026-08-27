@@ -218,7 +218,7 @@ function MobileProjectDeck({ projects }: { projects: AIProject[] }) {
       <div
         role="tablist"
         aria-label="切换项目"
-        className="relative mb-[12px] flex rounded-full border border-border-subtle bg-bg-elevated p-[3px]"
+        className="relative mb-[12px] flex rounded-[calc(var(--control-radius)+2px)] border border-border-subtle bg-bg-elevated p-[3px]"
       >
         {/* 滑块 —— 占一个槽位宽，translateX 按槽位步进（与卡片滑动同一根曲线） */}
         <span aria-hidden className="pointer-events-none absolute inset-[3px]">
@@ -228,7 +228,7 @@ function MobileProjectDeck({ projects }: { projects: AIProject[] }) {
               transform: `translateX(${(active + dragP) * 100}%)`,
             }}
             className={cn(
-              'h-full rounded-full bg-bg-surface shadow-[var(--shadow-elev-1)]',
+              'h-full rounded-[var(--control-radius)] bg-bg-surface shadow-[var(--shadow-elev-1)]',
               drag === null
                 ? 'transition-transform duration-[420ms] ease-[var(--ease-out-expo)] motion-reduce:transition-none'
                 : 'transition-none',
@@ -244,7 +244,7 @@ function MobileProjectDeck({ projects }: { projects: AIProject[] }) {
             aria-label={`项目 ${p.index} ${p.title}`}
             onClick={() => setActive(i)}
             className={cn(
-              'relative flex h-[38px] flex-1 items-center justify-center rounded-full',
+              'relative flex h-[38px] flex-1 items-center justify-center rounded-[var(--control-radius)]',
               'font-mono text-xs uppercase tracking-wider tabular-nums',
               'transition-colors duration-micro ease-out-quart',
               i === active ? 'text-text-primary' : 'text-text-tertiary',

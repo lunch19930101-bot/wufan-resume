@@ -7,12 +7,12 @@
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url('/static/fonts/DINOT-Medium.otf') format('opentype');
+  src: url('/asset-mobile/static/fonts/DINOT-Medium.otf') format('opentype');
 }
 @font-face {
   font-family: 'DINOT';
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('/static/fonts/DINOT-Bold.otf') format('opentype');
+  src: url('/asset-mobile/static/fonts/DINOT-Bold.otf') format('opentype');
 }

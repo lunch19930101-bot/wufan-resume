@@ -4,26 +4,26 @@
   font-style: normal;
   font-weight: 400;
   font-display: swap;
-  src: url('/static/fonts/MiSans-Regular.woff2') format('woff2');
+  src: url('/asset-mobile/static/fonts/MiSans-Regular.woff2') format('woff2');
 }
 @font-face {
   font-family: 'MiSans';
   font-style: normal;
   font-weight: 500;
   font-display: swap;
-  src: url('/static/fonts/MiSans-Medium.woff2') format('woff2');
+  src: url('/asset-mobile/static/fonts/MiSans-Medium.woff2') format('woff2');
 }
 @font-face {
   font-family: 'MiSans';
   font-style: normal;
   font-weight: 600;
   font-display: swap;
-  src: url('/static/fonts/MiSans-Semibold.woff2') format('woff2');
+  src: url('/asset-mobile/static/fonts/MiSans-Semibold.woff2') format('woff2');
 }
 @font-face {
   font-family: 'MiSans';
   font-style: normal;
   font-weight: 700;
   font-display: swap;
-  src: url('/static/fonts/MiSans-Bold.woff2') format('woff2');
+  src: url('/asset-mobile/static/fonts/MiSans-Bold.woff2') format('woff2');
 }
