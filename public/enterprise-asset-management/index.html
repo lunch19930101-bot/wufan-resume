@@ -1106,7 +1106,7 @@ body:not(.light) .prop-tree-item.active{background:rgba(10,132,255,0.12);color:v
 
         <!-- MAIN CONTENT -->
         <div class="ledger-main">
-          <div style="display:flex;gap:var(--space-sm);margin-bottom:var(--space-md)">
+          <div class="inner-tabs-row" style="display:flex;gap:var(--space-sm);margin-bottom:var(--space-md)">
             <button class="inner-tab active" onclick="switchInnerTab('ldgMain',this)">资产台账</button>
             <button class="inner-tab" onclick="switchInnerTab('ldgFixed',this)">固资经营性资产查询</button>
             <button class="inner-tab" onclick="switchInnerTab('ldgHistory',this)">历史台账</button>
@@ -9531,6 +9531,76 @@ document.addEventListener('click',function(e){
   body:not(.light) .fn-cell{background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.6)}
   /* —— 我的/换肤弹层 → 底部抽屉化（≤768px 时面板已移至 body） —— */
   .theme-panel,.profile-popup{position:fixed!important;top:auto!important;right:auto!important;left:12px!important;bottom:12px!important;width:auto!important;min-width:0!important;max-width:none!important;max-height:calc(100dvh - 24px)!important;overflow-y:auto!important;z-index:2300!important;border-radius:16px!important}
+  /* —— 抽屉态：汉堡 morph 成 ✕（关闭抽屉的明确入口），浅色抽屉上保持可见 —— */
+  .mnav-btn{transition:background .2s ease}
+  .mnav-btn span{transition:transform .22s ease,opacity .18s ease,background .2s ease}
+  body.mnav-open .mnav-btn{background:rgba(0,0,0,0.05)}
+  body.mnav-open .mnav-btn span{background:rgba(0,0,0,0.72)}
+  body.mnav-open .mnav-btn span:nth-child(1){transform:translateY(6px) rotate(45deg)}
+  body.mnav-open .mnav-btn span:nth-child(2){opacity:0}
+  body.mnav-open .mnav-btn span:nth-child(3){transform:translateY(-6px) rotate(-45deg)}
+  body.mnav-open:not(.light) .mnav-btn{background:rgba(255,255,255,0.12)}
+  body.mnav-open:not(.light) .mnav-btn span{background:rgba(255,255,255,0.85)}
+  /* —— 顶栏：藏副标题腾宽，模块胶囊行右缘渐隐（提示可横滑，消除"截断"感） —— */
+  .top-nav-brand p{display:none}
+  .top-nav-brand h1{font-size:15px!important}
+  .top-nav-items{-webkit-overflow-scrolling:touch;-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 16px),transparent);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 16px),transparent)}
+  /* —— 统计卡：奇数末卡占满整行（消除半行空洞） —— */
+  .stat-cards>*:last-child:nth-child(odd){grid-column:1/-1}
+  /* —— 工具栏：纵排堆叠，检索占满、筛选项伸展（钉钉式筛单） —— */
+  .toolbar{flex-direction:column;align-items:stretch;gap:8px;padding:10px 12px}
+  .toolbar-left{flex-wrap:wrap;gap:8px}
+  .toolbar-left .search-input{flex:1 1 100%}
+  .toolbar-left .select{flex:1 1 calc(50% - 4px);min-width:0}
+  .toolbar-right{justify-content:flex-start;flex-wrap:wrap;gap:8px}
+  /* —— 分页：居中收窄，翻页按钮只留箭头 —— */
+  .pagination{justify-content:center;flex-wrap:wrap;gap:4px;padding:10px 2px}
+  .pagination .page-btn span{display:none}
+  /* —— 弹窗 → 底部抽屉（钉钉式上滑） —— */
+  .modal-overlay{align-items:flex-end}
+  .modal{width:100%!important;max-width:100%!important;border-radius:20px 20px 0 0!important;max-height:86dvh!important;animation:msheet .28s cubic-bezier(.32,.72,.24,1)}
+  @keyframes msheet{from{transform:translateY(48px);opacity:.5}to{transform:none;opacity:1}}
+  /* —— >4 列表格 → 卡片列表（钉钉式 label:value，横滚仅留给窄表） —— */
+  .mtbl-cards{overflow:visible}
+  .mtbl-cards>table{display:block;min-width:0!important}
+  .mtbl-cards thead{display:none}
+  .mtbl-cards tbody{display:flex;flex-direction:column;gap:10px}
+  .mtbl-cards tbody:empty{display:none}
+  .mtbl-cards tr{display:flex;flex-direction:column;background:rgba(255,255,255,0.92);border:0.5px solid rgba(0,0,0,0.08);border-radius:14px;padding:2px 14px;box-shadow:0 1px 5px rgba(0,0,0,0.05)}
+  .mtbl-cards td{display:flex;align-items:flex-start;justify-content:space-between;gap:18px;padding:9px 0;border-bottom:0.5px dashed rgba(0,0,0,0.08);font-size:13px;line-height:20px;text-align:right;min-height:20px}
+  .mtbl-cards tr>td:last-child{border-bottom:0}
+  .mtbl-cards td::before{content:attr(data-label);flex-shrink:0;font-size:12px;color:rgba(0,0,0,0.45);text-align:left;line-height:20px}
+  .mtbl-cards td.chk-col{display:none}
+  .mtbl-cards td.mcell-title{font-weight:600;font-size:14px;color:rgba(0,0,0,0.9);text-align:left;padding-top:11px;border-bottom:0.5px solid rgba(0,0,0,0.08)}
+  .mtbl-cards td.mcell-title::before{content:none}
+  .mtbl-cards td.mcell-act{justify-content:flex-end;padding-top:10px}
+  .mtbl-cards td.mcell-act::before{content:none}
+  .mtbl-cards td:empty{display:none}
+  body:not(.light) .mtbl-cards tr{background:rgba(30,30,32,0.72);border-color:rgba(255,255,255,0.08)}
+  body:not(.light) .mtbl-cards td{border-bottom-color:rgba(255,255,255,0.07)}
+  body:not(.light) .mtbl-cards td.mcell-title{border-bottom-color:rgba(255,255,255,0.12);color:rgba(255,255,255,0.92)}
+  body:not(.light) .mtbl-cards td::before{color:rgba(255,255,255,0.4)}
+  /* —— 底部安全区 —— */
+  .page-panel,.page-panel.active{padding-bottom:calc(16px + env(safe-area-inset-bottom))!important}
+  /* #195 台账页内层桌面布局 → 钉钉式纵向流：单位树让位（筛选用胶囊+搜索），页签/分类胶囊横滑 */
+  .page-panel.active{padding-left:16px;padding-right:16px;padding-top:16px}
+  .ledger-layout{flex-direction:column;gap:0}
+  .ledger-sidebar{display:none}
+  .ledger-main{width:100%}
+  .ledger-main .inner-tabs-row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-left:-16px;margin-right:-16px;padding:0 16px;-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 18px),transparent)}
+  .ledger-main .inner-tabs-row::-webkit-scrollbar{display:none}
+  .inner-tab{flex-shrink:0;white-space:nowrap;padding:8px 12px}
+  .category-pills{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin:0 -16px 12px;padding:0 16px 2px;-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 18px),transparent)}
+  .category-pills::-webkit-scrollbar{display:none}
+  .cat-pill{flex-shrink:0;white-space:nowrap;padding:6px 14px}
+  /* 底部抽屉打磨：滚动区底距 + 关闭键热区 + 操作栏安全区 */
+  .modal-body{padding-bottom:24px}
+  .modal-close{width:36px;height:36px;padding:0;display:flex;align-items:center;justify-content:center}
+  .modal-footer{flex-wrap:wrap;padding-bottom:calc(14px + env(safe-area-inset-bottom))}
+  /* 图表卡：定宽环形图与图例纵向堆叠 */
+  div[style*="padding:16px 32px 24px"]{flex-direction:column!important;align-items:stretch;gap:12px!important;padding:12px 16px 20px!important}
+  div[style*="width:240px;height:240px"]{width:200px!important;height:200px!important;margin:0 auto}
+  div[style*="width:240px;height:240px"] svg{width:200px!important;height:200px!important}
 }
 </style>
 <script>
@@ -9555,8 +9625,38 @@ document.addEventListener('click',function(e){
   }
   var sb=document.querySelector('.sidebar');
   if(sb)sb.addEventListener('click',function(e){
+    /* #195 修复：父分组(.nav-parent)点击=展开/收起子级，绝不关抽屉；真正进入页面才关 */
+    if(e.target.closest('.nav-parent'))return;
     if(e.target.closest('[data-page],.nav-item,.nav-child,a,button'))document.body.classList.remove('mnav-open');
   });
+  /* ESC 关抽屉；打开时把当前激活项滚进可视区 */
+  document.addEventListener('keydown',function(e){if(e.key==='Escape')document.body.classList.remove('mnav-open')});
+  var mbtn=document.querySelector('.mnav-btn');
+  if(mbtn)mbtn.addEventListener('click',function(){
+    if(document.body.classList.contains('mnav-open')){
+      var a=document.querySelector('.sidebar .nav-item.active,.sidebar .nav-child.active');
+      if(a)setTimeout(function(){a.scrollIntoView({block:'center'})},80);
+    }
+  });
+  /* 表格卡片化：>4 列表格的每行 → 钉钉式 label:value 卡片（thead 标签盖到 td::before） */
+  function cardTables(){
+    document.querySelectorAll('.mtbl-cards').forEach(function(w){
+      var t=w.querySelector('table');if(!t)return;
+      var labels=[].map.call(t.querySelectorAll('thead th'),function(h){return (h.textContent||'').trim()});
+      if(!labels.length)return;
+      var ti=labels.findIndex(function(l){return /名称|标题|事项/.test(l)});
+      if(ti<0)ti=Math.min(2,labels.length-1);
+      var ai=labels.findIndex(function(l){return /操作/.test(l)});
+      t.querySelectorAll('tbody tr').forEach(function(tr){
+        var tds=tr.querySelectorAll('td');
+        [].forEach.call(tds,function(td,i){
+          if(!td.hasAttribute('data-label'))td.setAttribute('data-label',labels[i]||'');
+          td.classList.toggle('mcell-title',i===ti);
+          td.classList.toggle('mcell-act',i===ai);
+        });
+      });
+    });
+  }
   function wrapTables(){
     if(!window.matchMedia('(max-width:768px)').matches)return;
     document.querySelectorAll('table').forEach(function(t){
@@ -9564,8 +9664,9 @@ document.addEventListener('click',function(e){
       var w=document.createElement('div');w.className='mtbl-wrap';
       t.parentNode.insertBefore(w,t);w.appendChild(t);
       var cols=t.querySelectorAll('thead th').length||t.querySelectorAll('tr:first-child th,tr:first-child td').length;
-      if(cols>4)t.style.minWidth='560px';
+      if(cols>4)w.classList.add('mtbl-cards');else if(cols>2)t.style.minWidth='420px';
     });
+    cardTables();
   }
   wrapTables();
   window.addEventListener('resize',wrapTables);
