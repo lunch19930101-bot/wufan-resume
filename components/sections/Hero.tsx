@@ -38,7 +38,7 @@ export function Hero() {
           {site.role}
         </span>
         <span className="mt-2 block font-sans text-[13px] font-normal leading-relaxed tracking-wide text-text-tertiary">
-          3D 视觉设计 · 组件库工程化 · 全端 UI/UX 设计
+          视觉设计 · 组件库工程化 · 全端 UI/UX 设计
         </span>
       </h1>
 
@@ -90,7 +90,7 @@ function InlineAvatar() {
       aria-hidden
     >
       <img
-        src={withBasePath('/images/avatar.png')}
+        src={withBasePath('/images/avatar.png?v=20260828')}
         alt=""
         className="absolute inset-0 size-full object-cover"
       />

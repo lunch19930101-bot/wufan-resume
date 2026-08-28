@@ -59,8 +59,11 @@ export function HomeMain() {
         <ShowcaseStacked />
 
         <EssayParagraph>
-          <Strong>统信官网改版</Strong>
-          ——把 2020–2024 年生态大会物料统一进行<Strong>视觉升级</Strong>，整体<Strong>布局自适应</Strong>，保证各个设备的阅读性。期间自学 <Strong>C4D</Strong> 并投入实战，首页头图以 <Strong>3D 动态效果</Strong>呈现。
+          <Strong>统信官网改版</Strong>——负责官网整体<Strong>视觉体系重构</Strong>与落地执行，覆盖全站页面与模块；建立覆盖全站的<Strong>组件库</Strong>，输出色彩、字体、图标、组件、模板等规范。C 端与 B 端视觉统一，整体<Strong>布局自适应</Strong>保证各设备阅读性；期间自学 <Strong>C4D</Strong> 投入实战，首页头图以 <Strong>3D 动态效果</Strong>呈现。项目六个月完成上线，设计体系支持后续产品线持续扩展。
+        </EssayParagraph>
+
+        <EssayParagraph>
+          <Strong>统信生态大会</Strong>——公司年度最高规格的品牌活动。把 2020–2024 五届大会物料统一进<Strong>同一视觉体系</Strong>：抽取五届主视觉的共同基因作为基线，年份主题作为变量嵌入，既保留每届特征、又让品牌识别一以贯之。大会专题与官网改版<Strong>互为延续</Strong>，按访问年份自动匹配对应物料的视觉样式。
         </EssayParagraph>
 
         {/* 4. 设计系统 / 组件库工程化 */}
@@ -88,10 +91,8 @@ export function HomeMain() {
 
         {/* 7. AI 工具栈 */}
         <EssayParagraph>
-          精通
-          <Favicon src="/images/clients/midjourney.svg" alt="Midjourney" mono />
-          <Strong> PS、Sketch、C4D</Strong>
-          等设计软件，以及各平台 AI 软件（<Strong>MJ、豆包、即梦、Claude Code</Strong>等）。能够独立完成移动端以及 PC 端 <Strong>UI/UX 设计</Strong>、<Strong>3D 设计</Strong>、<Strong>后台系统设计</Strong>。
+          精通 <Strong>Figma、Sketch、C4D、Ps</Strong>
+          等设计软件，以及各平台 AI 软件（<Strong>Claude Code、ChatGPT、Codex、HBuilderX</Strong>）等。能够独立完成<Strong>平面视觉设计</Strong>、移动端以及 PC 端 <Strong>UI/UX 设计</Strong>、<Strong>3D 设计</Strong>、<Strong>后台系统设计</Strong>。
         </EssayParagraph>
 
         {/* 8. AI 协作三入口 —— atom63 "I build in public" 1:1 复刻 */}
