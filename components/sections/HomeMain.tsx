@@ -100,7 +100,7 @@ export function HomeMain() {
 
         {/* 9. 团队管理 */}
         <EssayParagraph>
-          六年团队管理经验——负责 UI 团队的主视觉提升、工作安排、团队文化建设、周报与线下门店调研。良好的设计能力与沟通协调能力，抗压能力强，具有创新意识。
+          <Strong>六年团队管理</Strong>经验——负责 UI 团队的<Strong>主视觉提升</Strong>、工作安排与<Strong>团队文化建设</Strong>。管理之外，我始终守在视觉一线——工具的每一次迁移都是一条学习曲线：从 <Strong>PS、Sketch</Strong> 到 <Strong>Figma</Strong>，再到 AI 工具的持续跟进，从<Strong>豆包、即梦</Strong>到 <Strong>Gemini</Strong>，再到如今日常使用的 <Strong>ChatGPT 与 Claude Code</Strong>。良好的设计能力与沟通协调能力，抗压能力强，持续学习，保持创新。
         </EssayParagraph>
 
         {/* 10. 项目合集 Timeline —— 原页面底部上移至此 */}
