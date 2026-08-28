@@ -329,7 +329,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
 .event-meta{display:flex;gap:16px;padding:10px 18px;background:var(--bg-page);border-radius:var(--radius-s);font-size:14px;color:var(--text-placeholder)}
   /* ===== #197/#198 移动端解锁 app-shell：整页自然滚动（修复内容显示不全 + 进入定位） ===== */
   @media (max-width:768px){
-    html,body{height:auto!important;overflow-x:hidden!important;overflow-y:auto!important}
+    html,body{height:auto!important;overflow:visible!important}
     .app{height:auto!important;min-height:100vh}
     .layout{overflow:visible!important;height:auto!important}
     .main{overflow:visible!important;height:auto!important}
