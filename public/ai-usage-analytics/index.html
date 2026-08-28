@@ -327,7 +327,26 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
 .event-msg-label{font-weight:600;margin-bottom:6px;font-size:14px}
 .event-msg-content{color:var(--text-secondary)}
 .event-meta{display:flex;gap:16px;padding:10px 18px;background:var(--bg-page);border-radius:var(--radius-s);font-size:14px;color:var(--text-placeholder)}
+  /* ===== #197/#198 移动端解锁 app-shell：整页自然滚动（修复内容显示不全 + 进入定位） ===== */
+  @media (max-width:768px){
+    html,body{height:auto!important;overflow-x:hidden!important;overflow-y:auto!important}
+    .app{height:auto!important;min-height:100vh}
+    .layout{overflow:visible!important;height:auto!important}
+    .main{overflow:visible!important;height:auto!important}
+    .content{overflow:visible!important;height:auto!important;min-height:0}
+    .top-nav{position:sticky!important;top:0;z-index:1200}
+    .split-sidebar{max-height:none!important}
+    .split-sidebar-list{max-height:none!important;overflow:visible!important}
+    .kanban-board{display:flex!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory;-webkit-overflow-scrolling:touch;min-height:0!important;padding-bottom:4px}
+    .kanban-col{flex:0 0 76vw;max-width:76vw;min-width:0;scroll-snap-align:start}
+    .kanban-cards{overflow:visible!important;max-height:none!important}
+  }
+
+
+  
+  @keyframes sheetSpin{to{transform:rotate(360deg)}}
 </style>
+<script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.addEventListener('pageshow',function(e){if(!e.persisted)window.scrollTo(0,0)});</script>
 </head>
 <body>
 
@@ -626,7 +645,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
 <div class="page-panel" id="page-agents">
   <div class="split-layout">
     <div class="split-sidebar">
-      <div class="split-sidebar-header"><h3>全部智能体 <span class="tag tag-default tag-l" style="margin-left:8px">5</span></h3><button class="btn btn-primary btn-sm" onclick="showToast('success','创建智能体功能演示')">创建智能体</button></div>
+      <div class="split-sidebar-header"><h3>全部智能体 <span class="tag tag-default tag-l" style="margin-left:8px">5</span></h3><button class="btn btn-primary btn-sm" onclick="openFormSheet('创建智能体',[{label:'名称',ph:'如：资产盘点助手'},{label:'模型',type:'select',options:['deepseek-chat','glm-4','qwen-max']},{label:'角色描述',type:'textarea',ph:'描述该智能体的职责与边界…'}],'创 建','智能体创建成功，已进入初始化')">创建智能体</button></div>
       <div style="padding:12px 16px"><div class="search-wrap" style="width:100%"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="搜索智能体..." style="width:100%"></div></div>
       <div class="split-sidebar-list">
         <div class="split-item active" onclick="selectAgent(0,this)"><div style="display:flex;align-items:center;gap:10px;margin-bottom:4px"><div style="width:28px;height:28px;border-radius:var(--radius-s);background:linear-gradient(135deg,#6366f1,#818cf8);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="16" height="16" viewBox="0 0 24 24" fill="#fff"><path d="M1.5 2H22.5V18H6.87574L1.5 22.7038V2Z"/></svg></div><div class="split-item-title">小管家</div></div><div class="split-item-desc">处理一般性咨询，提供资产相关知识解答</div><div style="display:flex;gap:6px;margin-top:4px"><span class="tag tag-default tag-l">通用</span><span class="tag tag-success">已启用</span><span class="tag tag-info tag-l">系统内置</span></div></div>
@@ -639,7 +658,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
     <div class="split-main">
       <div style="padding:16px 20px;border-bottom:1px solid var(--border-light);display:flex;align-items:center;justify-content:space-between">
         <div><div style="font-size:16px;font-weight:600;color:#000">小管家</div><div style="font-size:14px;color:var(--text-placeholder);margin-top:2px">处理一般性咨询，提供资产相关知识解答</div></div>
-        <div class="btn-group"><button class="btn btn-outline btn-sm" onclick="showToast('info','初始化中...')">初始化内置技能</button><button class="btn btn-primary btn-sm" onclick="showToast('success','保存成功')">保存</button></div>
+        <div class="btn-group"><button class="btn btn-outline btn-sm" onclick="openProgressSheet('初始化内置技能','正在初始化 12 个内置技能…','success','内置技能初始化完成')">初始化内置技能</button><button class="btn btn-primary btn-sm" onclick="showToast('success','保存成功')">保存</button></div>
       </div>
       <div class="tabs" style="padding:0 20px"><div class="tab-item active" onclick="switchTab(this,'agent-tab-content')">技能内容</div><div class="tab-item" onclick="switchTab(this,'agent-tab-tools')">调用工具</div><div class="tab-item" onclick="switchTab(this,'agent-tab-kb')">知识库</div><div class="tab-item" onclick="switchTab(this,'agent-tab-version')">版本历史</div><div class="tab-item" onclick="switchTab(this,'agent-tab-history')">历史对话</div></div>
       <div style="flex:1;overflow-y:auto;padding:20px">
@@ -722,7 +741,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
 <div class="page-panel" id="page-knowledge">
   <div class="split-layout">
     <div class="split-sidebar">
-      <div class="split-sidebar-header"><h3>全部知识库 <span class="tag tag-default tag-l" style="margin-left:8px">4</span></h3><button class="btn btn-primary btn-sm" onclick="showToast('success','创建知识库功能演示')">+ 创建</button></div>
+      <div class="split-sidebar-header"><h3>全部知识库 <span class="tag tag-default tag-l" style="margin-left:8px">4</span></h3><button class="btn btn-primary btn-sm" onclick="openFormSheet('创建知识库',[{label:'名称',ph:'如：财务制度知识库'},{label:'描述',type:'textarea',ph:'知识库内容简介…'},{label:'嵌入模型',type:'select',options:['bge-m3','text-embedding-3-small','m3e-base']}],'创 建','知识库创建成功，正在构建索引')">+ 创建</button></div>
       <div style="padding:12px 16px"><div class="search-wrap" style="width:100%"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="搜索知识库..." style="width:100%"></div></div>
       <div class="split-sidebar-list">
         <div class="split-item active" onclick="selectKb(this,0)"><div class="split-item-title">国资政策法规库</div><div class="split-item-desc">收录国家及地方国资管理相关法律法规</div><div style="display:flex;gap:6px;margin-top:6px"><span class="tag tag-default tag-l">通用</span><span class="tag tag-info tag-l">文档 5</span></div></div>
@@ -743,8 +762,8 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
           </div>
         </div>
         <div class="btn-group">
-          <button class="btn btn-outline btn-sm" onclick="showToast('info','重建索引中...')">重建索引</button>
-          <button class="btn btn-outline btn-sm" onclick="showToast('info','删除知识库功能演示')">删除</button>
+          <button class="btn btn-outline btn-sm" onclick="openProgressSheet('重建索引','正在重建知识库索引…','success','索引重建完成，共 1,284 个切片')">重建索引</button>
+          <button class="btn btn-outline btn-sm" onclick="openConfirmSheet('删除知识库','确定删除知识库「财务制度 2026」？<br>删除后其下的 1,284 个文档切片将一并移除，此操作不可恢复。','删 除','知识库已删除',true)">删除</button>
           <button class="btn btn-primary btn-sm" onclick="showToast('success','保存成功')">保存</button>
         </div>
       </div>
@@ -761,7 +780,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
         <div class="tab-panel active" id="kb-tab-content">
           <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
             <div style="font-size:14px;color:var(--text-placeholder)">共 12 条知识内容</div>
-            <button class="btn btn-primary btn-sm" onclick="showToast('success','添加内容功能演示')">+ 添加内容</button>
+            <button class="btn btn-primary btn-sm" onclick="openFormSheet('添加内容',[{label:'类型',type:'select',options:['文本片段','Markdown 文档','网页链接']},{label:'内容',type:'textarea',ph:'粘贴内容或链接…'}],'添 加','内容已添加，进入向量化队列')">+ 添加内容</button>
           </div>
           <div style="display:grid;grid-template-columns:1fr;gap:12px">
             <div style="background:var(--bg-container);border:1px solid var(--border-light);border-radius:var(--radius-l);padding:16px;cursor:pointer" onclick="showToast('info','打开内容编辑器')">
@@ -810,7 +829,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
         <div class="tab-panel" id="kb-tab-docs">
           <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center">
             <div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="搜索文档..."></div>
-            <button class="btn btn-primary btn-sm" onclick="showToast('success','上传成功')">+ 批量上传</button>
+            <button class="btn btn-primary btn-sm" onclick="openConfirmSheet('批量上传','将从本机选择文件批量上传至当前知识库。<br>支持 .md / .pdf / .docx / .txt，单文件 ≤ 20MB。','选择文件','3 个文件上传成功，已解析 86 个切片')">+ 批量上传</button>
           </div>
           <!-- 上传区域 -->
           <div style="border:2px dashed var(--border-light);border-radius:var(--radius-l);padding:32px;margin-bottom:16px;background:var(--bg-page)">
@@ -877,7 +896,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
                 <input class="form-input" type="number" value="0.5" step="0.1" min="0" max="1" style="width:100%">
               </div>
               <div style="display:flex;align-items:flex-end">
-                <button class="btn btn-primary" style="width:100%" onclick="showToast('info','检索测试执行中...')">搜索测试</button>
+                <button class="btn btn-primary" style="width:100%" onclick="openProgressSheet('检索测试','正在执行语义检索…','success','Top 5 结果已返回，平均相关度 0.87')">搜索测试</button>
               </div>
             </div>
           </div>
@@ -1126,7 +1145,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
 <!-- ===== MOBILE USERS ===== -->
 <div class="page-panel" id="page-mobile-users">
   <div class="table-wrap">
-    <div class="table-toolbar"><div class="table-toolbar-left"><div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="搜索用户..."></div></div><div class="table-toolbar-right"><button class="btn btn-primary btn-sm" onclick="showToast('success','添加用户功能演示')">+ 添加用户</button></div></div>
+    <div class="table-toolbar"><div class="table-toolbar-left"><div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="搜索用户..."></div></div><div class="table-toolbar-right"><button class="btn btn-primary btn-sm" onclick="openFormSheet('添加用户',[{label:'姓名',ph:'如：张三'},{label:'手机号',ph:'11 位手机号'},{label:'所属组织',type:'select',options:['城发集团总部','城发投资公司','城发建设公司','城发物业']},{label:'角色',type:'select',options:['普通用户','组织管理员']}],'添 加','用户创建成功，默认密码已通过短信下发')">+ 添加用户</button></div></div>
     <table><thead><tr><th>用户</th><th>邮箱</th><th>所属组织</th><th>状态</th><th>创建时间</th><th>操作</th></tr></thead><tbody>
     <tr><td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:var(--theme-primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px">张</div>zhangsan</div></td><td>zhangsan@demo.com</td><td>城发集团总部</td><td><span class="tag tag-success">启用</span></td><td style="font-family:var(--font-din)">2026-01-15</td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" style="color:var(--danger)">删除</button></td></tr>
     <tr><td><div style="display:flex;align-items:center;gap:8px"><div style="width:28px;height:28px;border-radius:50%;background:#2BA471;color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px">李</div>lisi</div></td><td>lisi@demo.com</td><td>城发投资公司</td><td><span class="tag tag-success">启用</span></td><td style="font-family:var(--font-din)">2026-02-01</td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" style="color:var(--danger)">删除</button></td></tr>
@@ -1142,7 +1161,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
 <!-- ===== ADMIN USERS ===== -->
 <div class="page-panel" id="page-admin-users">
   <div class="table-wrap">
-    <div class="table-toolbar"><div class="table-toolbar-left"><div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="搜索管理员..."></div></div><div class="table-toolbar-right"><button class="btn btn-primary btn-sm" onclick="showToast('success','添加管理员功能演示')">+ 添加管理员</button></div></div>
+    <div class="table-toolbar"><div class="table-toolbar-left"><div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="搜索管理员..."></div></div><div class="table-toolbar-right"><button class="btn btn-primary btn-sm" onclick="openFormSheet('添加管理员',[{label:'姓名',ph:'如：李四'},{label:'账号',ph:'登录账号'},{label:'角色',type:'select',options:['系统管理员','运维管理员','只读审计']}],'添 加','管理员创建成功')">+ 添加管理员</button></div></div>
     <table><thead><tr><th>用户名</th><th>真实姓名</th><th>邮箱</th><th>手机号</th><th>角色</th><th>状态</th><th>创建时间</th><th>操作</th></tr></thead><tbody>
     <tr><td>admin</td><td>系统管理员</td><td>admin@demo.com</td><td style="font-family:var(--font-din)">138****0001</td><td><span class="tag tag-info tag-l">管理员</span></td><td><span class="tag tag-success">启用</span></td><td style="font-family:var(--font-din)">2026-01-01</td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" style="color:var(--danger)">删除</button></td></tr>
     <tr><td>operator01</td><td>操作员A</td><td>opt01@demo.com</td><td style="font-family:var(--font-din)">139****0002</td><td><span class="tag tag-default tag-l">操作员</span></td><td><span class="tag tag-success">启用</span></td><td style="font-family:var(--font-din)">2026-02-15</td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" style="color:var(--danger)">删除</button></td></tr>
@@ -1156,7 +1175,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
 <!-- ===== ORGANIZATIONS ===== -->
 <div class="page-panel" id="page-organizations">
   <div class="table-wrap">
-    <div class="table-toolbar"><div class="table-toolbar-left"><div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="搜索组织..."></div></div><div class="table-toolbar-right"><button class="btn btn-primary btn-sm" onclick="showToast('success','添加组织功能演示')">+ 添加组织</button></div></div>
+    <div class="table-toolbar"><div class="table-toolbar-left"><div class="search-wrap"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg><input placeholder="搜索组织..."></div></div><div class="table-toolbar-right"><button class="btn btn-primary btn-sm" onclick="openFormSheet('添加组织',[{label:'组织名称',ph:'如：城发数科'},{label:'组织编码',ph:'如：T005'},{label:'上级组织',type:'select',options:['无（顶级）','城发集团总部','城发投资公司']}],'创 建','组织创建成功')">+ 添加组织</button></div></div>
     <table><thead><tr><th>组织名称</th><th>租户ID</th><th>组织代码</th><th>Token 配额</th><th>Token 剩余</th><th>联系人</th><th>联系电话</th><th>状态</th><th>操作</th></tr></thead><tbody>
     <tr><td>城发集团总部</td><td style="font-family:var(--font-din);font-size:14px;color:var(--text-placeholder)">T001</td><td style="font-family:var(--font-din);font-size:14px;color:var(--text-placeholder)">CF-HQ</td><td style="font-family:var(--font-din)">500,000</td><td style="font-family:var(--font-din)">371,544</td><td>张三</td><td style="font-family:var(--font-din)">138****0001</td><td><span class="tag tag-success">启用</span></td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" onclick="showToast('info','配额管理')">配额</button></td></tr>
     <tr><td>城发投资公司</td><td style="font-family:var(--font-din);font-size:14px;color:var(--text-placeholder)">T002</td><td style="font-family:var(--font-din);font-size:14px;color:var(--text-placeholder)">CF-INV</td><td style="font-family:var(--font-din)">200,000</td><td style="font-family:var(--font-din)">145,200</td><td>李四</td><td style="font-family:var(--font-din)">139****0002</td><td><span class="tag tag-success">启用</span></td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" onclick="showToast('info','配额管理')">配额</button></td></tr>
@@ -1172,7 +1191,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
   <div class="table-wrap">
     <div class="table-toolbar">
       <div><h3 style="font-size:16px;font-weight:600;color:#000;margin:0">欢迎提示词管理</h3><div style="font-size:14px;color:var(--text-placeholder);margin-top:2px">管理移动端首页的欢迎提示词，先创建分类再添加提示词</div></div>
-      <div style="display:flex;gap:8px"><select class="form-select" style="width:140px"><option>全部分类</option><option>资产查询</option><option>智能对话</option><option>数据分析</option></select><button class="btn btn-primary btn-sm" onclick="showToast('success','添加分类功能演示')">+ 添加分类</button></div>
+      <div style="display:flex;gap:8px"><select class="form-select" style="width:140px"><option>全部分类</option><option>资产查询</option><option>智能对话</option><option>数据分析</option></select><button class="btn btn-primary btn-sm" onclick="openFormSheet('添加分类',[{label:'分类名称',ph:'如：风险合规'},{label:'描述',type:'textarea',ph:'该分类下提示词的适用场景…'}],'创 建','分类创建成功')">+ 添加分类</button></div>
     </div>
   <table><thead><tr><th>图标</th><th>分类名称</th><th>编码</th><th>描述</th><th>提示词数</th><th>排序</th><th>状态</th><th>操作</th></tr></thead><tbody>
     <tr><td><div style="width:32px;height:32px;border-radius:8px;background:linear-gradient(135deg,#0052D9,#366EF4);display:flex;align-items:center;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="#fff"><path d="M15.762 17.1765C12.4258 19.8126 7.56978 19.5906 4.48959 16.5104C1.17014 13.191 1.17014 7.80905 4.48959 4.48959C7.80905 1.17014 13.191 1.17014 16.5104 4.48959C19.5907 7.56987 19.8126 12.4261 17.1763 15.7623L22.5206 21.1067L21.1064 22.5209L15.762 17.1765Z"/></svg></div></td><td><a href="javascript:void(0)" style="color:var(--theme-primary);text-decoration:none" onclick="showPromptsList('资产查询')">资产查询</a></td><td style="font-family:var(--font-din);font-size:14px;color:var(--text-placeholder)">asset_query</td><td>资产信息查询类提示词</td><td>5</td><td>100</td><td><span class="tag tag-success">启用</span></td><td><button class="btn btn-text btn-sm" onclick="showPromptsList('资产查询')">查看</button><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" style="color:var(--danger)">删除</button></td></tr>
@@ -1186,13 +1205,13 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
 <!-- ===== DATA SOURCES ===== -->
 <div class="page-panel" id="page-datasources">
   <div class="table-wrap">
-    <div class="table-toolbar"><div></div><div class="table-toolbar-right"><button class="btn btn-primary btn-sm" onclick="showToast('success','添加数据源功能演示')">+ 添加数据源</button></div></div>
+    <div class="table-toolbar"><div></div><div class="table-toolbar-right"><button class="btn btn-primary btn-sm" onclick="openFormSheet('添加数据源',[{label:'名称',ph:'如：火山方舟 API'},{label:'类型',type:'select',options:['LLM API','向量库','MCP 网关']},{label:'连接地址',ph:'https://…'},{label:'API Key',ph:'sk-…'}],'保 存','数据源已保存，连通性测试通过')">+ 添加数据源</button></div></div>
     <table><thead><tr><th>名称</th><th>域名</th><th>服务类型</th><th>状态</th><th>创建时间</th><th>操作</th></tr></thead><tbody>
-    <tr><td>DeepSeek API</td><td style="font-family:var(--font-din);font-size:14px;color:var(--text-placeholder)">api.deepseek.com</td><td><span class="tag tag-info tag-l">大模型(LLM)</span></td><td><span class="tag tag-success">启用</span></td><td style="font-family:var(--font-din)">2026-01-10</td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" onclick="showToast('success','连通性测试通过')">测试</button></td></tr>
-    <tr><td>智谱 GLM API</td><td style="font-family:var(--font-din);font-size:14px;color:var(--text-placeholder)">open.bigmodel.cn</td><td><span class="tag tag-info tag-l">大模型(LLM)</span></td><td><span class="tag tag-success">启用</span></td><td style="font-family:var(--font-din)">2026-01-10</td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" onclick="showToast('success','连通性测试通过')">测试</button></td></tr>
-    <tr><td>阿里云百炼</td><td style="font-family:var(--font-din);font-size:14px;color:var(--text-placeholder)">dashscope.aliyuncs.com</td><td><span class="tag tag-info tag-l">大模型(LLM)</span></td><td><span class="tag tag-success">启用</span></td><td style="font-family:var(--font-din)">2026-02-05</td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" onclick="showToast('success','连通性测试通过')">测试</button></td></tr>
+    <tr><td>DeepSeek API</td><td style="font-family:var(--font-din);font-size:14px;color:var(--text-placeholder)">api.deepseek.com</td><td><span class="tag tag-info tag-l">大模型(LLM)</span></td><td><span class="tag tag-success">启用</span></td><td style="font-family:var(--font-din)">2026-01-10</td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" onclick="openProgressSheet('连通性测试','正在测试连接…','success','连通性测试通过，延迟 86ms')">测试</button></td></tr>
+    <tr><td>智谱 GLM API</td><td style="font-family:var(--font-din);font-size:14px;color:var(--text-placeholder)">open.bigmodel.cn</td><td><span class="tag tag-info tag-l">大模型(LLM)</span></td><td><span class="tag tag-success">启用</span></td><td style="font-family:var(--font-din)">2026-01-10</td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" onclick="openProgressSheet('连通性测试','正在测试连接…','success','连通性测试通过，延迟 86ms')">测试</button></td></tr>
+    <tr><td>阿里云百炼</td><td style="font-family:var(--font-din);font-size:14px;color:var(--text-placeholder)">dashscope.aliyuncs.com</td><td><span class="tag tag-info tag-l">大模型(LLM)</span></td><td><span class="tag tag-success">启用</span></td><td style="font-family:var(--font-din)">2026-02-05</td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" onclick="openProgressSheet('连通性测试','正在测试连接…','success','连通性测试通过，延迟 86ms')">测试</button></td></tr>
     <tr><td>内部数据库</td><td style="font-family:var(--font-din);font-size:14px;color:var(--text-placeholder)">db.internal.local</td><td><span class="tag tag-default tag-l">数据库</span></td><td><span class="tag tag-danger">异常</span></td><td style="font-family:var(--font-din)">2026-03-15</td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" style="color:var(--danger)">删除</button></td></tr>
-    <tr><td>MCP 工具网关</td><td style="font-family:var(--font-din);font-size:14px;color:var(--text-placeholder)">mcp.internal.local</td><td><span class="tag tag-purple tag-l">MCP</span></td><td><span class="tag tag-success">启用</span></td><td style="font-family:var(--font-din)">2026-04-01</td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" onclick="showToast('success','连通性测试通过')">测试</button></td></tr>
+    <tr><td>MCP 工具网关</td><td style="font-family:var(--font-din);font-size:14px;color:var(--text-placeholder)">mcp.internal.local</td><td><span class="tag tag-purple tag-l">MCP</span></td><td><span class="tag tag-success">启用</span></td><td style="font-family:var(--font-din)">2026-04-01</td><td><button class="btn btn-text btn-sm">编辑</button><button class="btn btn-text btn-sm" onclick="openProgressSheet('连通性测试','正在测试连接…','success','连通性测试通过，延迟 86ms')">测试</button></td></tr>
   </tbody></table>
   <div class="pagination"><span class="page-info">共 5 条</span><button class="page-btn" disabled style="opacity:0.3"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m15 18-6-6 6-6"/></svg></button><button class="page-btn active">1</button><button class="page-btn"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></button></div>
   </div>
@@ -1207,7 +1226,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
         <div class="form-row"><div class="config-field"><label>提供商</label><select class="form-select w-full"><option>DeepSeek</option><option>智谱 GLM</option><option>阿里云百炼</option><option>自定义</option></select></div><div class="config-field"><label>模型名称</label><input class="form-input" value="deepseek-chat"></div></div>
         <div class="form-row"><div class="config-field"><label>Base URL</label><input class="form-input" value="https://api.deepseek.com" style="font-size:14px"></div><div class="config-field"><label>API Key</label><input class="form-input" value="sk-****...****" type="password"></div></div>
       </div>
-      <div class="config-card-footer"><button class="btn btn-outline btn-sm" onclick="showToast('success','连通性测试通过')">测试连通性</button><button class="btn btn-primary btn-sm" onclick="showToast('success','保存成功')">保存</button></div>
+      <div class="config-card-footer"><button class="btn btn-outline btn-sm" onclick="openProgressSheet('连通性测试','正在测试连接…','success','连通性测试通过，延迟 86ms')">测试连通性</button><button class="btn btn-primary btn-sm" onclick="showToast('success','保存成功')">保存</button></div>
     </div>
     <div class="config-card">
       <div class="config-card-header"><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#2BA471,#43C688);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M5.18903 5.5H9V7.5H5V9.5H9V11.5H5V13C5 13.1682 5.00695 13.335 5.02059 13.5H9V15.5H5.54436C6.49234 17.5655 8.57787 19 11 19V20H6V22H18V20H13V19C15.4221 19 17.5077 17.5655 18.4556 15.5H15V13.5H18.9794C18.9931 13.335 19 13.1682 19 13V11.5H15V9.5H19V7.5H15V5.5H18.811C18.1449 2.91216 15.7958 1 13 1H11C8.20424 1 5.85509 2.91216 5.18903 5.5Z"/></svg></div><div><div style="font-size:14px;font-weight:600;color:#000">语音识别</div><div style="font-size:14px;color:rgba(0,0,0,0.4)">语音转文字服务</div></div></div><div style="display:flex;align-items:center;gap:8px"><span class="tag tag-success">已启用</span><div class="switch on" onclick="this.classList.toggle('on');this.previousElementSibling.textContent=this.classList.contains('on')?'已启用':'未启用';this.previousElementSibling.className=this.classList.contains('on')?'tag tag-success':'tag tag-default'"></div></div></div>
@@ -1215,7 +1234,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
         <div class="form-row"><div class="config-field"><label>提供商</label><select class="form-select w-full"><option>阿里云百炼</option><option>自定义</option></select></div><div class="config-field"><label>模型名称</label><input class="form-input" value="paraformer-v2"></div></div>
         <div class="form-row"><div class="config-field"><label>Base URL</label><input class="form-input" value="https://dashscope.aliyuncs.com" style="font-size:14px"></div><div class="config-field"><label>API Key</label><input class="form-input" value="sk-****...****" type="password"></div></div>
       </div>
-      <div class="config-card-footer"><button class="btn btn-outline btn-sm" onclick="showToast('success','连通性测试通过')">测试连通性</button><button class="btn btn-primary btn-sm" onclick="showToast('success','保存成功')">保存</button></div>
+      <div class="config-card-footer"><button class="btn btn-outline btn-sm" onclick="openProgressSheet('连通性测试','正在测试连接…','success','连通性测试通过，延迟 86ms')">测试连通性</button><button class="btn btn-primary btn-sm" onclick="showToast('success','保存成功')">保存</button></div>
     </div>
     <div class="config-card">
       <div class="config-card-header"><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#8A50CC,#A78BFA);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M16 5.25C14.4812 5.25 13.25 6.48122 13.25 8C13.25 9.51878 14.4812 10.75 16 10.75C17.5188 10.75 18.75 9.51878 18.75 8C18.75 6.48122 17.5188 5.25 16 5.25Z"/><path d="M22 2H2V22H22V2ZM20 4V19.5858L9 8.58579L4 13.5858V4H20Z"/></svg></div><div><div style="font-size:14px;font-weight:600;color:#000">图像识别</div><div style="font-size:14px;color:rgba(0,0,0,0.4)">图片理解和识别</div></div></div><div style="display:flex;align-items:center;gap:8px"><span class="tag tag-success">已启用</span><div class="switch on" onclick="this.classList.toggle('on');this.previousElementSibling.textContent=this.classList.contains('on')?'已启用':'未启用';this.previousElementSibling.className=this.classList.contains('on')?'tag tag-success':'tag tag-default'"></div></div></div>
@@ -1223,7 +1242,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
         <div class="form-row"><div class="config-field"><label>提供商</label><select class="form-select w-full"><option>阿里云百炼</option><option>自定义</option></select></div><div class="config-field"><label>模型名称</label><input class="form-input" value="qwen-vl-max"></div></div>
         <div class="form-row"><div class="config-field"><label>Base URL</label><input class="form-input" value="https://dashscope.aliyuncs.com" style="font-size:14px"></div><div class="config-field"><label>API Key</label><input class="form-input" value="sk-****...****" type="password"></div></div>
       </div>
-      <div class="config-card-footer"><button class="btn btn-outline btn-sm" onclick="showToast('success','连通性测试通过')">测试连通性</button><button class="btn btn-primary btn-sm" onclick="showToast('success','保存成功')">保存</button></div>
+      <div class="config-card-footer"><button class="btn btn-outline btn-sm" onclick="openProgressSheet('连通性测试','正在测试连接…','success','连通性测试通过，延迟 86ms')">测试连通性</button><button class="btn btn-primary btn-sm" onclick="showToast('success','保存成功')">保存</button></div>
     </div>
     <div class="config-card">
       <div class="config-card-header"><div style="display:flex;align-items:center;gap:10px"><div style="width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,#E37318,#F7BA1E);display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="20" height="20" viewBox="0 0 24 24" fill="#fff"><path d="M4 2V20H7V9H12V20H15V5H20V20H22V22H2V2H4Z"/></svg></div><div><div style="font-size:14px;font-weight:600;color:#000">质量观测与优化</div><div style="font-size:14px;color:rgba(0,0,0,0.4)">对话质量评估</div></div></div><div style="display:flex;align-items:center;gap:8px"><span class="tag tag-default">未启用</span><div class="switch" onclick="this.classList.toggle('on');this.previousElementSibling.textContent=this.classList.contains('on')?'已启用':'未启用';this.previousElementSibling.className=this.classList.contains('on')?'tag tag-success':'tag tag-default'"></div></div></div>
@@ -1231,7 +1250,7 @@ textarea.form-input{height:auto;padding:8px;resize:vertical}
         <div class="form-row"><div class="config-field"><label>提供商</label><select class="form-select w-full"><option>智谱 GLM</option><option>DeepSeek</option><option>自定义</option></select></div><div class="config-field"><label>模型名称</label><input class="form-input" value="glm-4-plus"></div></div>
         <div class="form-row"><div class="config-field"><label>Base URL</label><input class="form-input" value="https://open.bigmodel.cn/api/paas/v4" style="font-size:14px"></div><div class="config-field"><label>API Key</label><input class="form-input" value="" placeholder="未配置"></div></div>
       </div>
-      <div class="config-card-footer"><button class="btn btn-outline btn-sm" onclick="showToast('error','连通性测试失败')">测试连通性</button><button class="btn btn-primary btn-sm" onclick="showToast('success','保存成功')">保存</button></div>
+      <div class="config-card-footer"><button class="btn btn-outline btn-sm" onclick="openProgressSheet('连通性测试','正在测试连接…','error','连通性测试失败：连接超时（MCP 网关仅内网可达）')">测试连通性</button><button class="btn btn-primary btn-sm" onclick="showToast('success','保存成功')">保存</button></div>
     </div>
   </div>
 </div>
@@ -1268,6 +1287,8 @@ function doLogin() {
   if (u === 'admin' && p === 'admin123') {
     document.getElementById('loginPage').style.display = 'none';
     document.getElementById('appPage').classList.add('show');
+    window.scrollTo(0, 0);
+    setTimeout(drawTrendChart, 60); // app 可见后重绘（否则 canvas 以 0 宽初始化成空白）
   } else {
     const err = document.getElementById('loginError');
     err.style.display = 'flex';
@@ -1290,6 +1311,8 @@ function toggleNavGroup(el) {
 
 // ===== PAGE SWITCH =====
 function switchPage(pageId, navEl) {
+  try{var _sc=document.querySelector('.content');if(_sc)_sc.scrollTop=0;}catch(e){}
+  window.scrollTo(0,0);
   // Update nav
   document.querySelectorAll('.nav-item,.nav-child').forEach(n => n.classList.remove('active'));
   if (navEl) navEl.classList.add('active');
@@ -1441,6 +1464,64 @@ function showPromptsList(category) {
 }
 
 // ===== TOAST =====
+
+// ===== #199 通用底部弹窗（移动端自动呈现为底部抽屉，桌面居中） =====
+function sheetClose(){document.querySelectorAll('.modal-overlay').forEach(function(o){o.remove()})}
+function openSheet(title, bodyHTML, actions){
+  sheetClose();
+  var ov=document.createElement('div');
+  ov.className='modal-overlay show';
+  ov.onclick=function(e){if(e.target===ov)ov.remove()};
+  var acts=actions||[];
+  var html='<div class="modal" style="max-width:480px"><div class="modal-header"><h3>'+title+'</h3><button class="modal-close" onclick="this.closest(\'.modal-overlay\').remove()"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg></button></div><div class="modal-body">'+bodyHTML+'</div>';
+  if(acts.length){
+    html+='<div class="modal-footer">';
+    acts.forEach(function(a,i){
+      var danger=(a.danger?'style="flex:1;color:var(--error);border-color:var(--error)"':'style="flex:1"');
+      html+='<button class="btn '+(a.primary?'btn-primary':'btn-outline')+' btn-sm" '+danger+' data-act="'+i+'">'+a.label+'</button>';
+    });
+    html+='<button class="btn btn-text btn-sm" style="flex:1" data-act="close">取 消</button></div>';
+  }
+  html+='</div>';
+  ov.innerHTML=html;
+  ov.querySelectorAll('[data-act]').forEach(function(b){
+    b.onclick=function(){
+      var k=b.getAttribute('data-act');
+      if(k==='close'){ov.remove();return}
+      var a=acts[+k];
+      if(a&&a.onClick)a.onClick(ov);
+      if(!a||!a.keep)ov.remove();
+    };
+  });
+  document.body.appendChild(ov);
+  return ov;
+}
+function sheetField(f){
+  var h='<div><div class="form-label" style="margin-bottom:6px">'+f.label+'</div>';
+  if(f.type==='select'){h+='<select class="form-select" style="width:100%">';(f.options||[]).forEach(function(o){h+='<option>'+o+'</option>'});h+='</select>'}
+  else if(f.type==='textarea'){h+='<textarea class="form-input" rows="3" style="width:100%;resize:vertical" placeholder="'+(f.ph||'')+'"></textarea>'}
+  else{h+='<input class="form-input" style="width:100%" placeholder="'+(f.ph||'')+'">'}
+  return h+'</div>';
+}
+function openFormSheet(title, fields, confirmText, successMsg){
+  var h='<div style="display:flex;flex-direction:column;gap:14px">';
+  fields.forEach(function(f){h+=sheetField(f)});
+  openSheet(title,h+'</div>',[{label:confirmText||'确 定',primary:true,onClick:function(){showToast('success',successMsg||'操作成功')}}]);
+}
+function openConfirmSheet(title,msg,confirmText,successMsg,danger){
+  openSheet(title,'<div style="font-size:14px;color:var(--text-secondary);line-height:1.8">'+msg+'</div>',[{label:confirmText||'确 定',primary:!danger,danger:!!danger,onClick:function(){showToast('success',successMsg||'操作成功')}}]);
+}
+function openProgressSheet(title,runningText,doneType,doneText){
+  var ov=openSheet(title,'<div style="font-size:14px;color:var(--text-secondary);display:flex;align-items:center;gap:10px;padding:6px 0"><span style="width:14px;height:14px;border:2px solid var(--border);border-top-color:var(--theme-primary);border-radius:50%;display:inline-block;flex:none;animation:sheetSpin .8s linear infinite"></span>'+runningText+'</div>',[]);
+  setTimeout(function(){
+    var b=ov.querySelector('.modal-body>div');
+    if(b){b.innerHTML='<span style="color:#16a34a;font-weight:600">\u2714</span> '+doneText}
+    var f=document.createElement('div');f.className='modal-footer';
+    f.innerHTML='<button class="btn btn-primary btn-sm" style="flex:1" onclick="this.closest(\'.modal-overlay\').remove()">知道了</button>';
+    ov.querySelector('.modal').appendChild(f);
+  },1400);
+}
+
 function showToast(type, msg) {
   const container = document.getElementById('toastContainer');
   const icons = {
@@ -1472,6 +1553,7 @@ function drawTrendChart() {
   if (!canvas) return;
   const dpr = window.devicePixelRatio || 1;
   const rect = canvas.getBoundingClientRect();
+  if (rect.width < 10 || rect.height < 10) return; // 登录前 .app 隐藏时 rect 为 0，跳过
   canvas.width = rect.width * dpr;
   canvas.height = rect.height * dpr;
   const ctx = canvas.getContext('2d');
@@ -1763,7 +1845,8 @@ function logout() {
         .config-card-footer{justify-content:stretch}
         .config-card-footer .btn{flex:1;white-space:nowrap}
 }
-</style>
+
+  </style>
 <script>
 (function(){
   var nav=document.querySelector('.top-nav');

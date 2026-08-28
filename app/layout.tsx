@@ -6,6 +6,7 @@ import { site } from '@/lib/config';
 import { withBasePath } from '@/lib/utils';
 
 import { MainArea } from '@/components/layout/MainArea';
+import { ScrollTopOnLoad } from '@/components/motion/ScrollTopOnLoad';
 import { Nav } from '@/components/nav/Nav';
 import { Footer } from '@/components/sections/Footer';
 
@@ -82,6 +83,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         suppressHydrationWarning
       >
         <SkipLink />
+        <ScrollTopOnLoad />
         <Nav />
         <MainArea>{children}</MainArea>
         <Footer />

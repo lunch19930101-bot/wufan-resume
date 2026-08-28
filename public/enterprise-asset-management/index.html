@@ -757,6 +757,7 @@ body:not(.light) .prop-tree-item.active{background:rgba(10,132,255,0.12);color:v
 .tree-arrow.expanded{transform:rotate(0deg)!important}
 .tree-arrow:not(.expanded){transform:rotate(-90deg)!important}
 </style>
+<script>if('scrollRestoration' in history)history.scrollRestoration='manual';window.addEventListener('pageshow',function(e){if(!e.persisted)window.scrollTo(0,0)});</script>
 </head>
 <body class="light">
 <!-- TOP NAV BAR (blue, 60px) -->
@@ -8272,6 +8273,8 @@ function updateRegionMap(metric){
 }
 
 function switchPage(id,btn){
+  try{var _sc=document.querySelector('.content');if(_sc)_sc.scrollTop=0;}catch(e){}
+  window.scrollTo(0,0);
   document.querySelectorAll('.page-panel').forEach(function(p){p.classList.remove('active')});
   var panel=document.getElementById('panel-'+id);
   if(!panel)return;
@@ -9627,6 +9630,16 @@ document.addEventListener('click',function(e){
   div[style*="width:240px;height:240px"]{width:200px!important;height:200px!important;margin:0 auto}
   div[style*="width:240px;height:240px"] svg{width:200px!important;height:200px!important}
 }
+
+  @media (max-width:768px){
+  /* ===== #197 移动端解锁 app-shell：整页自然滚动（修复进入定位 + 内容可达性） ===== */
+  html,body{height:auto!important;overflow-x:hidden!important;overflow-y:auto!important}
+  .layout{overflow:visible!important;height:auto!important}
+  .main{overflow:visible!important;height:auto!important}
+  .content{overflow:visible!important;height:auto!important;min-height:0}
+  .top-nav{position:sticky!important;top:0;z-index:1200}
+
+  }
 </style>
 <script>
 (function(){
