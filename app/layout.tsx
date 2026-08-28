@@ -6,7 +6,6 @@ import { site } from '@/lib/config';
 import { withBasePath } from '@/lib/utils';
 
 import { MainArea } from '@/components/layout/MainArea';
-import { ScrollTopOnLoad } from '@/components/motion/ScrollTopOnLoad';
 import { Nav } from '@/components/nav/Nav';
 import { Footer } from '@/components/sections/Footer';
 
@@ -77,13 +76,18 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           dangerouslySetInnerHTML={{ __html: noFlashThemeScript }}
         />
         */}
+        {/* #197 — 关掉浏览器滚动恢复：必须在 hydration 前执行（浏览器恢复滚动早于 React 启动） */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `if('scrollRestoration'in history)history.scrollRestoration='manual';window.addEventListener('pageshow',function(e){if(!e.persisted)window.scrollTo(0,0)});`,
+          }}
+        />
       </head>
       <body
         className="min-h-screen bg-bg-canvas text-text-primary antialiased"
         suppressHydrationWarning
       >
         <SkipLink />
-        <ScrollTopOnLoad />
         <Nav />
         <MainArea>{children}</MainArea>
         <Footer />
