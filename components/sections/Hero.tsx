@@ -80,8 +80,8 @@ function renderBold(text: string) {
 
 /**
  * Inline 头像 —— atom63 H1 中 32×32 圆形头像
- * 用户 2026-08-20 提供肖像照（398×398 PNG 带透明），
- * 缩至 150×150 自托管（public/images/avatar.png），object-cover 圆形裁剪
+ * 用户 2026-08-28 提供肖像照 MR2A7999.JPG（3648×5472），
+ * 脸部方裁 1150px 缩至 120×120 自托管（public/images/avatar.png），object-cover 圆形裁剪
  */
 function InlineAvatar() {
   return (
