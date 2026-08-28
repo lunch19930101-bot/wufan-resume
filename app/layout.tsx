@@ -79,7 +79,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         {/* #197 — 关掉浏览器滚动恢复：必须在 hydration 前执行（浏览器恢复滚动早于 React 启动） */}
         <script
           dangerouslySetInnerHTML={{
-            __html: `if('scrollRestoration'in history)history.scrollRestoration='manual';window.addEventListener('pageshow',function(e){if(!e.persisted)window.scrollTo(0,0)});`,
+            __html: `(function(){if('scrollRestoration'in history)history.scrollRestoration='manual';var t0=Date.now();function top(){window.scrollTo(0,0)}function pin(){if(Date.now()-t0<1200){if(window.scrollY>0)top();requestAnimationFrame(pin)}}window.addEventListener('pageshow',function(e){t0=Date.now();top();try{var a=document.activeElement;a&&a.blur&&a.blur()}catch(_){}});document.addEventListener('DOMContentLoaded',function(){top();requestAnimationFrame(pin)});window.addEventListener('load',function(){top();requestAnimationFrame(pin)});function stop(){t0=0}window.addEventListener('touchstart',stop,{passive:true});window.addEventListener('wheel',stop,{passive:true});window.addEventListener('keydown',stop);})();`,
           }}
         />
       </head>
