@@ -1846,7 +1846,135 @@ function logout() {
         .config-card-footer .btn{flex:1;white-space:nowrap}
 }
 
-  </style>
+  /* ========== #205 04化移动端整改（对齐 asset-mobile 设计语言） ========== */
+@media (max-width:768px){
+
+/* —— 1. 画布：面板即页，16px 页边距 + 底部安全区 —— */
+.content{padding:0!important}
+.page-panel,.page-panel.active{padding:12px 16px calc(24px + env(safe-area-inset-bottom))!important}
+
+/* —— 2. 顶栏 → 04 导航行：48px、标题 17/600、副题 12 灰单行 —— */
+.topbar{min-height:48px!important;padding:6px 16px 8px!important;justify-content:center!important}
+.topbar h2{font-size:17px!important;line-height:24px!important;font-weight:600!important}
+.topbar-desc{font-size:12px!important;line-height:18px!important;color:var(--text-secondary)!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:100%}
+
+/* —— 3. 卡片 → 04 列表卡：12px 圆角 + 1px 边线、无阴影、12px 节奏 —— */
+.card{border-radius:12px!important;border:1px solid #E7E7E7!important;box-shadow:none!important;padding:14px 16px!important;margin:12px 0 0!important}
+.page-panel>.card:first-child,.page-panel .card+.card{margin-top:12px}
+.page-panel>.card:first-child{margin-top:0!important}
+.card-title{font-size:16px!important;line-height:22px!important;font-weight:600!important}
+.card-header{margin-bottom:12px!important}
+.card-desc{font-size:12px!important;line-height:18px!important;color:var(--text-secondary)!important}
+
+/* —— 4. 统计卡 → 04 灰底内嵌块：8px 圆角 / 标签 12 灰 / 数值 20 品牌蓝 600 —— */
+.stat-card{background:#F7F8FA!important;border:0!important;border-radius:8px!important;padding:12px!important;min-height:0!important;justify-content:flex-start!important}
+.sc-label{font-size:12px!important;line-height:18px!important;color:var(--text-secondary)!important;margin-bottom:2px!important}
+.sc-value{font-size:20px!important;line-height:28px!important;font-weight:600!important;color:var(--theme-primary)!important;letter-spacing:-.2px!important;font-family:var(--font-din)!important}
+.sc-sub,.sc-badge{font-size:12px!important;line-height:18px!important}
+.sc-icon{display:none!important}
+.stat-cards>*:last-child:nth-child(odd){grid-column:1/-1}
+
+/* —— 5. 页签 → 04 Tabs：48px 行高、14px、选中 600 + 16×3 胶囊下划线 —— */
+.tabs,.dashboard-tabs{height:48px!important;align-items:stretch!important;margin:0 0 12px!important;flex-wrap:nowrap!important;overflow-x:auto!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.tabs::-webkit-scrollbar,.dashboard-tabs::-webkit-scrollbar{display:none}
+.tab-item,.dashboard-tab{font-size:14px!important;flex-shrink:0!important;white-space:nowrap!important;padding:0 16px!important;display:flex!important;align-items:center!important}
+.tab-item.active,.dashboard-tab.active{font-weight:600!important;border-bottom-color:transparent!important;position:relative}
+.tab-item.active::after,.dashboard-tab.active::after{content:'';position:absolute;left:50%;transform:translateX(-50%);bottom:0;width:16px;height:3px;border-radius:499px;background:var(--theme-primary)}
+.tab-panel{padding-top:12px!important}
+
+/* —— 6. 工具栏 → 04：36px 检索框 6px 圆角、按钮 34px 高 4px 圆角 —— */
+.table-toolbar{padding:10px 0!important;gap:8px!important}
+.search-wrap{flex:1 1 100%!important}
+.search-wrap input,.search-wrap input:focus{height:36px!important;border-radius:6px!important;font-size:14px!important;background:rgba(250,250,250,.98)!important}
+.table-toolbar select,.table-toolbar .form-select,.table-toolbar .form-input{height:36px!important;border-radius:6px!important;font-size:13px!important;flex:1 1 calc(50% - 4px)!important;min-width:0!important;width:auto!important}
+.btn{height:34px!important;border-radius:4px!important;padding:0 14px!important;font-size:14px!important;font-weight:500!important}
+.btn-primary{box-shadow:none!important}
+
+/* —— 7. 标签 → 04 tag：3px 圆角 12px —— */
+.tag{border-radius:3px!important;font-size:12px!important;padding:2px 6px!important;line-height:16px!important;gap:4px!important}
+
+/* —— 8. 表格 → 04 列表卡：12px 圆角 + 1px 边线 + 实线细分隔 —— */
+.mtbl-wrap,.mtbl-cards{margin:12px 0 0!important}
+.mtbl-cards tbody{gap:8px!important}
+.mtbl-cards tr{border-radius:12px!important;border:1px solid #E7E7E7!important;box-shadow:none!important;padding:2px 14px!important}
+.mtbl-cards td{font-size:13px!important;line-height:20px!important;border-bottom:1px solid rgba(0,0,0,.04)!important}
+.mtbl-cards td::before{font-size:12px!important;color:var(--text-placeholder)!important}
+.mtbl-cards td.mcell-title{font-size:14px!important;font-weight:600!important;border-bottom:1px solid #E7E7E7!important}
+.mtbl-cards td.mcell-act{justify-content:flex-end!important}
+.table-wrap{border-radius:12px!important;box-shadow:none!important;border:1px solid #E7E7E7!important}
+.table-wrap table{font-size:13px!important}
+
+/* —— 9. 表单 → 04：label 上置 13 灰、输入整行 40px 高 6px 圆角 —— */
+.form-row{grid-template-columns:1fr!important;gap:12px!important}
+.form-group{width:100%!important;min-width:0!important}
+.form-label{font-size:13px!important;color:var(--text-secondary)!important;margin-bottom:6px!important;font-weight:400!important}
+.form-input,.form-select{width:100%!important;box-sizing:border-box!important;height:40px!important;border-radius:6px!important;font-size:14px!important}
+.form-input[type=textarea],textarea.form-input{height:auto!important;min-height:80px!important;padding:10px 12px!important}
+.modal .form-input,.modal .form-select{height:40px!important}
+.config-field label{font-size:13px!important;color:var(--text-secondary)!important}
+.config-field .form-input,.config-field .form-select{height:40px!important;border-radius:6px!important;font-size:14px!important}
+
+/* —— 10. 模型配置卡 → 04 —— */
+.config-card{border-radius:12px!important;border:1px solid #E7E7E7!important}
+.config-card-header{padding:12px 16px!important}
+.config-card-body{padding:14px 16px!important}
+.config-card-footer{padding:10px 16px calc(12px + env(safe-area-inset-bottom))!important}
+.config-card-footer .btn{flex:1!important;min-height:36px!important}
+
+/* —— 11. 抽屉/弹窗 → 04 底部抽屉：16px 顶圆角 + 抓手 + 操作铺满 38px —— */
+.modal-overlay{z-index:2600!important}
+.modal{border-radius:16px 16px 0 0!important}
+.modal::before{content:'';display:block;width:36px;height:4px;border-radius:499px;background:rgba(0,0,0,.1);margin:8px auto 0}
+.modal-header{padding:14px 16px 10px!important}
+.modal-header h3{font-size:16px!important;font-weight:600!important}
+.modal-body{padding:4px 16px 16px!important}
+.modal-footer{padding:8px 16px calc(16px + env(safe-area-inset-bottom))!important;gap:8px!important;border-top:0!important}
+.modal-footer .btn{flex:1 1 0!important;min-height:38px!important;height:38px!important}
+
+/* —— 12. toast → 04 深色药丸 —— */
+.toast{background:rgba(0,0,0,.82)!important;color:#fff!important;border-radius:8px!important;min-width:0!important;max-width:78vw!important;box-shadow:none!important;font-size:14px!important;padding:10px 16px!important}
+.toast-icon{color:inherit!important}
+.toast-icon svg{color:currentColor!important}
+
+/* —— 13. 分页 → 04：32px 方钮 4px 圆角 —— */
+.pagination{gap:6px!important;padding:12px 0!important;justify-content:center!important}
+.page-btn{min-width:32px!important;height:32px!important;border-radius:4px!important}
+.page-info{font-size:12px!important}
+
+/* —— 14. 看板/分栏/事件流 —— */
+.kanban-col{border-radius:12px!important;border:1px solid #E7E7E7!important}
+.kanban-col-head{padding:10px 12px!important;font-size:14px!important;font-weight:600!important}
+.kanban-card{border-radius:8px!important;border:1px solid #E7E7E7!important;padding:10px 12px!important;box-shadow:none!important}
+.kanban-card-title{font-size:14px!important;font-weight:500!important}
+.split-sidebar{max-height:none!important}
+.split-item{border-radius:8px!important;padding:10px 12px!important;border:1px solid transparent!important}
+.split-item.on,.split-item.active{background:var(--brand-light)!important;border-color:rgba(0,82,217,.2)!important}
+.split-item-title{font-size:14px!important;font-weight:500!important}
+.split-item-desc{font-size:12px!important;color:var(--text-secondary)!important}
+.event-msg{border-radius:8px!important}
+.event-meta{font-size:12px!important}
+
+/* —— 15. 图表 → 04 字阶 —— */
+.h-bar-label,.h-bar-val,.col-label,.col-count{font-size:12px!important}
+.chart-range .period-btn,.period-btn{height:30px!important;padding:0 12px!important;border-radius:499px!important;font-size:13px!important;border-color:transparent!important;background:#F2F3F5!important;color:var(--text-secondary)!important}
+.period-btn.on,.period-btn.active{background:#fff!important;color:var(--theme-primary)!important;font-weight:600!important;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.progress-bar{height:6px!important}
+.empty-state{padding:32px 16px!important;font-size:13px!important}
+
+/* —— 16. 按压反馈（04 :active 态） —— */
+.btn:active{opacity:.72!important}
+.tab-item:active,.dashboard-tab:active,.period-btn:active{opacity:.72}
+.mtbl-cards tr:active{background:rgba(0,0,0,.03)}
+.kanban-card:active,.split-item:active{background:rgba(0,82,217,.06)}
+.mtbl-cards tr{cursor:pointer}
+
+/* —— 17. 占位符省略 —— */
+.page-panel input:not([type=checkbox]):not([type=radio]),.modal input:not([type=checkbox]):not([type=radio]){
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+::placeholder{text-overflow:ellipsis}
+}
+</style>
 <script>
 (function(){
   var nav=document.querySelector('.top-nav');
@@ -1902,5 +2030,51 @@ function logout() {
   new MutationObserver(function(){setTimeout(wrapTables,30)}).observe(document.body,{childList:true,subtree:true});
 })();
 </script>
-</body>
+<script>
+/* #206 行点击详情抽屉 + 按压反馈交互 */
+(function(){
+  function sheetRows(pairs){
+    var h='';
+    (pairs||[]).forEach(function(p,i){
+      h+='<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px;padding:9px 0;'+(i<pairs.length-1?'border-bottom:1px solid rgba(0,0,0,.06);':'')+'font-size:13px;line-height:20px">'
+        +'<span style="color:var(--text-secondary);flex-shrink:0">'+p[0]+'</span>'
+        +'<span style="color:var(--text-primary);text-align:right;word-break:break-word;min-width:0">'+p[1]+'</span></div>';
+    });
+    return h;
+  }
+  window.openDetailSheet=function(title,pairs,actions){
+    if(typeof openSheet!=='function')return;
+    openSheet(title,sheetRows(pairs),actions||[{label:'关 闭',primary:true}]);
+  };
+  /* 表格行 → label:value 详情抽屉（移动端） */
+  document.addEventListener('click',function(e){
+    if(!window.matchMedia('(max-width:768px)').matches)return;
+    if(e.target.closest('button,a,select,input,textarea,.switch,.page-btn'))return;
+    var tr=e.target.closest('.mtbl-cards tbody tr');
+    if(tr&&!tr.closest('.modal')){
+      var pairs=[];
+      tr.querySelectorAll('td[data-label]').forEach(function(td){
+        var v=(td.textContent||'').trim();if(v)pairs.push([td.getAttribute('data-label'),v]);
+      });
+      var t=tr.querySelector('.mcell-title');
+      var title=(t?(t.textContent||'').trim():'')||'详情';
+      if(pairs.length)openDetailSheet(title+' · 详情',pairs);
+      return;
+    }
+    /* 模型配置卡 → 只读详情（排除卡内可编辑控件区） */
+    var cc=e.target.closest('.config-card');
+    if(cc&&!e.target.closest('.config-card-footer')){
+      var name=(cc.querySelector('.config-card-header b,.config-card-header .card-title,.config-card-header div'))
+      var titleEl=cc.querySelector('.config-card-header');
+      var t2=(titleEl?(titleEl.textContent||'').trim().split('\n')[0]:'')||'模型配置';
+      var pairs2=[];
+      cc.querySelectorAll('.config-field').forEach(function(f){
+        var lb=f.querySelector('label');var ip=f.querySelector('input,select');
+        if(lb&&ip)pairs2.push([(lb.textContent||'').trim(),(ip.value||'')||'-']);
+      });
+      if(pairs2.length)openDetailSheet(t2.replace(/\s+/g,' ').slice(0,24)+' · 配置详情',pairs2);
+    }
+  },true);
+})();
+</script></body>
 </html>

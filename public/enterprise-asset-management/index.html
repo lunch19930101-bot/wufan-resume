@@ -9640,7 +9640,190 @@ document.addEventListener('click',function(e){
   .top-nav{position:sticky!important;top:0;z-index:1200}
 
   }
-@media(min-width:769px){/* #202b stat-value-pc */.stat-cards .sc-value{font-size:26px!important;line-height:34px!important}}</style>
+@media(min-width:769px){/* #202b stat-value-pc */.stat-cards .sc-value{font-size:26px!important;line-height:34px!important}}/* ========== #204 04化移动端整改（对齐 asset-mobile 设计语言） ========== */
+@media (max-width:768px){
+
+/* —— 1. 画布节奏：面板即页，16px 页边距、底部安全区 —— */
+.content{padding:0!important}
+.page-panel,.page-panel.active{padding:12px 16px calc(24px + env(safe-area-inset-bottom))!important}
+
+/* —— 2. 顶栏 → 04 导航行（48px、标题单行省略，右侧用户区让位抽屉） —— */
+.topbar{height:48px!important;padding:0 16px!important}
+.breadcrumb{font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.breadcrumb span,.breadcrumb i{white-space:nowrap}
+.topbar-right{display:none!important}
+
+/* —— 3. 卡片 → 04 列表卡：12px 圆角 + 1px 边线 + 无阴影，节奏 12px —— */
+.card{border-radius:12px!important;border:1px solid var(--border)!important;box-shadow:none!important;padding:14px 16px!important;margin:12px 0 0!important}
+.page-panel>.card:first-child,.page-panel>.card:first-of-type{margin-top:0!important}
+.page-panel .card h3,.card-title{font-size:16px!important;line-height:22px!important;font-weight:600!important}
+.page-panel>h2,.page-panel>h3{font-size:18px!important;line-height:26px!important;font-weight:600!important}
+
+/* —— 4. 统计卡 → 04 灰底内嵌块：8px 圆角 / 标签 12 灰 / 数值 20 品牌蓝加粗 —— */
+.stat-cards{gap:8px!important;margin:12px 0 0!important}
+.stat-card{background:#F7F8FA!important;border:0!important;border-radius:8px!important;padding:12px!important;min-height:0!important}
+body:not(.light) .stat-card{background:rgba(255,255,255,.05)!important}
+.sc-label{font-size:12px!important;line-height:18px!important;color:var(--text-secondary)!important}
+.sc-value{font-size:20px!important;line-height:28px!important;font-weight:600!important;color:var(--theme-primary)!important;margin-top:2px!important;letter-spacing:-.2px!important}
+.sc-unit{font-size:12px!important;color:var(--text-muted)!important}
+
+/* —— 5. 页签 → 04 Tabs：白底 48px、14px 文字、选中 600 + 16×3 胶囊下划线 —— */
+.inner-tabs{height:48px!important;align-items:stretch!important;margin:0 0 12px!important;border-bottom:1px solid var(--border)!important;flex-wrap:nowrap!important;overflow-x:auto!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.inner-tabs::-webkit-scrollbar{display:none}
+.inner-tab,.msg-tab,.op-tab,.cls-tab{font-size:14px!important;flex-shrink:0!important;white-space:nowrap!important;padding:0 14px!important}
+.inner-tab.active,.msg-tab.active,.op-tab.active,.cls-tab.active{font-weight:600!important}
+.tab-indicator{width:16px!important;height:3px!important;border-radius:499px!important}
+.op-tab-group{flex-wrap:nowrap!important;overflow-x:auto!important;scrollbar-width:none;-webkit-overflow-scrolling:touch}
+.op-tab-group::-webkit-scrollbar{display:none}
+
+/* —— 6. 分类胶囊 → 04 chip：全圆角、13px —— */
+.category-pills{gap:8px!important}
+.cat-pill{padding:6px 14px!important;border-radius:499px!important;font-size:13px!important;white-space:nowrap!important}
+.cat-pill.active{font-weight:500}
+
+/* —— 7. 工具栏 / 输入 → 04：36px 高、6px 圆角检索框，按钮 34px 高 4px 圆角 —— */
+.toolbar{padding:10px 0!important;gap:8px!important}
+.search-input,.map-search-input{width:100%!important;flex:1 1 100%!important;height:36px!important;border-radius:6px!important;font-size:14px!important}
+.toolbar .select,.op-select,.map-filter-select{height:36px!important;border-radius:6px!important;font-size:13px!important;flex:1 1 calc(50% - 4px)!important;min-width:0!important}
+.btn{border-radius:4px!important;min-height:34px;padding:0 14px!important;font-size:14px!important;font-weight:500!important;white-space:nowrap!important}
+.btn-primary{box-shadow:none!important}
+.map-btn-query,.map-btn-reset{min-height:34px!important;border-radius:4px!important}
+
+/* —— 8. 标签 → 04 tag：3px 圆角、12px —— */
+.tag{border-radius:3px!important;font-size:12px!important;padding:2px 6px!important;line-height:16px!important}
+
+/* —— 9. 表格 → 04 列表卡：12px 圆角 + 1px 边线 + 实线细分隔 —— */
+.mtbl-wrap,.mtbl-cards{margin:12px 0 0!important}
+.mtbl-cards tbody{gap:8px!important}
+.mtbl-cards tr{border-radius:12px!important;border:1px solid var(--border)!important;box-shadow:none!important;padding:2px 14px!important}
+.mtbl-cards td{font-size:13px!important;line-height:20px!important;border-bottom:1px solid rgba(0,0,0,.04)!important}
+body:not(.light) .mtbl-cards td{border-bottom-color:rgba(255,255,255,.05)!important}
+.mtbl-cards td::before{font-size:12px!important;color:var(--text-muted)!important}
+.mtbl-cards td.mcell-title{font-size:14px!important;font-weight:600!important;border-bottom:1px solid var(--border)!important}
+.table-wrap{border-radius:12px!important;box-shadow:none!important}
+.mtbl-wrap table,.table-wrap table{font-size:13px!important}
+
+/* —— 10. 表单 → 04：label 上置 13px 灰、输入整行 40px 高 6px 圆角 —— */
+.form-row{display:flex!important;flex-direction:column!important;gap:12px!important}
+.form-group{width:100%!important;min-width:0!important}
+.form-label{font-size:13px!important;color:var(--text-secondary)!important;margin-bottom:6px!important}
+.label-sm{font-size:12px!important}
+.form-input,.form-select,.form-textarea{width:100%!important;box-sizing:border-box!important;border-radius:6px!important;font-size:14px!important}
+.form-input,.form-select{height:40px!important}
+.form-textarea{min-height:96px!important;padding:10px 12px!important}
+.op-date-range{width:100%!important;box-sizing:border-box!important;height:40px!important;border-radius:6px!important;font-size:14px!important}
+
+/* —— 11. 详情 → 04 label:value 行：左灰 13 / 右黑 14，细分隔线 —— */
+.detail-group{padding:2px 0!important}
+.detail-row{padding:9px 0!important;border-bottom:1px solid rgba(0,0,0,.04)!important;align-items:flex-start!important}
+body:not(.light) .detail-row{border-bottom-color:rgba(255,255,255,.05)!important}
+.detail-label{width:auto!important;min-width:88px!important;max-width:44%!important;text-align:left!important;font-size:13px!important;color:var(--text-muted)!important;line-height:20px!important;margin-right:12px!important}
+.detail-value{flex:1!important;min-width:0!important;font-size:14px!important;line-height:20px!important;word-break:break-word!important;text-align:right!important}
+
+/* —— 12. 树 → 04：横滚容器、40px 行高、14/13px —— */
+.tree-root,.prop-tree{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.tree-item{height:40px;font-size:14px!important;border-radius:8px}
+.tree-child{font-size:13px!important;height:34px}
+.tree-children,.prop-tree-children{padding-left:14px!important}
+.prop-tree-item{font-size:13px!important;padding:8px 10px!important}
+.tree-arrow{width:16px;height:16px;flex-shrink:0}
+
+/* —— 13. 宫格图标 → 04：44px 图标块 12px 圆角 —— */
+.classify-icon{width:44px!important;height:44px!important;border-radius:12px!important}
+.classify-name{font-size:14px!important}
+.classify-sub,.classify-value{font-size:12px!important}
+.qn-icon-wrap{border-radius:12px!important}
+
+/* —— 14. 时间轴 → 04 紧凑 —— */
+.tl-item{padding:0 0 14px!important}
+.tl-title{font-size:14px!important;font-weight:600!important}
+.tl-desc{font-size:12px!important;color:var(--text-muted)!important;line-height:18px!important}
+.tl-date{font-size:12px!important}
+
+/* —— 15. 图表数值 → 04 字阶 —— */
+.h-bar-row{gap:8px!important}
+.h-bar-label{font-size:12px!important;width:64px!important;flex-shrink:0!important}
+.h-bar-val{font-size:12px!important}
+.donut-legend-item{font-size:12px!important}
+.ring-num{font-size:20px!important;font-weight:600!important}
+.ring-label{font-size:12px!important}
+.lease-header-metric,.contract-header-metric{min-width:0!important}
+
+/* —— 16. 分页 → 04：32px 方钮 4px 圆角 —— */
+.pagination{gap:6px!important;padding:12px 0!important}
+.page-btn{min-width:32px!important;height:32px!important;border-radius:4px!important}
+.page-info{font-size:12px!important}
+
+/* —— 17. 弹窗 → 04 底部抽屉：16px 顶圆角 + 抓手 + 底部操作铺满 —— */
+.modal-overlay{z-index:2600!important}
+.modal{border-radius:16px 16px 0 0!important}
+.modal::before{content:'';display:block;width:36px;height:4px;border-radius:499px;background:rgba(0,0,0,.1);margin:8px auto 0}
+body:not(.light) .modal::before{background:rgba(255,255,255,.15)}
+.modal-header{padding:14px 16px 10px!important}
+.modal-header h3{font-size:16px!important;font-weight:600!important}
+.modal-body{padding:4px 16px 16px!important}
+.modal-footer{padding:8px 16px calc(16px + env(safe-area-inset-bottom))!important;gap:8px!important}
+.modal-footer .btn{flex:1 1 0!important;min-height:38px!important}
+
+/* —— 18. 待办/消息 → 04 卡片行 —— */
+.todo-item{border-radius:12px!important;border:1px solid var(--border)!important;background:transparent!important;padding:10px 12px!important}
+.todo-text{font-size:14px!important}
+.todo-time{font-size:12px!important;color:var(--text-muted)!important}
+
+/* —— 19. 上传区 → 04 —— */
+.upload-zone{border-radius:12px!important;padding:24px 16px!important}
+.upload-text{font-size:13px!important}
+.upload-hint{font-size:12px!important}
+
+/* —— 20. 其它收口 —— */
+.profile-menu-item{min-height:44px;font-size:14px!important;border-radius:8px}
+.toast-container{z-index:3000!important}
+[style*="grid-template-columns:repeat(6,1fr)"]{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+.page-panel .card>div[style*="display:flex"][style*="justify-content:space-between"]{flex-wrap:wrap!important;gap:10px!important}
+.page-panel .card>div[style*="display:flex"][style*="justify-content:space-between"]>div{min-width:0}
+}
+/* ========== #204b 移动端补丁：去mask硬切/placeholder省略号 ========== */
+@media (max-width:768px){
+/* 04 无渐隐——页签/胶囊/顶导右缘靠横向滚动自身示意，撤掉会把字形切成半个字的 mask */
+.ledger-main .inner-tabs-row,
+.category-pills,
+.top-nav-items{-webkit-mask-image:none!important;mask-image:none!important}
+
+/* 占位符单行省略（Blink/WebKit 对 input 的 placeholder 默认硬裁切） */
+.page-panel input:not([type=checkbox]):not([type=radio]):not([type=range]),
+.toolbar input,.modal input{
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+}
+.page-panel input::placeholder,.toolbar input::placeholder,.modal input::placeholder{
+  text-overflow:ellipsis;overflow:hidden;white-space:nowrap
+}
+
+/* 顶导品牌 h1 真省略（此前 overflow 被旧块覆盖成硬切观感） */
+.top-nav-brand h1{overflow:hidden;text-overflow:ellipsis}
+}
+/* ========== #204c bidding/operation 行内横排修复 ========== */
+@media (max-width:768px){
+/* bidding：面积筛选胶囊行 / 统计小卡横排（行内 gap:24px nowrap）→ 换行 */
+.page-panel div[style*="gap:24px;margin-bottom:32px"]{flex-wrap:wrap!important;gap:8px!important;margin-bottom:12px!important}
+.page-panel div[style*="gap:24px;margin-bottom:32px"]>*{min-width:0!important}
+.page-panel div[style*="gap:24px;margin-bottom:32px"]>div.card{flex:1 1 calc(50% - 4px)!important}
+
+/* 运营/通用：行内筛出行（align-items:center;gap:8px）→ 换行，下拉两列、日期段整行 */
+.page-panel div[style*="display:flex;align-items:center;gap:8px"]{flex-wrap:wrap!important;gap:8px!important}
+.page-panel div[style*="display:flex;align-items:center;gap:8px"]>*{min-width:0}
+#panel-operation .op-select{flex:1 1 calc(50% - 4px)!important;width:auto!important;max-width:100%!important}
+.op-date-range{flex:1 1 100%!important;width:auto!important;max-width:100%!important}
+
+/* 环形图卡：纵向堆叠 + 200px 居中（重申压过行内 padding 变体） */
+.page-panel div[style*="padding:16px 32px 24px"]{flex-direction:column!important;align-items:center!important;gap:12px!important;padding:12px 16px 20px!important}
+.page-panel div[style*="flex-shrink:0;width:240px;height:240px"]{width:200px!important;height:200px!important}
+.page-panel div[style*="flex-shrink:0;width:240px;height:240px"] svg{width:200px!important;height:200px!important}
+
+/* 240×180 定宽柱图卡 → 随卡伸缩 */
+.page-panel div[style*="width:240px;height:180px"]{width:100%!important;max-width:320px!important}
+.page-panel div[style*="width:240px;height:180px"] svg{width:100%!important}
+}
+</style>
 <script>
 (function(){
   var nav=document.querySelector('.top-nav');
