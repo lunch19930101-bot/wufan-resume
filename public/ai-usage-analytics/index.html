@@ -1747,6 +1747,21 @@ function logout() {
   .mtbl-cards td.mcell-act{justify-content:flex-end;padding-top:10px}
   .mtbl-cards td.mcell-act::before{content:none}
   .mtbl-cards td:empty{display:none}
+  /* ===== #196 知识库/提示词行内行换行（块状化，防右缘截断） ===== */
+  /* 行内小标签/筛选行（知识库配置标签、提示词分类筛选）→ 允许换行 */
+  [style*="display:flex;gap:8px"]{flex-wrap:wrap;row-gap:6px}
+  /* split-main 头部：标题块整行 + 操作钮组铺满一行 */
+  .split-main>div[style*="justify-content:space-between"]{flex-wrap:wrap;gap:10px}
+  .split-main>div[style*="justify-content:space-between"]>div:first-child{flex:1 1 100%;min-width:0}
+  .split-main>div[style*="justify-content:space-between"] .btn-group{width:100%;display:flex;gap:8px}
+  .split-main>div[style*="justify-content:space-between"] .btn-group .btn{flex:1;white-space:nowrap}
+        /* ===== #196 模型配置卡片：单列满宽 + 头部块状化（防竖排挤压/开关裁切） ===== */
+        .stat-cards.c2{grid-template-columns:1fr!important}
+        .config-card-header{flex-wrap:wrap;gap:10px}
+        .config-card-header>div:first-child{flex:1 1 100%;min-width:0}
+        .config-card-header>div:last-child{margin-left:auto}
+        .config-card-footer{justify-content:stretch}
+        .config-card-footer .btn{flex:1;white-space:nowrap}
 }
 </style>
 <script>

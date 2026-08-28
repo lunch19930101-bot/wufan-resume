@@ -9586,6 +9586,31 @@ document.addEventListener('click',function(e){
   .page-panel.active{padding-left:16px;padding-right:16px;padding-top:16px}
   .ledger-layout{flex-direction:column;gap:0}
   .ledger-sidebar{display:none}
+  /* 资产卡片页长标题：移动端收敛为两行内，避免 18px 长折行 */
+  #panel-card h3{font-size:16px!important;line-height:1.45!important;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+  /* 资产卡片页头部：标题块占满首行，操作按钮整行换到标题下方并铺满（避免窄屏按钮被挤成竖排单字） */
+  #panel-card .card>div[style*="display:flex"][style*="justify-content:space-between"]{flex-wrap:wrap;gap:12px}
+  #panel-card .card>div[style*="display:flex"][style*="justify-content:space-between"]>div:first-child{flex:1 1 100%;min-width:0}
+  #panel-card .card>div[style*="display:flex"][style*="justify-content:space-between"]>div[style*="display:flex;gap:var(--space-sm)"]{width:100%;gap:8px}
+  #panel-card .card>div[style*="display:flex"][style*="justify-content:space-between"]>div[style*="display:flex;gap:var(--space-sm)"] .btn{flex:1;min-height:36px;white-space:nowrap}
+  #panel-card .card>div[style*="display:flex"][style*="justify-content:space-between"]>div:first-child>div[style*="display:flex;gap:12px"]{flex-wrap:wrap;gap:6px 10px}
+  /* 消息/通知类筛选工具栏（内联 flex 一行排：搜索+下拉+按钮）→ 窄屏分块换行：搜索整行、下拉两列、按钮组铺满，避免右缘截断 */
+  .page-panel div[style*="padding:12px;display:flex;align-items:center;gap:12px;border-bottom"]{flex-wrap:wrap;gap:8px}
+  .page-panel div[style*="padding:12px;display:flex;align-items:center;gap:12px;border-bottom"]>input{flex:1 1 100%;max-width:none!important}
+  .page-panel div[style*="padding:12px;display:flex;align-items:center;gap:12px;border-bottom"]>select{flex:1 1 calc(50% - 8px);min-width:0}
+  .page-panel div[style*="padding:12px;display:flex;align-items:center;gap:12px;border-bottom"]>div[style*="display:flex;gap:0"]{flex:1 1 100%}
+  .page-panel div[style*="padding:12px;display:flex;align-items:center;gap:12px;border-bottom"]>div[style*="display:flex;gap:0"]>button{flex:1;white-space:nowrap}
+  .page-panel div[style*="padding:12px;display:flex;align-items:center;gap:12px;border-bottom"]>button{flex:1 1 calc(50% - 8px);white-space:nowrap;min-height:34px}
+  /* 内联多列网格（统计卡/筛选位）→ 2 列块状，压过行内 style 的 4/5/3 列挤压 */
+  [style*="grid-template-columns:repeat(4,1fr)"],[style*="grid-template-columns:repeat(5,1fr)"],[style*="grid-template-columns:repeat(3,1fr)"]{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+  /* 资产地图：桌面左右分栏 → 纵向流（筛选块收纳可滚 + 地图块定高），否则 360px 侧栏把地图挤没 */
+  #panel-map>div[style*="display:flex"]{flex-direction:column!important;height:auto!important;min-height:0!important;gap:12px!important}
+  #panel-map>div[style*="display:flex"]>div:first-child{width:auto!important;min-width:0!important;max-height:46vh;overflow-y:auto;-webkit-overflow-scrolling:touch}
+  #panel-map>div[style*="display:flex"]>div:last-child{flex:none!important;height:340px!important;border-left:1px solid #e7e7e7!important;border-radius:12px!important}
+  /* 宽图表 SVG：保持原生可读字号，卡片内横向滑动（块状边界不动） */
+  .page-panel .card:has(>svg[width="100%"]){overflow-x:auto;-webkit-overflow-scrolling:touch}
+  .page-panel .card>svg[width="100%"]{min-width:600px}
+  .page-panel .card>svg[width="100%"][viewBox^="0 0 8"]{min-width:740px}
   .ledger-main{width:100%}
   .ledger-main .inner-tabs-row{flex-wrap:nowrap;overflow-x:auto;scrollbar-width:none;-webkit-overflow-scrolling:touch;margin-left:-16px;margin-right:-16px;padding:0 16px;-webkit-mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 18px),transparent);mask-image:linear-gradient(90deg,#000 0,#000 calc(100% - 18px),transparent)}
   .ledger-main .inner-tabs-row::-webkit-scrollbar{display:none}
