@@ -12,17 +12,17 @@ import { site } from '@/lib/config';
  *   1. GridRule（full-bleed + 两端菱形）—— /Contact 上沿
  *   2. / Contact          —— 邮箱 + 电话
  *   3. GridRule（full-bleed + 两端菱形）—— Build 上沿 / boundary
- *   4. Build area：3 行 2 列，自包含 max-w-xl 区块
+ *   4. Build area：3 行 2 列，自包含 max-w-[672px] 区块
  *        Build   | Shipped
  *        Engine  | Viewport
  *        Beijing | Local    ← 看板行：Doto 点阵大数字（天气 + HH∶MM∶SS 时间）
- *      行间用 max-w-xl 宽度的 border-top 分隔；中心垂直分隔线贯穿每行
+ *      行间用 max-w-[672px] 宽度的 border-top 分隔；中心垂直分隔线贯穿每行
  *   5. GridRule（full-bleed + 两端菱形）—— Build 下沿 / boundary
  *   6. / Copyright
  *
  * 视觉规则（避免"虚线叠层"+ 严格区分通栏/非通栏）：
  *   - section boundary（Contact ↔ Build ↔ Copyright）：full-bleed GridRule + 端点菱形
- *   - Build area 内部：max-w-xl 宽度，单一连续 border-top/border-l，无菱形
+ *   - Build area 内部：max-w-[672px] 宽度，单一连续 border-top/border-l，无菱形
  *   - cell 无 border（避免相邻 cell 虚线相位错位）
  *   - 所有虚线统一 var(--color-border-default)
  */
@@ -89,8 +89,8 @@ export function Footer() {
       {/* GridRule 1 —— 贯穿全屏的虚线 + 两端菱形 */}
       <GridRule />
 
-      {/* / Contact —— 邮箱 + 电话（max-w-xl 容器内） */}
-      <div className="mx-auto max-w-xl px-6">
+      {/* / Contact —— 邮箱 + 电话（max-w-[672px] 容器内） */}
+      <div className="mx-auto max-w-[672px] px-6">
         <section className="py-6">
           <p className="mb-3 font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
             / Contact
@@ -123,12 +123,12 @@ export function Footer() {
       {/* GridRule 2 —— 贯穿全屏（boundary with Contact），两端有菱形 */}
       <GridRule />
 
-      {/* Build area —— 自包含 max-w-xl 区块，不通栏，无菱形
+      {/* Build area —— 自包含 max-w-[672px] 区块，不通栏，无菱形
           - 顶部/底部由外层 GridRule 提供（full-bleed + 端点菱形）
-          - 内部行间分隔：max-w-xl 宽度的 border-top（与中心垂直分隔线同宽）
+          - 内部行间分隔：max-w-[672px] 宽度的 border-top（与中心垂直分隔线同宽）
           - 中心垂直分隔线：absolute span，贯穿整行高度
           - 所有线统一用 border-border-default，避免相位错位 */}
-      <div className="mx-auto max-w-xl px-6">
+      <div className="mx-auto max-w-[672px] px-6">
         <div className="-mx-6">
           {rows.map((row, i) => (
             <Fragment key={row.left.label}>
@@ -204,8 +204,8 @@ export function Footer() {
       {/* GridRule 3 —— 贯穿全屏（boundary with Copyright），两端有菱形 */}
       <GridRule />
 
-      {/* / Copyright（max-w-xl 容器内） */}
-      <div className="mx-auto max-w-xl px-6">
+      {/* / Copyright（max-w-[672px] 容器内） */}
+      <div className="mx-auto max-w-[672px] px-6">
         <p className="py-6 text-left font-mono text-mono-micro text-text-tertiary">
           © {year} {site.name} · WF0101
         </p>
@@ -218,10 +218,10 @@ export function Footer() {
 
 /**
  * GridRule —— 贯穿整个 viewport 的虚线 + 两端 4px 实心菱形。
- * 直接渲染在 <footer> 子层（不在 max-w-xl 容器里），所以 width:100% = viewport 宽。
+ * 直接渲染在 <footer> 子层（不在 max-w-[672px] 容器里），所以 width:100% = viewport 宽。
  * 视觉规则在 globals.css 的 .grid-rule / ::before / ::after。
  *
- * 端点菱形的位置 = viewport 左右边（不在 max-w-xl 边）。
+ * 端点菱形的位置 = viewport 左右边（不在 max-w-[672px] 边）。
  * 仅用于 section boundary（Contact ↔ Build ↔ Copyright）。
  * Build area 内部分隔不走 GridRule，避免通栏 + 避免棱形。
  */

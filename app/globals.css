@@ -239,7 +239,7 @@ html:has(.live-resume) {
     font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
   }
 
-  /* atom63.io 全高左右虚线 —— max-w-xl 内容容器视觉导引
+  /* atom63.io 全高左右虚线 —— max-w-[672px] 内容容器视觉导引（#227 版心 576→672）
      与 .grid-rule 横线使用同一 token（--color-border-default），
      这样竖线 / 横线 / 交汇菱形颜色完全一致。 */
   body::after {
@@ -250,7 +250,7 @@ html:has(.live-resume) {
     left: 50%;
     transform: translateX(-50%);
     width: 100%;
-    max-width: calc(36rem * var(--a63-type-scale, 1)); /* max-w-xl × type-scale */
+    max-width: calc(42rem * var(--a63-type-scale, 1)); /* 672px × type-scale */
     border-left: 1px dashed var(--color-border-default);
     border-right: 1px dashed var(--color-border-default);
     pointer-events: none;
@@ -326,13 +326,13 @@ html:has(.live-resume) {
   /* Grid rule —— atom63 footer/nav 虚线横线 + 两端 4px 实心菱形
      - 1px dashed 横线（full-bleed，width:100%）
      - 两端各 1 个 4px 旋转 45° 的实心菱形，颜色同虚线
-     - 菱形位置 = body::after 的两条竖虚线（max-w-xl 边缘），
+     - 菱形位置 = body::after 的两条竖虚线（672px 版心边缘），
        不在 viewport 边缘——这样横线 / 竖线 / 菱形构成完整十字交汇
      - 关键：calc 不带 type-scale 乘数。
-       body::after 在 :root 层不被 zoom，竖线在 50% ± 18rem × scale（视觉像素）。
+       body::after 在 :root 层不被 zoom，竖线在 50% ± 21rem × scale（视觉像素）。
        footer 是 body > *，被 zoom: scale 影响，内部的 CSS 单位会被 × scale 渲染。
-       写 `calc(50% - 18rem - 2px)`，让 zoom 自然缩放偏移量，
-       最终视觉位置 = 50% - 18rem×scale - 2px×scale，与 body::after 竖线对齐。
+       写 `calc(50% - 21rem - 2px)`，让 zoom 自然缩放偏移量，
+       最终视觉位置 = 50% - 21rem×scale - 2px×scale，与 body::after 竖线对齐。
   */
   .grid-rule {
     position: relative;
@@ -352,12 +352,12 @@ html:has(.live-resume) {
     pointer-events: none;
   }
   .grid-rule::before {
-    /* 左侧菱形：与 body::after 的左竖线（max-w-xl 左边缘）对齐 */
-    left: calc(50% - 18rem - 2px);
+    /* 左侧菱形：与 body::after 的左竖线（672px 版心左边缘）对齐 */
+    left: calc(50% - 21rem - 2px);
   }
   .grid-rule::after {
-    /* 右侧菱形：与 body::after 的右竖线（max-w-xl 右边缘）对齐 */
-    right: calc(50% - 18rem - 2px);
+    /* 右侧菱形：与 body::after 的右竖线（672px 版心右边缘）对齐 */
+    right: calc(50% - 21rem - 2px);
   }
 }
 

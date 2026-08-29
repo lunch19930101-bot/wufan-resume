@@ -46,7 +46,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   const content = getProjectContent(project);
 
   return (
-    <article className="mx-auto max-w-xl px-6 pb-24 pt-8">
+    <article className="mx-auto max-w-[672px] px-6 pb-24 pt-8">
       {/* Header */}
       <header className="flex flex-col gap-3 pb-8">
         <h1

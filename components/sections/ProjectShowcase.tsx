@@ -18,7 +18,7 @@ import { getVisibleProjects, type Project } from '@/lib/projects';
  *   - 右上角 icon badge: size-4 rounded-full 玻璃底(bg-background/10 backdrop-blur-sm)
  *     + 箭头随封面深浅自适应（深底白 / 浅底黑，见 project.coverTone）
  *   - 底部 caption: p-3.5 pt-10
- *   - 容器: max-w-xl px-6, container-type:inline-size 横向滚动
+ *   - 容器: max-w-[672px] px-6, container-type:inline-size 横向滚动
  *   - 左右 chevron 玻璃感按钮控制水平滚动
  *
  * 卡片点击 → 跳转 /projects/<slug> 详情页
@@ -48,15 +48,16 @@ export function ProjectShowcase() {
     >
       {/* Carousel —— 1:1 atom63 bleed 模式
           （与 ShowcaseCarousel 相同的破容器手法，可嵌入 HomeMain 长文流）
-          - 滑出 max-w-xl px-6 内容列，扩展到完整 576px (max-w-xl 外宽)
-          - container-type:inline-size 让 100cqw = 576px
+          - 滑出 max-w-[672px] px-6 内容列，扩展到完整 672px 外宽（手机端全宽出血）
+          - lg 起 HomeMain 的破格 wrapper 已给出 864/1088px 宽，出血归零（lg:mx-0 lg:w-full）
+          - container-type:inline-size 让 100cqw = 出血层实际宽度
           - track padding-inline:1.5rem 在两端自然形成 24px gutter
             · scrollLeft=0 时左侧 24px 空白可见
             · 滑动后 padding 随内容滑出，卡片贴 viewport 边缘
             · 滑到最右时右侧 24px 空白再现
           - 不使用 scroll-snap（atom63 完全不用 snap） */}
       <div
-        className="-mx-6 w-[calc(100%+4rem)]"
+        className="-mx-6 w-[calc(100%+4rem)] lg:mx-0 lg:w-full"
         style={{ containerType: 'inline-size' }}
       >
         <div className="relative">
@@ -141,10 +142,11 @@ export function WorkCard({ project }: { project: Project }) {
         'group relative block shrink-0 overflow-hidden bg-bg-muted',
         'rounded-[var(--showcase-radius)]',
         // 卡片宽度 —— 1:1 atom63 ScrollableList 公式
-        //   100cqw = bleed wrapper 宽 (576px = max-w-xl 外宽)
+        //   100cqw = bleed wrapper 实际宽（手机全宽出血 / lg 864 / xl 1088，
+        //   随 HomeMain #227 破格 wrapper 联动）
         //   2.5 张可见 (2 全显 + 0.5 peek)，公式直接复刻 atom63：
         //     w-[calc((100cqw-2.5rem)/2.5)]
-        //   (576 - 40) / 2.5 ≈ 214px / 卡片
+        //   xl 1440 屏：(1088 - 40) / 2.5 ≈ 419px / 卡片
         'w-[calc((100cqw-2.5rem)/2.5)]',
         'aspect-[3/4]',
       )}

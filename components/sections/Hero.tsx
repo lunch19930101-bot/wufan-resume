@@ -27,7 +27,7 @@ export function Hero() {
      手机 Hero 底距为 0 —— 与 HomeMain 首节的 40px 节距会叠加成 80，
      由 space-y-[40px] 单独承担；md 维持原值（pt 64 / pb 64） */
   return (
-    <section className="mx-auto max-w-xl px-6 pt-[24px] pb-0 md:pt-8 md:pb-16">
+    <section className="mx-auto max-w-[672px] px-6 pt-[24px] pb-0 md:pt-8 md:pb-16">
       <h1 className="text-hero-h1 text-text-primary">
         {/* #213 头像与文字垂直居中对齐（flex items-center 精确居中） */}
         <span className="flex flex-wrap items-center">
@@ -51,7 +51,7 @@ export function Hero() {
 
       {/* 个人介绍 —— atom63 开场长文（按 \n\n 分段，**词** 渲染为加粗强调） */}
       {site.intro ? (
-        <div className="mt-[40px] max-w-xl space-y-[24px] text-essay-p leading-[27.625px] text-text-secondary md:mt-6 md:space-y-4">
+        <div className="mt-[40px] space-y-[24px] text-essay-p leading-[27.625px] text-text-secondary md:mt-6 md:space-y-4">
           {site.intro.split('\n\n').map((para, i) => (
             <p key={i}>{renderBold(para)}</p>
           ))}
