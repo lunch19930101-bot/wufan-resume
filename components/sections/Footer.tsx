@@ -90,7 +90,7 @@ export function Footer() {
       <GridRule />
 
       {/* / Contact —— 邮箱 + 电话（max-w-[672px] 容器内） */}
-      <div className="mx-auto max-w-[672px] px-6">
+      <div className="mx-auto max-w-[672px] px-6 lg:max-w-[864px] xl:max-w-[1088px]">
         <section className="py-6">
           <p className="mb-3 font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
             / Contact
@@ -128,7 +128,7 @@ export function Footer() {
           - 内部行间分隔：max-w-[672px] 宽度的 border-top（与中心垂直分隔线同宽）
           - 中心垂直分隔线：absolute span，贯穿整行高度
           - 所有线统一用 border-border-default，避免相位错位 */}
-      <div className="mx-auto max-w-[672px] px-6">
+      <div className="mx-auto max-w-[672px] px-6 lg:max-w-[864px] xl:max-w-[1088px]">
         <div className="-mx-6">
           {rows.map((row, i) => (
             <Fragment key={row.left.label}>
@@ -205,7 +205,7 @@ export function Footer() {
       <GridRule />
 
       {/* / Copyright（max-w-[672px] 容器内） */}
-      <div className="mx-auto max-w-[672px] px-6">
+      <div className="mx-auto max-w-[672px] px-6 lg:max-w-[864px] xl:max-w-[1088px]">
         <p className="py-6 text-left font-mono text-mono-micro text-text-tertiary">
           © {year} {site.name} · WF0101
         </p>

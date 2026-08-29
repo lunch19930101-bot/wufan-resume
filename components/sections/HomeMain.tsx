@@ -11,9 +11,9 @@ import { ProjectShowcase } from '@/components/sections/ProjectShowcase';
 /**
  * HomeMain —— atom63.io 长文式主体（1:1 复刻）
  *
- * 容器：max-w-[672px] + px-6 (32px) → 内文 608px（#227 PC 分层破格：正文 672 画布）
- * 卡片类区块（轮播/堆叠卡/AI 入口/Timeline）lg 起负边距破格出内容列：
- *   lg:-mx-[128px] → 864px、xl:-mx-[240px] → 1088px（负边距在 zoom 坐标系内，随字号缩放联动）
+ * 容器（#228 统一宽，用户指定）：max-w-[672px] lg:max-w-[864px] xl:max-w-[1088px]
+ *   —— 文字与卡片同宽，不再分层破格；px-6 (32px) → 内文 608 / 800 / 1024px
+ *   —— globals.css 的 body::after 竖线与 .grid-rule 菱形用同档媒体查询联动（54rem / 68rem）
  * 段间距：手机两档制 40px（节间）/ 24px（节内），md space-y-6 (32px)
  * 段落：17px / Geist / #b4b4b4；手机行高 1.85，md 起 1.625
  * 手机端章节导航 MobileQuickNav 已上移至 app/page.tsx 顶层（Hero 之前）
@@ -33,14 +33,14 @@ import { ProjectShowcase } from '@/components/sections/ProjectShowcase';
  */
 export function HomeMain() {
   return (
-    <main className="mx-auto max-w-[672px] px-6">
+    <main className="mx-auto max-w-[672px] px-6 lg:max-w-[864px] xl:max-w-[1088px]">
       {/* 手机端垂直节奏两档制（用户 2026-08-24）：节间距 40px、节内相关内容 24px。
           手机 pt-0 —— 与 Hero 的 40px 底距合并为单一 40px 节距（原来 64+64=128 过宽）；
           md 维持原值（pt/pb 64px、space-y 32px），scale 阶梯不可用于 px 精确值 */}
       <article className="space-y-[40px] pt-0 pb-[40px] md:space-y-6 md:pt-16 md:pb-16">
         {/* 1. 统信时期项目轮播 —— 横向滑动作品展示。
             PC 副本：手机端轮播已上移到 Hero 第一屏（#showcase 锚点在那边） */}
-        <div className="hidden scroll-mt-[104px] md:block lg:-mx-[128px] xl:-mx-[240px]">
+        <div className="hidden scroll-mt-[104px] md:block">
           <ShowcaseCarousel />
         </div>
 
@@ -58,7 +58,7 @@ export function HomeMain() {
         </div>
 
         {/* 3. ShowcaseStacked —— 1 大 3 小自动轮换（统信时期精选） */}
-        <div className="lg:-mx-[128px] xl:-mx-[240px]">
+        <div>
           <ShowcaseStacked />
         </div>
 
@@ -100,7 +100,7 @@ export function HomeMain() {
         </EssayParagraph>
 
         {/* 8. AI 协作三入口 —— atom63 "I build in public" 1:1 复刻 */}
-        <div className="lg:-mx-[128px] xl:-mx-[240px]">
+        <div>
           <AIProjectEntrance />
         </div>
 
@@ -110,7 +110,7 @@ export function HomeMain() {
         </EssayParagraph>
 
         {/* 10. 项目合集 Timeline —— 原页面底部上移至此 */}
-        <div className="lg:-mx-[128px] xl:-mx-[240px]">
+        <div>
           <ProjectShowcase />
         </div>
 

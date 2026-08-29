@@ -239,9 +239,10 @@ html:has(.live-resume) {
     font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
   }
 
-  /* atom63.io 全高左右虚线 —— max-w-[672px] 内容容器视觉导引（#227 版心 576→672）
+  /* atom63.io 全高左右虚线 —— 版心容器视觉导引（#228 统一宽，与容器同档媒体查询联动）
      与 .grid-rule 横线使用同一 token（--color-border-default），
-     这样竖线 / 横线 / 交汇菱形颜色完全一致。 */
+     这样竖线 / 横线 / 交汇菱形颜色完全一致。
+     版心：<672px 流式 · lg (≥1024) 864px · xl (≥1280) 1088px —— 文字与内容同宽 */
   body::after {
     content: '';
     position: fixed;
@@ -255,6 +256,16 @@ html:has(.live-resume) {
     border-right: 1px dashed var(--color-border-default);
     pointer-events: none;
     z-index: 55;
+  }
+  @media (min-width: 64rem) {
+    body::after {
+      max-width: calc(54rem * var(--a63-type-scale, 1)); /* 864px × type-scale */
+    }
+  }
+  @media (min-width: 80rem) {
+    body::after {
+      max-width: calc(68rem * var(--a63-type-scale, 1)); /* 1088px × type-scale */
+    }
   }
 
   ::selection {
@@ -352,12 +363,29 @@ html:has(.live-resume) {
     pointer-events: none;
   }
   .grid-rule::before {
-    /* 左侧菱形：与 body::after 的左竖线（672px 版心左边缘）对齐 */
+    /* 左侧菱形：与 body::after 的左竖线（版心左边缘）对齐 */
     left: calc(50% - 21rem - 2px);
   }
   .grid-rule::after {
-    /* 右侧菱形：与 body::after 的右竖线（672px 版心右边缘）对齐 */
+    /* 右侧菱形：与 body::after 的右竖线（版心右边缘）对齐 */
     right: calc(50% - 21rem - 2px);
+  }
+  /* #228 统一宽：lg 864（半宽 27rem）/ xl 1088（半宽 34rem），与 body::after 同档 */
+  @media (min-width: 64rem) {
+    .grid-rule::before {
+      left: calc(50% - 27rem - 2px);
+    }
+    .grid-rule::after {
+      right: calc(50% - 27rem - 2px);
+    }
+  }
+  @media (min-width: 80rem) {
+    .grid-rule::before {
+      left: calc(50% - 34rem - 2px);
+    }
+    .grid-rule::after {
+      right: calc(50% - 34rem - 2px);
+    }
   }
 }
 

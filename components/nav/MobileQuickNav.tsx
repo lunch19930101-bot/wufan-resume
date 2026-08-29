@@ -108,7 +108,7 @@ export function MobileQuickNav() {
         <div
           ref={trackRef}
           className={cn(
-            'mx-auto flex h-full max-w-[672px] items-center gap-1 overflow-x-auto px-6',
+            'mx-auto flex h-full max-w-[672px] items-center gap-1 overflow-x-auto px-6 lg:max-w-[864px] xl:max-w-[1088px]',
             '[scrollbar-width:none] [&::-webkit-scrollbar]:hidden',
             '[mask-image:linear-gradient(to_right,transparent,black_24px,black_calc(100%_-_24px),transparent)]',
             '[-webkit-mask-image:linear-gradient(to_right,transparent,black_24px,black_calc(100%_-_24px),transparent)]',
