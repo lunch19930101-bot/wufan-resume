@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>企业资产管理后台</title>
 <link href="/fonts/fonts.css" rel="stylesheet">
 <link href="/fonts/demo-fonts.css" rel="stylesheet">
@@ -9827,8 +9827,8 @@ body:not(.light) .modal::before{background:rgba(255,255,255,.15)}
 /* —— 全局（不限视口）—— */
 /* 首页去掉资产分布地图卡 */
 #panel-dashboard #mapCard{display:none!important}
-/* 快捷导航一行 3 个 */
-#quickNavGrid{grid-template-columns:repeat(3,1fr)!important;gap:20px 16px!important;padding:20px!important}
+/* 快捷导航一行 4 个（2026-08-29 用户改回） */
+#quickNavGrid{grid-template-columns:repeat(4,1fr)!important;gap:20px 16px!important;padding:20px!important}
 /* 圆角统一（04 规范：按钮 4 / 输入·选择 6；排除胶囊与浏览器 chrome 钮） */
 .btn,.page-panel button:not(.cat-pill):not(.mnav-btn):not(.modal-close),
 .modal button:not(.modal-close),.mtbl-cards button{border-radius:4px!important}
@@ -9955,5 +9955,43 @@ body:not(.light) .modal::before{background:rgba(255,255,255,.15)}
   new MutationObserver(function(){setTimeout(wrapTables,30)}).observe(document.body,{childList:true,subtree:true});
 })();
 </script>
+<style>
+/* ========== #204h 快捷导航管理：居中弹窗 → 抽屉 + 滑动（PC 右滑入 · 移动端底部上滑） ========== */
+#modalQuickNav{display:flex!important;visibility:hidden;opacity:0;align-items:stretch;justify-content:flex-end;background:rgba(0,0,0,0.38);-webkit-backdrop-filter:none;backdrop-filter:none;transition:opacity 240ms ease,visibility 0s linear 240ms}
+#modalQuickNav.show{visibility:visible;opacity:1;transition:opacity 240ms ease}
+#modalQuickNav .modal{width:min(560px,94vw)!important;max-height:none!important;height:100%!important;margin:0;border-radius:20px 0 0 20px;transform:translateX(102%);transition:transform 300ms cubic-bezier(.32,.72,.24,1)}
+#modalQuickNav.show .modal{transform:translateX(0)}
+@media (max-width:768px){
+  #modalQuickNav{justify-content:stretch;align-items:flex-end}
+  #modalQuickNav .modal{width:100%!important;height:auto!important;max-height:88dvh!important;border-radius:20px 20px 0 0;transform:translateY(102%)}
+  #modalQuickNav.show .modal{transform:translateY(0)}
+}
+/* ========== #204i 换肤面板：放大重排（原 240px 窄卡 + 24px 圆点，排版拥挤） ========== */
+.theme-panel{min-width:308px;padding:20px;border-radius:16px;transform:translateY(-6px)}
+.theme-panel.show{transform:translateY(0)}
+.theme-section{margin-bottom:18px}
+.theme-section-title{font-size:13px;color:rgba(0,0,0,0.45);margin-bottom:10px}
+.theme-mode-row{gap:10px}
+.theme-mode-btn{padding:10px 0;font-size:14px;border-radius:10px}
+.theme-color-grid{grid-template-columns:repeat(4,1fr);gap:16px 10px;justify-items:stretch}
+.theme-dot{width:100%;height:44px;border-radius:12px;border:0}
+.theme-dot:hover{transform:scale(1.04);border-color:transparent}
+.theme-dot.active{border-color:transparent;box-shadow:0 0 0 2px #fff,0 0 0 4px rgba(0,0,0,0.25)}
+body.light .theme-dot.active{border-color:transparent;box-shadow:0 0 0 2px #fff,0 0 0 4px rgba(0,0,0,0.25)}
+.theme-popup-label{font-size:12px;color:rgba(0,0,0,0.45);margin-top:6px}
+@media (max-width:768px){
+  .theme-panel{left:0!important;right:0!important;bottom:0!important;min-width:0;border-radius:20px 20px 0 0!important;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px))!important;max-height:80dvh!important;transform:translateY(102%)}
+  .theme-panel.show{transform:translateY(0)}
+  .theme-color-grid{grid-template-columns:repeat(4,1fr)!important;gap:16px 10px!important}
+  .theme-dot{height:48px}
+}
+</style>
+<style>
+/* ========== #204j iOS 刘海屏安全区（viewport-fit=cover 后顶栏/侧栏避开状态栏） ========== */
+@media (max-width:768px){
+  .top-nav{height:calc(56px + env(safe-area-inset-top,0px))!important;padding-top:env(safe-area-inset-top,0px)!important}
+  .sidebar{padding-top:env(safe-area-inset-top,0px)!important}
+}
+</style>
 </body>
 </html>

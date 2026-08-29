@@ -1,4 +1,5 @@
 import { type ReactNode } from 'react';
+import type { Viewport } from 'next';
 
 import './globals.css';
 
@@ -46,6 +47,13 @@ export const metadata = {
     // 给元素注入 inline style / <font> 标签，触发 hydration mismatch error。
     google: 'notranslate',
   },
+};
+
+/* #216 viewport-fit=cover —— 刘海屏 iPhone 全屏渲染，去掉系统加的上下安全区灰边 */
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  viewportFit: 'cover',
 };
 
 export default function RootLayout({ children }: { children: ReactNode }) {

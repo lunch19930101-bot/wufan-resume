@@ -2,7 +2,7 @@
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <title>AI资产管家系统</title>
 <link href="/fonts/fonts.css" rel="stylesheet">
 <link href="/fonts/demo-fonts.css" rel="stylesheet">
@@ -2181,5 +2181,68 @@ function logout() {
   });
 })();
 </script>
+<script>
+/* #208 顶栏右上「管理员」菜单补全：账号信息 + 个人信息/修改密码/消息通知/系统设置/退出（原仅 2 项 toast 占位） */
+(function(){
+  var m=document.getElementById('userMenu');if(!m||m.dataset.rich)return;m.dataset.rich='1';
+  m.style.width='236px';m.style.minWidth='0';m.style.padding='6px';
+  function rowsHtml(rows){return '<div>'+rows.map(function(r){return '<div style="display:flex;justify-content:space-between;gap:16px;padding:11px 0;border-bottom:1px solid var(--border-light);font-size:13px"><span style="color:var(--text-placeholder)">'+r[0]+'</span><span style="color:var(--text-secondary);font-weight:500;text-align:right">'+r[1]+'</span></div>'}).join('')+'</div>'}
+  function notesHtml(ns){return '<div>'+ns.map(function(n){return '<div style="display:flex;gap:10px;padding:10px;border:1px solid var(--border-light);border-radius:10px;margin-bottom:8px"><div style="flex:1;min-width:0"><div style="font-size:13px;font-weight:600;color:#000">'+n.t+'</div><div style="font-size:12px;color:var(--text-secondary);line-height:1.6;margin-top:2px">'+n.d+'</div><div style="font-size:11px;color:var(--text-placeholder);margin-top:4px">'+n.m+'</div></div></div>'}).join('')+'</div>'}
+  var NOTES=[
+    {t:'Token 消耗预警',d:'今日 Token 消耗已达昨日全天的 76%，请关注用量趋势。',m:'今天 09:32'},
+    {t:'知识库待审核',d:'2 篇新文档待审核发布：《产品设计规范 v2》《组件库更新说明》。',m:'昨天 18:07'},
+    {t:'安全提醒',d:'检测到 3 个异常登录 IP，已自动拦截并记录审计日志。',m:'08-26 11:20'}
+  ];
+  var IC={
+    profile:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;color:var(--text-placeholder)"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+    password:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;color:var(--text-placeholder)"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>',
+    notify:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;color:var(--text-placeholder)"><path d="M18 8a6 6 0 0 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/></svg>',
+    settings:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;color:var(--text-placeholder)"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 1 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 1 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>',
+    logout:'<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" style="flex:none;color:#E5484D"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>'
+  };
+  function item(ic,label,act,badge,danger){
+    var d=document.createElement('div');
+    d.style.cssText='display:flex;align-items:center;gap:10px;padding:9px 10px;border-radius:8px;font-size:14px;color:'+(danger?'#E5484D':'var(--text-secondary)')+';cursor:pointer';
+    d.innerHTML=ic+'<span style="flex:1">'+label+'</span>'+(badge||'');
+    d.onmouseenter=function(){d.style.background=badge?'#FEF0F0':'#F2F6FF'};
+    d.onmouseleave=function(){d.style.background='none'};
+    d.onclick=function(e){e.stopPropagation();m.style.display='none';act()};
+    return d;
+  }
+  var head=document.createElement('div');
+  head.style.cssText='display:flex;align-items:center;gap:10px;padding:10px 10px 8px;border-bottom:1px solid var(--border-light);margin-bottom:6px';
+  head.innerHTML='<div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,#2B6DE8,#6E96FF);color:#fff;font-size:14px;display:flex;align-items:center;justify-content:center;flex:none">A</div>'
+    +'<div style="min-width:0"><div style="font-size:14px;font-weight:600;color:#000;line-height:1.3">admin</div><div style="font-size:12px;color:var(--text-placeholder);margin-top:2px">系统管理员 · 全部权限</div></div>';
+  m.innerHTML='';m.appendChild(head);
+  m.appendChild(item(IC.profile,'个人信息',function(){
+    openSheet('个人信息',rowsHtml([['账号','admin'],['角色','系统管理员'],['姓名','吴帆'],['邮箱','admin@wufan.cc'],['手机','138****6688'],['最近登录','今天 09:12 · 武汉']]),[
+      {label:'编 辑',primary:true,onClick:function(){openFormSheet('编辑个人信息',[{label:'姓名',ph:'请输入姓名'},{label:'邮箱',ph:'请输入邮箱'},{label:'手机号',ph:'请输入手机号'}],'保 存','个人信息已更新')}},
+      {label:'关 闭'}
+    ]);
+  }));
+  m.appendChild(item(IC.password,'修改密码',function(){
+    openFormSheet('修改密码',[{label:'当前密码',ph:'请输入当前密码'},{label:'新密码',ph:'8-20 位，需包含字母和数字'},{label:'确认新密码',ph:'请再次输入新密码'}],'确认修改','密码修改成功，下次登录生效');
+  }));
+  m.appendChild(item(IC.notify,'消息通知',function(){
+    openSheet('通知中心',notesHtml(NOTES),[
+      {label:'全部已读',primary:true,onClick:function(){var b=document.getElementById('tbaBadge');if(b)b.style.display='none';showToast('success','3 条通知已全部标记为已读')}},
+      {label:'关 闭'}
+    ]);
+  },'<span style="min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#E5484D;color:#fff;font-size:10px;line-height:16px;text-align:center;font-style:normal">3</span>'));
+  m.appendChild(item(IC.settings,'系统设置',function(){
+    openFormSheet('系统设置',[{label:'消息通知',type:'select',options:['开启','仅安全提醒','关闭']},{label:'数据刷新频率',type:'select',options:['30 秒','1 分钟','5 分钟','手动']},{label:'登录保护',type:'select',options:['开启','关闭']}],'保 存','设置已保存');
+  }));
+  var sep=document.createElement('div');sep.style.cssText='height:1px;background:var(--border-light);margin:6px 4px';m.appendChild(sep);
+  m.appendChild(item(IC.logout,'退出登录',function(){logout()},null,true));
+})();
+</script>
+<style>
+/* ========== #209 iOS 刘海屏安全区（viewport-fit=cover 后顶栏/侧栏/登录页避开状态栏与 Home 条） ========== */
+@media (max-width:768px){
+  .top-nav{height:calc(var(--topnav-h) + env(safe-area-inset-top,0px))!important;padding-top:env(safe-area-inset-top,0px)!important}
+  .sidebar{padding-top:env(safe-area-inset-top,0px)!important}
+  .login-wrap{padding-top:env(safe-area-inset-top,0px)!important;padding-bottom:env(safe-area-inset-bottom,0px)!important}
+}
+</style>
 </body>
 </html>

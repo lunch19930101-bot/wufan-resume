@@ -29,7 +29,8 @@ export function Hero() {
   return (
     <section className="mx-auto max-w-xl px-6 pt-[24px] pb-0 md:pt-8 md:pb-16">
       <h1 className="text-hero-h1 text-text-primary">
-        <span className="block">
+        {/* #213 头像与文字垂直居中对齐（flex items-center 精确居中） */}
+        <span className="flex flex-wrap items-center">
           Hola, 我是
           <InlineAvatar />
           {site.name}
@@ -38,7 +39,7 @@ export function Hero() {
           {site.role}
         </span>
         <span className="mt-2 block font-sans text-[13px] font-normal leading-relaxed tracking-wide text-text-tertiary">
-          视觉设计 · 组件库工程化 · 全端 UI/UX 设计
+          视觉设计 · 组件库工程化 · 全端 UI/UX 设计 · 平面设计
         </span>
       </h1>
 
@@ -86,7 +87,7 @@ function renderBold(text: string) {
 function InlineAvatar() {
   return (
     <span
-      className="relative mx-[0.4em] inline-flex size-[48px] align-baseline overflow-hidden rounded-full border border-border-subtle bg-bg-elevated"
+      className="relative mx-[0.4em] inline-flex size-[48px] flex-none overflow-hidden rounded-full border border-border-subtle bg-bg-elevated"
       aria-hidden
     >
       <img
