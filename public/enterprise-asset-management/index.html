@@ -7805,46 +7805,30 @@ function buildModuleItems(nav,cfg){
     }
   });
 }
-/* #221 侧边栏渲染：PC = 当前模块；移动端抽屉 = 完整导航树（全部模块分组、当前模块展开、当前位置高亮） */
+/* #225 侧边栏渲染：跟随顶部模块 tab —— PC 与移动端抽屉都只渲染当前模块（切换模块走顶部切换条） */
 function renderSidebar(auto){
   var nav=document.getElementById('sidebarNav');
   nav.innerHTML='';
   var isMobile=window.matchMedia('(max-width:768px)').matches;
-  if(!isMobile){
-    buildModuleItems(nav,sidebarConfigs[currentTopNav]);
+  if(isMobile){
+    /* 抽屉头部：当前模块名（位置上下文；切换模块走顶部 tab 切换条） */
+    var cfg=sidebarConfigs[currentTopNav];
+    var head=document.createElement('div');
+    head.className='nav-cur-mod';
+    head.innerHTML='<span class="nav-icon">'+(cfg.icon||'')+'</span><span class="nav-cur-name">'+cfg.name+'</span>';
+    nav.appendChild(head);
+  }
+  buildModuleItems(nav,sidebarConfigs[currentTopNav]);
+  if(auto!==false){
+    /* 自动进入当前模块第一个页面 */
     var fb=nav.querySelector('.nav-item:not(.nav-parent)');
     if(!fb)fb=nav.querySelector('.nav-child');
     if(fb)fb.click();
-    return;
-  }
-  sidebarConfigs.forEach(function(cfg,i){
-    var mod=document.createElement('div');
-    mod.className='nav-mod'+(i===currentTopNav?' cur open':'');
-    var head=document.createElement('button');
-    head.type='button';head.className='nav-mod-head';
-    head.innerHTML='<span class="nav-icon">'+(cfg.icon||'')+'</span><span class="nav-mod-name">'+cfg.name+'</span><span class="nav-mod-chev">'+chevronSVG+'</span>';
-    head.onclick=function(){
-      if(i===currentTopNav){mod.classList.toggle('open');return}
-      switchTopNav(i);
-    };
-    mod.appendChild(head);
-    var body=document.createElement('div');
-    body.className='nav-mod-body';
-    buildModuleItems(body,cfg);
-    mod.appendChild(body);
-    nav.appendChild(mod);
-  });
-  var cur=nav.children[currentTopNav];
-  if(auto!==false){
-    // auto-click first navigable item of current module
-    var firstBtn=cur&&cur.querySelector('.nav-item:not(.nav-parent)');
-    if(!firstBtn&&cur)firstBtn=cur.querySelector('.nav-child');
-    if(firstBtn)firstBtn.click();
   }else{
-    // 断点切换重渲染：回到用户当前所在页，不跳首页
+    /* 断点切换重渲染：回到用户当前所在页，不跳首页 */
     var act=currentPageId&&nav.querySelector('[data-page="'+currentPageId+'"]');
     if(act)act.click();
-    else if(cur){var fb2=cur.querySelector('.nav-item:not(.nav-parent)')||cur.querySelector('.nav-child');if(fb2)fb2.click()}
+    else{var fb2=nav.querySelector('.nav-item:not(.nav-parent)')||nav.querySelector('.nav-child');if(fb2)fb2.click()}
   }
 }
 function switchTopNav(idx){
@@ -10105,30 +10089,38 @@ body:not(.light) .theme-panel-close{background:rgba(255,255,255,0.12);color:rgba
 <style>
 /* ========== #221/#222/#223/#224 移动端样式整改（2026-08-29 用户反馈批次：顶部切换/抽屉导航树/资产安全/消息中心/卡片对齐 04） ========== */
 @media (max-width:768px){
-  /* —— #221 顶部模块切换胶囊行：去图标、滚动渐隐提示、选中白底更醒目 —— */
-  .top-nav-items{gap:8px!important;padding:6px 12px 10px!important;scroll-snap-type:x proximity}
-  .top-nav .top-nav-item{scroll-snap-align:start;padding:0 14px!important;height:30px!important;gap:0!important;background:rgba(255,255,255,0.14)!important;font-size:13px!important;font-weight:500!important}
+  /* —— #226 顶部模块切换条：TDesign Mobile Tabs 风（白底整行 · 选中品牌蓝 600 + 底部短指示条 · 未选灰），对齐 04 —— */
+  .top-nav-items{gap:0!important;padding:0 8px!important;margin:0 -20px;background:#FFFFFF!important;scroll-snap-type:x proximity;box-shadow:inset 0 -1px 0 0 #F0F0F0}
+  .top-nav .top-nav-item{position:relative;display:flex!important;align-items:center;scroll-snap-align:start;height:48px!important;padding:0 16px!important;gap:0!important;border-radius:0!important;background:transparent!important;color:rgba(0,0,0,0.6)!important;font-size:16px!important;font-weight:400!important;white-space:nowrap}
   .top-nav .top-nav-item svg{display:none!important}
-  .top-nav .top-nav-item.active{background:#FFFFFF!important;font-weight:600!important}
+  .top-nav .top-nav-item.active{background:transparent!important;color:var(--theme-primary,#0052D9)!important;font-weight:600!important;box-shadow:none!important}
+  .top-nav .top-nav-item.active::after{content:'';position:absolute;left:50%;bottom:0;transform:translateX(-50%);width:32px;height:3px;border-radius:2px;background:var(--theme-primary,#0052D9)}
+  body:not(.light) .top-nav-items{background:#1D1D1F!important;box-shadow:inset 0 -1px 0 0 rgba(255,255,255,0.08)}
+  body:not(.light) .top-nav .top-nav-item{color:rgba(255,255,255,0.55)!important}
+  body:not(.light) .top-nav .top-nav-item.active{color:var(--theme-primary,#5B9BFF)!important}
+  body:not(.light) .top-nav .top-nav-item.active::after{background:var(--theme-primary,#5B9BFF)}
 
-  /* —— #221 抽屉完整导航树：模块分组头（当前模块展开高亮，其余收起） —— */
-  .nav-mod+.nav-mod{margin-top:6px;padding-top:6px;border-top:1px solid rgba(0,0,0,0.05)}
-  body:not(.light) .nav-mod+.nav-mod{border-top-color:rgba(255,255,255,0.07)}
-  .nav-mod-head{display:flex;align-items:center;gap:10px;width:100%;height:46px;padding:0 14px;border:0;background:none;border-radius:12px;font-size:15px;font-weight:600;color:rgba(0,0,0,0.55);font-family:inherit;cursor:pointer}
-  .nav-mod-head .nav-icon{width:24px;height:24px}
-  .nav-mod-head .nav-icon svg{width:22px;height:22px}
-  .nav-mod-name{flex:1;text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .nav-mod-chev{width:20px;height:20px;color:rgba(0,0,0,0.45);transition:transform .2s ease;flex-shrink:0}
-  .nav-mod-chev svg{width:18px;height:18px;display:block}
-  .nav-mod.cur>.nav-mod-head{color:var(--theme-primary,#007AFF);background:rgba(0,122,255,0.08)}
-  .nav-mod.open>.nav-mod-head .nav-mod-chev{transform:rotate(180deg)}
-  .nav-mod-body{display:none;padding:2px 0 6px}
-  .nav-mod.open>.nav-mod-body{display:block}
-  /* 当前页叶子项：加左侧指示条，位置感更强 */
-  .sidebar .nav-item.active{box-shadow:inset 3px 0 0 0 var(--theme-primary,#007AFF)}
-  body:not(.light) .nav-mod-head{color:rgba(255,255,255,0.5)}
-  body:not(.light) .nav-mod.cur>.nav-mod-head{color:#5B9BFF;background:rgba(10,132,255,0.16)}
-  body:not(.light) .nav-mod-chev{color:rgba(255,255,255,0.45)}
+  /* —— #225 抽屉：模块级导航 —— 只渲染当前模块的页面组，顶部显示当前模块名；选中页 = 深蓝底白字（无左侧指示条） —— */
+  .nav-cur-mod{display:flex;align-items:center;gap:10px;padding:4px 16px 10px;font-size:13px;font-weight:600;color:rgba(0,0,0,0.4);letter-spacing:.5px}
+  .nav-cur-mod .nav-icon{width:22px!important;height:22px!important;color:var(--theme-primary,#0052D9)}
+  .nav-cur-mod .nav-icon svg{width:20px;height:20px;display:block}
+  /* !important 压过基础态（.nav-item.active 蓝底 10% tint）与换肤动态注入样式 */
+  .sidebar .nav-item.active,.sidebar .nav-child.active{background:var(--theme-primary,#0052D9)!important;color:#FFFFFF!important;font-weight:600!important;box-shadow:none!important;border-radius:12px!important}
+  .sidebar .nav-item.active .nav-icon,.sidebar .nav-child.active .nav-icon{color:#FFFFFF!important}
+  .sidebar .nav-item.active .nav-badge{background:#FFFFFF!important;color:var(--theme-primary,#0052D9)!important}
+  /* 展开型分组头不算“选中页”：降为紧凑小标签（13px 灰字），避免与选中页抢层级/撞名 */
+  .sidebar .nav-item.nav-parent{height:34px!important;margin-top:6px;padding:0 16px!important;font-size:13px!important;font-weight:600!important;color:rgba(0,0,0,0.4)!important;background:none!important;border-radius:8px!important}
+  .sidebar .nav-item.nav-parent .nav-icon{width:16px!important;height:16px!important}
+  .sidebar .nav-item.nav-parent .nav-icon svg{width:16px!important;height:16px!important}
+  .sidebar .nav-item.nav-parent.active{background:none!important;color:rgba(0,0,0,0.4)!important}
+  .sidebar .nav-item.nav-parent.active>.nav-icon{color:inherit!important}
+  .sidebar .nav-item.nav-parent .nav-chevron{width:16px;height:16px;color:rgba(0,0,0,0.3)}
+  /* 抽屉底板改实底：毛玻璃 28% 透光会渗出主页面文字，压淡列表（对齐 TDesign 抽屉） */
+  .sidebar{background:#FFFFFF!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+  body:not(.light) .sidebar{background:#1D1D1F!important}
+  body:not(.light) .nav-cur-mod{color:rgba(255,255,255,0.4)}
+  body:not(.light) .nav-cur-mod .nav-icon{color:#5B9BFF}
+  body:not(.light) .sidebar .nav-item.nav-parent.active{color:rgba(255,255,255,0.9)!important}
 
   /* —— #222 资产安全：单列卡、去固定高（内容不再溢出叠压）、图标/字号对齐 04 节奏 —— */
   #safetyCardGrid{grid-template-columns:1fr!important;gap:12px!important}
