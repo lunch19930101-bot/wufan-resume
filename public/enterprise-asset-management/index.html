@@ -777,6 +777,8 @@ body:not(.light) .prop-tree-item.active{background:rgba(10,132,255,0.12);color:v
         <svg viewBox="0 0 24 24" fill="none"><path stroke="rgba(0,0,0,0.45)" stroke-linecap="square" stroke-width="2" d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18Z"/><circle cx="8" cy="10" r="1.5" fill="rgba(0,0,0,0.45)"/><circle cx="12.5" cy="7.5" r="1.5" fill="rgba(0,0,0,0.45)"/><circle cx="16" cy="10.5" r="1.5" fill="rgba(0,0,0,0.45)"/><circle cx="9.5" cy="15.5" r="1.5" fill="rgba(0,0,0,0.45)"/></svg>
       </div>
       <div class="theme-panel" id="themePanel" onclick="event.stopPropagation()">
+        <!-- #220 弹层头：PC 1200px 宽面板与移动端底部弹层共用（默认 display:none，两套断点各自启用） -->
+        <div class="theme-panel-head"><span class="theme-panel-title">样式管理</span><button type="button" class="theme-panel-close" onclick="closeThemePanel()" aria-label="关闭">✕</button></div>
         <div class="theme-section">
           <div class="theme-section-title">外观模式</div>
           <div class="theme-mode-row">
@@ -9966,24 +9968,55 @@ body:not(.light) .modal::before{background:rgba(255,255,255,.15)}
   #modalQuickNav .modal{width:100%!important;height:auto!important;max-height:88dvh!important;border-radius:20px 20px 0 0;transform:translateY(102%)}
   #modalQuickNav.show .modal{transform:translateY(0)}
 }
-/* ========== #204i 换肤面板：放大重排（原 240px 窄卡 + 24px 圆点，排版拥挤） ========== */
-.theme-panel{min-width:308px;padding:20px;border-radius:16px;transform:translateY(-6px)}
-.theme-panel.show{transform:translateY(0)}
-.theme-section{margin-bottom:18px}
-.theme-section-title{font-size:13px;color:rgba(0,0,0,0.45);margin-bottom:10px}
-.theme-mode-row{gap:10px}
-.theme-mode-btn{padding:10px 0;font-size:14px;border-radius:10px}
-.theme-color-grid{grid-template-columns:repeat(4,1fr);gap:16px 10px;justify-items:stretch}
-.theme-dot{width:100%;height:44px;border-radius:12px;border:0}
-.theme-dot:hover{transform:scale(1.04);border-color:transparent}
-.theme-dot.active{border-color:transparent;box-shadow:0 0 0 2px #fff,0 0 0 4px rgba(0,0,0,0.25)}
-body.light .theme-dot.active{border-color:transparent;box-shadow:0 0 0 2px #fff,0 0 0 4px rgba(0,0,0,0.25)}
-.theme-popup-label{font-size:12px;color:rgba(0,0,0,0.45);margin-top:6px}
-@media (max-width:768px){
-  .theme-panel{left:0!important;right:0!important;bottom:0!important;min-width:0;border-radius:20px 20px 0 0!important;padding:20px 20px calc(20px + env(safe-area-inset-bottom,0px))!important;max-height:80dvh!important;transform:translateY(102%)}
+/* ========== #220 换肤/管理员弹层：PC 与移动端样式彻底分离（用户 2026-08-29：PC 换肤面板太窄改 1200px；移动端侧边栏管理员弹窗太窄改全宽；两套断点各自独立布局） ========== */
+/* —— 弹层头（标题 + 关闭）：PC 宽面板与移动端弹层共用，默认隐藏，由下方两套断点分别启用 —— */
+.theme-panel-head{display:none;align-items:center;justify-content:space-between}
+.theme-panel-title{font-size:16px;font-weight:600;letter-spacing:.02em;color:rgba(0,0,0,0.85)}
+.theme-panel-close{width:32px;height:32px;border:0;border-radius:50%;background:rgba(0,0,0,0.06);color:rgba(0,0,0,0.55);font-size:14px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;font-family:inherit;padding:0}
+.theme-panel-close:active{background:rgba(0,0,0,0.14)}
+body:not(.light) .theme-panel-title{color:rgba(255,255,255,0.92)}
+body:not(.light) .theme-panel-close{background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.7)}
+/* —— PC（≥769px）：1200px 宽「样式管理」设置面板 —— 头行 + 左「外观模式」右「主题色」两栏，大色板一行铺开 —— */
+@media (min-width:769px){
+  .theme-panel{top:52px!important;width:min(1200px,calc(100vw - 48px))!important;min-width:0!important;padding:22px 32px 30px!important;border-radius:20px!important;transform:translateY(-8px);display:grid;grid-template-columns:minmax(200px,280px) 1fr;column-gap:56px}
   .theme-panel.show{transform:translateY(0)}
-  .theme-color-grid{grid-template-columns:repeat(4,1fr)!important;gap:16px 10px!important}
-  .theme-dot{height:48px}
+  .theme-panel-head{display:flex;grid-column:1/-1;margin:0 0 20px;padding-bottom:16px;border-bottom:1px solid rgba(0,0,0,0.08)}
+  body:not(.light) .theme-panel-head{border-bottom-color:rgba(255,255,255,0.1)}
+  .theme-section{margin-bottom:0}
+  .theme-section-title{font-size:14px;color:rgba(0,0,0,0.45);margin-bottom:14px}
+  .theme-mode-row{gap:12px}
+  .theme-mode-btn{padding:14px 0;font-size:15px;border-radius:12px}
+  .theme-color-grid{grid-template-columns:repeat(auto-fit,minmax(84px,1fr))!important;gap:22px 14px;justify-items:stretch}
+  .theme-dot{width:100%;height:72px;border-radius:14px;border:0}
+  .theme-dot:hover{transform:scale(1.03);border-color:transparent}
+  .theme-dot.active{border-color:transparent;box-shadow:0 0 0 2px #fff,0 0 0 4px rgba(0,0,0,0.25)}
+  body.light .theme-dot.active{border-color:transparent;box-shadow:0 0 0 2px #fff,0 0 0 4px rgba(0,0,0,0.25)}
+  .theme-popup-label{font-size:13px;color:rgba(0,0,0,0.45);margin-top:8px}
+}
+/* —— 移动端（≤768px）：换肤 → 全宽底部弹层（顶部把手 + 标题行 + 大触摸件）；管理员弹窗（.me-cell 触发）同步全宽化 —— */
+@media (max-width:768px){
+  .theme-panel{left:0!important;right:0!important;bottom:0!important;top:auto!important;width:100%!important;min-width:0!important;padding:0 20px calc(24px + env(safe-area-inset-bottom,0px))!important;border-radius:20px 20px 0 0!important;max-height:82dvh!important;transform:translateY(102%)!important;display:block!important;transition:transform 320ms cubic-bezier(.32,.72,.24,1),opacity 180ms ease}
+  .theme-panel.show{transform:translateY(0)!important}
+  .theme-panel::before{content:'';display:block;width:36px;height:4px;border-radius:2px;background:rgba(0,0,0,0.15);margin:10px auto 2px}
+  body:not(.light) .theme-panel::before{background:rgba(255,255,255,0.25)}
+  .theme-panel-head{display:flex;padding:12px 0 14px;border-bottom:1px solid rgba(0,0,0,0.06);margin-bottom:18px}
+  body:not(.light) .theme-panel-head{border-bottom-color:rgba(255,255,255,0.08)}
+  .theme-panel-close{width:36px;height:36px}
+  .theme-section{margin-bottom:20px}
+  .theme-section-title{font-size:14px;margin-bottom:12px}
+  .theme-mode-row{gap:12px}
+  .theme-mode-btn{padding:13px 0;font-size:15px;border-radius:12px}
+  .theme-color-grid{grid-template-columns:repeat(4,minmax(0,1fr))!important;gap:18px 12px!important;justify-items:stretch}
+  .theme-dot{width:100%;height:52px;border-radius:14px;border:0}
+  .theme-popup-label{font-size:13px;margin-top:8px}
+  /* #220 管理员弹窗：原 9536 仅 left:12px 无 right → shrink-to-fit 收成窄条；改全宽底部弹层 */
+  .profile-popup{left:0!important;right:0!important;bottom:0!important;top:auto!important;width:100%!important;min-width:0!important;max-width:none!important;border-radius:20px 20px 0 0!important;max-height:84dvh!important;overflow-y:auto!important;transform:translateY(102%)!important;padding:0 20px calc(24px + env(safe-area-inset-bottom,0px))!important;transition:transform 320ms cubic-bezier(.32,.72,.24,1),opacity 180ms ease}
+  .profile-popup.show{transform:translateY(0)!important}
+  .profile-popup::before{content:'';display:block;width:36px;height:4px;border-radius:2px;background:rgba(0,0,0,0.15);margin:10px auto 2px}
+  body:not(.light) .profile-popup::before{background:rgba(255,255,255,0.25)}
+  /* #220 底部弹层加半透明 scrim 聚焦（z 2299 < 弹层 2300；点按落到 body → document 关闭逻辑生效） */
+  body:has(> .theme-panel.show)::after,body:has(> .profile-popup.show)::after{content:'';position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:2299;animation:fadeIn .2s ease}
+  @keyframes fadeIn{from{opacity:0}to{opacity:1}}
 }
 </style>
 <style>

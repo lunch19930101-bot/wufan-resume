@@ -9,6 +9,8 @@
   uni-tabbar{left:max(0px,calc(50% - 600px))!important;right:max(0px,calc(50% - 600px))!important}
   /* #218 自定义固定头/底栏同样收进 1200px 画布（原 left:0;right:0;width:100% 全屏宽，width 必须置 auto 让 left/right 决定宽度） */
   uni-view.dashboard-header,uni-view.app-tabbar{left:max(0px,calc(50% - 600px))!important;right:max(0px,calc(50% - 600px))!important;width:auto!important}
+  /* #218b 修复：应用自身 scoped CSS .tab[data-v]{width:100vw}/.page-content{width:100vw} 按视口取宽，撑破 1200px 画布（内容右移溢出被裁）——强制按父级画布取宽 */
+  uni-view.tab,.page-content{width:100%!important;max-width:100%!important;min-width:0!important}
   /* #218 Tab 项在宽画布下均匀分布（原居中堆在中间显窄）；内容区给固定底栏让出 60px+16px */
   .app-tabbar__inner{justify-content:space-around!important}
   uni-view.tab>uni-view.view{padding-bottom:88px!important}
