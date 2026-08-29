@@ -2244,5 +2244,13 @@ function logout() {
   .login-wrap{padding-top:env(safe-area-inset-top,0px)!important;padding-bottom:env(safe-area-inset-bottom,0px)!important}
 }
 </style>
+<style>
+/* ========== #224 移动端登录页收尾：清掉底部灰条（login-wrap 背景在两段 flex:none 内容下方露出）+ 补版脚 ========== */
+@media (max-width:768px){
+  .login-wrap{background:#fff!important}
+  .login-form h3{margin-top:16px!important}
+  .login-wrap::after{content:'AI资产管家系统 v1.0 · wufan.cc';display:block;flex:none;width:100%;padding:0 0 calc(20px + env(safe-area-inset-bottom,0px));text-align:center;font-size:12px;color:var(--text-placeholder,#8C8C8C);letter-spacing:.02em}
+}
+</style>
 </body>
 </html>
