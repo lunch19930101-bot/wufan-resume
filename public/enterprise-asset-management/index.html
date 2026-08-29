@@ -9823,6 +9823,49 @@ body:not(.light) .modal::before{background:rgba(255,255,255,.15)}
 .page-panel div[style*="width:240px;height:180px"]{width:100%!important;max-width:320px!important}
 .page-panel div[style*="width:240px;height:180px"] svg{width:100%!important}
 }
+/* ========== #204d 报表表单·首页地图·导航3列·圆角统一·间距 ========== */
+/* —— 全局（不限视口）—— */
+/* 首页去掉资产分布地图卡 */
+#panel-dashboard #mapCard{display:none!important}
+/* 快捷导航一行 3 个 */
+#quickNavGrid{grid-template-columns:repeat(3,1fr)!important;gap:20px 16px!important;padding:20px!important}
+/* 圆角统一（04 规范：按钮 4 / 输入·选择 6；排除胶囊与浏览器 chrome 钮） */
+.btn,.page-panel button:not(.cat-pill):not(.mnav-btn):not(.modal-close),
+.modal button:not(.modal-close),.mtbl-cards button{border-radius:4px!important}
+.page-panel select,.page-panel input[type=text],.page-panel input[type=date],
+.page-panel input[type=number],.page-panel input[type=search],.page-panel textarea,
+.modal select,.modal input[type=text],.modal textarea{border-radius:6px!important}
+.op-date-range{border-radius:6px!important}
+
+@media (max-width:768px){
+/* —— 新建报表（panel-reportform）：40/80 桌面留白 → 16px 单列 —— */
+#panel-reportform div[style*="padding:40px 80px"]{padding:16px!important}
+#panel-reportform div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}
+#panel-reportform h3{font-size:16px!important;margin-bottom:12px!important}
+#panel-reportform div[style*="padding-bottom:24px"]{padding-bottom:14px!important}
+#panel-reportform select,#panel-reportform input[type=text]{height:40px!important;font-size:14px!important}
+#panel-reportform div[style*="height:32px;border-radius:12px"]{height:40px!important}
+#panel-reportform div[style*="border-top:1px solid #e7e7e7;padding-top:32px"]{padding-top:16px!important;margin-top:16px!important}
+#panel-reportform div[style*="border-top:1px solid #e7e7e7;padding-top:32px"] button{flex:1 1 0;min-height:38px!important;padding:0 16px!important}
+#panel-reportform div[style*="justify-content:center;gap:8px"]{gap:8px!important}
+
+/* —— 选择器/工具栏与块状底的内间距（不再贴边） —— */
+.card .toolbar,.table-wrap .toolbar,.card .table-toolbar,.table-wrap .table-toolbar{padding-left:12px!important;padding-right:12px!important}
+.card .toolbar .search-input,.table-wrap .toolbar .search-input{flex:1 1 100%!important}
+
+/* —— 快捷导航 3 列下的图标呼吸 —— */
+.qn-icon-wrap{width:56px!important;height:56px!important}
+.qn-icon-wrap svg{width:28px!important;height:28px!important}
+.qn-label{font-size:12px!important;margin-top:6px!important}
+}
+/* ========== #204e 块状底内间距：行卡/分页 ========== */
+@media (max-width:768px){
+/* mtbl 行卡列表：与块状底（带边框 table-wrap）左右留 12px，不再贴边 */
+.table-wrap .mtbl-wrap{margin:12px 12px 0!important}
+.table-wrap>table.mtbl-cards{margin:12px 12px 0!important}
+/* 分页：恢复水平内边距（#204 的 12px 0 改为四向 12px，与工具栏对齐） */
+.pagination{padding:12px!important}
+}
 </style>
 <script>
 (function(){
