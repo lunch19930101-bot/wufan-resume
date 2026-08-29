@@ -9993,5 +9993,31 @@ body.light .theme-dot.active{border-color:transparent;box-shadow:0 0 0 2px #fff,
   .sidebar{padding-top:env(safe-area-inset-top,0px)!important}
 }
 </style>
+<style>
+/* ========== #204k 移动端交互整改：顶栏两行（模块切换独立胶囊行）+ 抽屉个人信息头部化放大 ========== */
+@media (max-width:768px){
+  /* —— 1. 顶栏改两行：第一行 汉堡+品牌，第二行 模块切换胶囊（可横滑，激活白底醒目） —— */
+  .top-nav{height:auto!important;flex-wrap:wrap;padding-bottom:0!important}
+  .top-nav-brand{min-height:48px;flex:1 1 auto}
+  .mnav-btn{top:calc(8px + env(safe-area-inset-top,0px))!important}
+  .top-nav-items{order:9;flex:1 1 100%!important;width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch;gap:6px;padding:0 12px 10px;scrollbar-width:none}
+  .top-nav-items::-webkit-scrollbar{display:none}
+  .top-nav .top-nav-item{flex:none;padding:7px 14px!important;border-radius:499px!important;font-size:13px!important;line-height:18px!important;background:rgba(255,255,255,0.18)!important;color:rgba(255,255,255,0.9)!important}
+  .top-nav .top-nav-item.active{background:#FFFFFF!important;color:var(--theme-primary,#0A84FF)!important;font-weight:600!important;box-shadow:0 4px 10px rgba(0,0,0,0.16)!important}
+  .top-nav .top-nav-item.active svg{color:var(--theme-primary,#0A84FF)!important;fill:var(--theme-primary,#0A84FF)!important}
+  /* —— 2. 抽屉：个人信息区移到顶部并放大（48px 头像 / 17px 姓名），功能宫格更透气 —— */
+  .sidebar{display:flex;flex-direction:column}
+  .sidebar-nav{order:2;padding-top:6px!important}
+  .mnav-extras{order:1;gap:14px!important;padding:18px 16px 14px!important;border-top:0!important;border-bottom:1px solid rgba(0,0,0,0.06)!important;background:linear-gradient(180deg,rgba(0,122,255,0.05),rgba(0,122,255,0))}
+  .me-cell{gap:14px!important;padding:14px!important;border-radius:14px!important}
+  .me-avatar{width:48px!important;height:48px!important;font-size:18px!important}
+  .me-info b{font-size:17px!important;line-height:24px!important}
+  .me-info i{font-size:13px!important;line-height:18px!important;margin-top:3px!important}
+  .fn-row{gap:10px!important}
+  .fn-cell{gap:8px!important;padding:14px 8px!important;border-radius:12px!important;font-size:12px!important}
+  .fn-cell svg{width:22px!important;height:22px!important}
+  body:not(.light) .mnav-extras{border-bottom-color:rgba(255,255,255,0.08)!important}
+}
+</style>
 </body>
 </html>

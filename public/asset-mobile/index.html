@@ -1,13 +1,16 @@
 <!DOCTYPE html><html lang=zh-CN><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><title>资产可视化</title><script>var coverSupport = 'CSS' in window && typeof CSS.supports === 'function' && (CSS.supports('top: env(a)') || CSS.supports('top: constant(a)'))
-            document.write('<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />')</script><link rel=stylesheet href=/asset-mobile/static/index.149e085d.css><style>/* PC 访问限制层：本演示为移动端 H5 专属，≥769px 全屏提示 */
+            document.write('<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0, viewport-fit=cover" />')</script><link rel=stylesheet href=/asset-mobile/static/index.149e085d.css><style>/* #218 PC 端呈现：1200px 宽居中画布（用户 2026-08-29，替代原「请用手机访问」限制层） */
 #pc-restrict{display:none}
 @media (min-width:769px){
-  html,body{overflow:hidden!important}
-  #pc-restrict{display:flex;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;margin:0;background:linear-gradient(160deg,#f4f7fb 0%,#e8effa 100%);font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','MiSans',sans-serif}
-  #pc-restrict .pc-card{display:flex;flex-direction:column;align-items:center;gap:0;padding:56px 64px;background:#fff;border-radius:20px;box-shadow:0 12px 40px rgba(0,42,100,.10);text-align:center;max-width:420px}
-  #pc-restrict .pc-phone{width:72px;height:72px;border-radius:18px;background:linear-gradient(135deg,#0052D9,#0289FF);display:flex;align-items:center;justify-content:center;margin-bottom:24px}
-  #pc-restrict h1{margin:0 0 8px;font-size:20px;line-height:28px;font-weight:600;color:rgba(0,0,0,.9)}
-  #pc-restrict p{margin:0 0 4px;font-size:14px;line-height:24px;color:rgba(0,0,0,.55)}
-  #pc-restrict .pc-url{margin-top:20px;padding:8px 16px;border-radius:8px;background:rgba(0,82,217,.06);font-size:13px;line-height:20px;color:#0052D9;font-weight:500;letter-spacing:.02em}
+  html,body{overflow:auto!important;height:auto!important}
+  body{background:#E9EDF4!important}
+  #app,uni-app{max-width:1200px;margin:0 auto;min-height:100vh;background:#F6F7F9;box-shadow:0 0 0 1px rgba(13,42,100,.05),0 24px 64px rgba(13,42,100,.10)}
+  uni-app{display:block;height:auto!important;min-height:100vh}
+  uni-tabbar{left:max(0px,calc(50% - 600px))!important;right:max(0px,calc(50% - 600px))!important}
+  /* #218 自定义固定头/底栏同样收进 1200px 画布（原 left:0;right:0;width:100% 全屏宽，width 必须置 auto 让 left/right 决定宽度） */
+  uni-view.dashboard-header,uni-view.app-tabbar{left:max(0px,calc(50% - 600px))!important;right:max(0px,calc(50% - 600px))!important;width:auto!important}
+  /* #218 Tab 项在宽画布下均匀分布（原居中堆在中间显窄）；内容区给固定底栏让出 60px+16px */
+  .app-tabbar__inner{justify-content:space-around!important}
+  uni-view.tab>uni-view.view{padding-bottom:88px!important}
 }
 </style></head><body><noscript><strong>Please enable JavaScript to continue.</strong></noscript><div id=app></div><div id="pc-restrict"><div class="pc-card"><div class="pc-phone"><svg width="36" height="36" viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="7" y="2.5" width="10" height="19" rx="2.5" stroke="#fff" stroke-width="1.8"/><path d="M10.5 18.5h3" stroke="#fff" stroke-width="1.8" stroke-linecap="round"/></svg></div><h1>资产管理移动端</h1><p>本演示为移动端 H5 应用</p><p>请使用手机浏览体验完整功能</p><div class="pc-url">wufan.cc/asset-mobile</div></div><script src=/asset-mobile/static/js/chunk-vendors.c6277f06.js></script><script src=/asset-mobile/static/js/index.1c4cdbbd.js></script></body></html>
