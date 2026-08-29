@@ -5,7 +5,7 @@ import { createPortal } from 'react-dom';
 
 import { site } from '@/lib/config';
 import { cn, withBasePath } from '@/lib/utils';
-import { scrollToTarget } from '@/components/motion/SmoothScroll';
+import { scrollToTarget } from '@/components/motion/scroll';
 
 /**
  * CommandMenu —— atom63.io Nav 顶部的命令面板风格弹出菜单

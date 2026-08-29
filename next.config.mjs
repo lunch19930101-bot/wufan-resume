@@ -24,7 +24,6 @@ const nextConfig = {
 
   // 让 [slug] 动态路由被 generateStaticParams 枚举
   experimental: {
-    optimizePackageImports: ['gsap'],
   },
 };
 

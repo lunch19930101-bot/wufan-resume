@@ -6,4 +6,4 @@ export { FadeIn } from './FadeIn';
 export { RevealImage } from './RevealImage';
 export { CountUp } from './CountUp';
 export { MagneticWrap } from './MagneticWrap';
-export { SmoothScroll, scrollToTarget } from './SmoothScroll';
+export { scrollToTarget } from './scroll';

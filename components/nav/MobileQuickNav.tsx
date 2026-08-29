@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react';
 
-import { scrollToTarget } from '@/components/motion/SmoothScroll';
+import { scrollToTarget } from '@/components/motion/scroll';
 import { cn } from '@/lib/utils';
 
 /**
