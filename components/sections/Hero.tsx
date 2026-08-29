@@ -86,7 +86,7 @@ function renderBold(text: string) {
 function InlineAvatar() {
   return (
     <span
-      className="relative mx-[0.4em] inline-flex size-8 align-middle overflow-hidden rounded-full border border-border-subtle bg-bg-elevated"
+      className="relative mx-[0.4em] inline-flex size-[80px] align-middle overflow-hidden rounded-full border border-border-subtle bg-bg-elevated"
       aria-hidden
     >
       <img

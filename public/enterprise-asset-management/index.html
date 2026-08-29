@@ -9866,6 +9866,24 @@ body:not(.light) .modal::before{background:rgba(255,255,255,.15)}
 /* 分页：恢复水平内边距（#204 的 12px 0 改为四向 12px，与工具栏对齐） */
 .pagination{padding:12px!important}
 }
+/* ========== #204f 全部工具栏水平内间距 ========== */
+@media (max-width:768px){
+/* #204 的 .toolbar{padding:10px 0} 清了水平内边距，#204d 只补了 .card/.table-wrap 内嵌的；
+   这里全局恢复 —— 覆盖直接挂在 panel 下的工具栏（入库台账等 24 处）：列表/看板、搜索、分类/状态选择器与块状底左右留 12px */
+.toolbar{padding-left:12px!important;padding-right:12px!important}
+}
+/* ========== #204g 横向溢出清理 ========== */
+@media (max-width:768px){
+/* 1) 卡片内联 tab 条（维修/盘点/巡检/处置/交易/闲置等）：变内部滚动条，不撑宽页面 */
+.card div[style*="gap:var(--space-sm);margin-bottom:32px"]{flex-wrap:nowrap!important;overflow-x:auto!important;max-width:100%!important;-webkit-overflow-scrolling:touch;scrollbar-width:none}
+.card div[style*="gap:var(--space-sm);margin-bottom:32px"]::-webkit-scrollbar{display:none}
+/* 2) 消息页操作行（内联 style 顺序与 #204 选择器不同而漏网）：允许换行 */
+.page-panel div[style*="display:flex;gap:8px;align-items:center"]{flex-wrap:wrap!important}
+/* 3) 位置地图页：去掉 min-width:380，地图与侧栏纵向堆叠 */
+#panel-map-location div[style*="min-width:380px"]{min-width:0!important;width:auto!important;max-width:100%!important}
+#panel-map-location div[style*="display:flex;gap:16px;height:calc(100vh - 140px)"]{flex-direction:column!important;height:auto!important}
+#panel-map-location div[style*="flex:1;position:relative"]{height:52vh!important;flex:none!important}
+}
 </style>
 <script>
 (function(){
