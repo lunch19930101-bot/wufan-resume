@@ -138,7 +138,8 @@ export function ShowcaseStacked() {
       {/* figcaption —— label + 轮换进度 */}
       <figcaption className="flex items-baseline justify-between gap-2 pt-1 font-mono text-[10px] uppercase tracking-wider text-text-tertiary">
         <span className="text-text-secondary">[ 统信生态大会 · 2020–2024 主视觉 ]</span>
-        <span className="tabular-nums">
+        {/* #235 对比度：01/05 计数是信息（非装饰），tertiary 在浅色主题下 ≈2:1 不达 AA */}
+        <span className="tabular-nums text-text-secondary">
           {String(active + 1).padStart(2, '0')} / {String(tiles.length).padStart(2, '0')}
         </span>
       </figcaption>

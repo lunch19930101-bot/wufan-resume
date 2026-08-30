@@ -119,9 +119,23 @@ export function HomeMain() {
           <ProjectShowcase />
         </div>
 
-        {/* 11. 收尾 —— 求职状态 */}
+        {/* 11. 收尾 —— 求职状态 + 简历直达（#235 走查：核心转化动作不能只藏在 Menu 里） */}
         <EssayParagraph>
           我目前在武汉市，求职中随时可入职。
+          <a
+            href={withBasePath('/pdf-viewer/')}
+            data-cursor="link"
+            className="ml-2 text-text-primary underline decoration-text-tertiary underline-offset-[6px] transition-colors hover:decoration-text-primary"
+          >
+            查看简历 / 作品集 PDF
+          </a>
+          <a
+            href={withBasePath('/resumes/wufan-resume.docx')}
+            data-cursor="link"
+            className="ml-3 text-text-primary underline decoration-text-tertiary underline-offset-[6px] transition-colors hover:decoration-text-primary"
+          >
+            下载 Word 版
+          </a>
         </EssayParagraph>
       </article>
     </main>

@@ -267,6 +267,13 @@ html:has(.live-resume) {
       max-width: calc(68rem * var(--a63-type-scale, 1)); /* 1088px × type-scale */
     }
   }
+  /* #235 走查：<672px 手机上版心=全屏，虚线贴屏幕左右两缘（圆角屏上更明显），
+     被读作「边缘有线挡着」—— 导引线的意义是标版心边界，此时已无意义，隐藏 */
+  @media (max-width: 41.99rem) {
+    body::after {
+      display: none;
+    }
+  }
 
   ::selection {
     background-color: rgba(44, 127, 255, 0.25);

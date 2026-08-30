@@ -36,11 +36,24 @@ export const metadata = {
   },
   description: `${site.tagline} ${site.role}，所在地 ${site.location}。`,
   charSet: 'utf-8',
-  metadataBase: new URL('https://example.com'),
+  /* #235 走查修复：metadataBase 曾是 example.com —— canonical/OG 全解析到错误域名 */
+  metadataBase: new URL('https://wufan.cc'),
   openGraph: {
     title: `${site.name} — ${site.role}`,
     description: site.tagline,
     type: 'website',
+    /* 分享卡片图（微信 / Slack 转发预览）—— 2024 统信生态大会主视觉裁 1200×630 */
+    images: [
+      {
+        url: '/images/og.jpg',
+        width: 1200,
+        height: 630,
+        alt: `${site.name} — ${site.role} · 作品集`,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
   },
   other: {
     // 禁用 Google 翻译 / 第三方翻译扩展 —— 它们会在 React hydration 前修改 DOM，

@@ -356,7 +356,11 @@ function SlideCard({
         'group relative shrink-0 overflow-hidden bg-black text-left',
         // 直角 —— 由外框圆角统一裁切（atom63 slide 无自身圆角）
         // 卡片宽度：100cqw = 外框宽（内容列宽），1.2 张可见（1 全显 + peek）
-        'w-[calc(100cqw/1.2)]',
+        // 手机端（#235 走查定稿）：满宽无 peek —— 轨道 viewport = cqw − 40（左右
+        // gutter 20px），卡恰好占满 viewport，下一张从 viewport 右缘 +8px 起，
+        // 被轨道 overflow 裁切（露出 0px）。52~60px 的 peek 竖条在手机上被用户
+        // 读作「视频右边被挡」；滑动提示由自动轮播承担，PC 的 peek 设计语言保留
+        'w-[calc(100cqw/1.2)] max-md:w-[calc(100cqw-40px)]',
         'aspect-[16/10]',
       )}
     >
