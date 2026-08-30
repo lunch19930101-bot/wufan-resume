@@ -43,22 +43,46 @@ export function CommandMenu({
   const [visible, setVisible] = useState(false);
   const [copied, setCopied] = useState(false);
   const [wechatCopied, setWechatCopied] = useState(false);
+  /* #233 用户指定：弹层跟随 Menu 按钮（右缘对齐按钮右缘、顶贴按钮下缘），
+     不再视口居中。打开瞬间测量；打开期间窗口 resize 重算 */
+  const [pos, setPos] = useState<{ right: number; top: number } | null>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => setMounted(true), []);
 
+  const measure = () => {
+    const btn = triggerRef.current;
+    if (!btn) return;
+    const vw = window.innerWidth;
+    const rect = btn.getBoundingClientRect();
+    const w = Math.min(384, vw - 24);
+    /* 右缘跟按钮；极窄屏（弹层≈全宽）时收回到距右 12px，不越左缘 */
+    const right = Math.max(12, Math.min(vw - rect.right, vw - 12 - w));
+    setPos({ right, top: rect.bottom + 6 });
+  };
+
   // 开关 + 动画
   useEffect(() => {
     if (!mounted) return;
     if (open) {
+      measure();
       setVisible(true);
       return;
     }
     // 关闭：等动画结束再卸载
     const t = window.setTimeout(() => setVisible(false), 140);
     return () => window.clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, mounted]);
+
+  // 打开期间 resize 跟随
+  useEffect(() => {
+    if (!open) return;
+    window.addEventListener('resize', measure);
+    return () => window.removeEventListener('resize', measure);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [open]);
 
   // Esc 关闭
   useEffect(() => {
@@ -176,17 +200,19 @@ export function CommandMenu({
             data-slot="command-root"
             data-state={open ? 'open' : 'closed'}
             className={cn(
-              'fixed z-overlay left-1/2 top-[66px]',
+              'fixed z-overlay',
               'w-[min(24rem,calc(100vw-1.5rem))]',
               'shadow-[var(--shadow-elev-3)]',
             )}
             style={{
+              right: pos ? `${pos.right}px` : '32px',
+              top: pos ? `${pos.top}px` : '66px',
               opacity: open ? 1 : 0,
               transform: open
-                ? 'translate3d(-50%, 0, 0)'
-                : 'translate3d(-50%, -8px, 0)',
+                ? 'translate3d(0, 0, 0)'
+                : 'translate3d(0, -8px, 0)',
               transition: 'transform 140ms cubic-bezier(0.16,1,0.3,1), opacity 140ms cubic-bezier(0.16,1,0.3,1)',
-              transformOrigin: 'top center',
+              transformOrigin: 'top right',
             }}
           >
             {/* 外层 popup —— 1:1 atom63 .a63-Command-popup
