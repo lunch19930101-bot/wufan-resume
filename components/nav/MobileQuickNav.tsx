@@ -21,7 +21,10 @@ import { cn } from '@/lib/utils';
  * 视觉语言延续：mono 双位序号 01—05、墨色胶囊、dashed 底边框（与 58px
  * Nav 同母题）、滚动轨道两端 24px mask 渐隐。
  *
- * 几何锁：条高 46px —— HEADER_OFFSET / 各锚点 scroll-mt-[104px] 依赖此值。
+ * 几何锁：条高 46px —— 锚点偏移 / 各锚点 scroll-mt-[104px] 依赖此值；
+ * 偏移不再硬编码，go() 里实测 header.offsetHeight（Nav 高 = 58 + 安全区，
+ * 刘海屏 59px —— #236：正是这个安全区曾让 top-[58px] 的本条整条叠进
+ * Nav 内容带，两个 backdrop-filter 重叠时 iOS 直接丢掉 Nav 的毛玻璃）。
  * 挂载位置：app/page.tsx 顶层（fixed，不占 HomeMain 文章流）。
  */
 const LINKS = [
@@ -32,7 +35,7 @@ const LINKS = [
   { id: 'timeline', label: '项目合集' },
 ] as const;
 
-const HEADER_OFFSET = -(58 + 46);
+const BAR_H = 46;
 
 /* 滑入阈值：条原先自然位置 151–197px，滚到其顶部触 Nav（151 - 58 ≈ 140）
    的那一刻唤起——恰好是「该出现的时候」 */
@@ -90,7 +93,10 @@ export function MobileQuickNav() {
   }, [active]);
 
   const go = (id: string) => {
-    scrollToTarget(`#${id}`, HEADER_OFFSET);
+    /* #236：Nav 高 = 58 + 安全区（env() 读不到 JS，实测元素高度）——
+       刘海屏上原 -104 会把锚点压到两道横条底下 59px */
+    const navH = document.querySelector('header')?.offsetHeight ?? 58;
+    scrollToTarget(`#${id}`, -(navH + BAR_H));
   };
 
   return (
@@ -99,12 +105,18 @@ export function MobileQuickNav() {
     <div
       aria-hidden={!shown}
       className={cn(
-        'fixed inset-x-0 top-[58px] z-40 md:hidden',
+        /* #236：top 必须跟着 Nav 的 58+安全区 走 —— 原硬编码 58px 在刘海屏
+           iPhone（安全区 ≈59px）上滑入后整条叠进 Nav 内容带：两层半透明
+           压在一起 + 两个 backdrop-filter 重叠（iOS WebKit 遇重叠会直接
+           丢掉其中一个的采样层）→ 用户看到的正是「Nav 毛玻璃消失」 */
+        'fixed inset-x-0 top-[calc(58px+env(safe-area-inset-top,0px))] z-40 md:hidden',
         'transition-[transform,opacity] duration-base ease-out-quart',
         shown ? 'translate-y-0 opacity-100' : 'pointer-events-none -translate-y-full opacity-0',
       )}
     >
-      <div className="h-[46px] border-b border-dashed border-border-default bg-bg-canvas/90 backdrop-blur-md">
+      {/* #236：实底替代 bg/90+blur —— 全站只留 Nav 一个 backdrop-filter，
+          从根上消除重叠与滚动合成竞态；/90 的透出本就 ≈10%，视觉无损 */}
+      <div className="h-[46px] border-b border-dashed border-border-default bg-bg-canvas">
         <div
           ref={trackRef}
           className={cn(

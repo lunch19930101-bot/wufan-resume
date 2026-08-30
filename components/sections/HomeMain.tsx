@@ -45,12 +45,12 @@ export function HomeMain() {
             #231 曾与 Hero 介绍文一起收到 672px；#232 用户反馈右侧大片空白怪，
             定稿：视频恢复撑满容器（md 608 / lg 800 / xl 1024），仅介绍文保持
             672px 阅读行宽（编辑式「文字窄、媒体宽」层次） */}
-        <div className="hidden scroll-mt-[104px] md:block">
+        <div className="hidden scroll-mt-[calc(104px+env(safe-area-inset-top,0px))] md:block">
           <ShowcaseCarousel />
         </div>
 
         {/* 2. 统信开篇 */}
-        <div id="uniontech" className="scroll-mt-[104px]">
+        <div id="uniontech" className="scroll-mt-[calc(104px+env(safe-area-inset-top,0px))]">
           <EssayParagraph>
             曾在
             <Favicon src="/images/clients/uniontech.svg" alt="统信软件" />
@@ -81,7 +81,7 @@ export function HomeMain() {
         </EssayParagraph>
 
         {/* 5. 平安银行时代 */}
-        <div id="pingan" className="scroll-mt-[104px]">
+        <div id="pingan" className="scroll-mt-[calc(104px+env(safe-area-inset-top,0px))]">
           <EssayParagraph>
             更早之前，我在
             <Favicon src="/images/clients/pingan.ico" alt="平安银行" />

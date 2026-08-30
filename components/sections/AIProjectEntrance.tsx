@@ -112,7 +112,7 @@ export function AIProjectEntrance() {
   const mobileOnly = projects.find((p) => p.mobileOnly);
 
   return (
-    <section id="ai-projects" aria-label="AI 协作项目" className="w-full scroll-mt-[104px]">
+    <section id="ai-projects" aria-label="AI 协作项目" className="w-full scroll-mt-[calc(104px+env(safe-area-inset-top,0px))]">
       {/* 手机端：竖向单卡 + 分段切换（参考移动端工作台 / 国资管家的 tab+卡片语言）；
           PC 三列网格，md 档起接管（MobileProjectDeck hidden） */}
       <MobileProjectDeck projects={projects} />

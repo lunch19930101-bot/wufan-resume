@@ -46,7 +46,7 @@ export function Hero() {
 
       {/* 手机端：动态作品轮播上移到第一屏（h1 之后、介绍之前）——
           PC 隐藏（原位副本在 HomeMain，hidden md:block） */}
-      <div id="showcase" className="mt-[24px] scroll-mt-[104px] md:hidden">
+      <div id="showcase" className="mt-[24px] scroll-mt-[calc(104px+env(safe-area-inset-top,0px))] md:hidden">
         <ShowcaseCarousel />
       </div>
 
