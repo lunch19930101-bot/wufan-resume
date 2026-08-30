@@ -36,8 +36,10 @@ export function HomeMain() {
     <main className="mx-auto max-w-[672px] px-6 lg:max-w-[864px] xl:max-w-[1088px]">
       {/* 手机端垂直节奏两档制（用户 2026-08-24）：节间距 40px、节内相关内容 24px。
           手机 pt-0 —— 与 Hero 的 40px 底距合并为单一 40px 节距（原来 64+64=128 过宽）；
-          #230 节间距统一 40px（md+ 原为 32px），页边留白 md pt/pb 64px 不变 */}
-      <article className="space-y-[40px] pt-0 pb-[40px] md:pt-16 md:pb-16">
+          #230 节间距统一 40px（md+ 原为 32px），页边留白 md pb-64px 不变。
+          #232 md:pt-0 —— PC 同理：Hero md:pb-[40px] + 这里 pt-0 = 40px 节距
+          （原 md:pt-16=64 与 Hero pb-16=64 叠成 128px 空带） */}
+      <article className="space-y-[40px] pt-0 pb-[40px] md:pt-0 md:pb-16">
         {/* 1. 统信时期项目轮播 —— 横向滑动作品展示。
             PC 副本：手机端轮播已上移到 Hero 第一屏（#showcase 锚点在那边）。
             #231 用户指定视频收窄：与 Hero 介绍文同宽 672px（lg/xl 生效），

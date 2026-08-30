@@ -305,13 +305,17 @@ function SlideCard({
       videoRef.current?.pause();
       return;
     }
+    /* threshold 0 —— 任意可见就挂载 <video>：peek 卡（可见 <25%）也渲染
+       内容帧而不是按钮黑底（#232 用户报"bug"：672 收窄后右侧露出的
+       纯黑竖条刺眼）；播放仍以 25% 为门槛 */
     const io = new IntersectionObserver(
       ([entry]) => {
         if (!entry) return;
-        inViewRef.current = entry.isIntersecting;
-        if (entry.isIntersecting) {
-          setLoaded(true);
-          const v = videoRef.current;
+        if (entry.isIntersecting) setLoaded(true);
+        const mainView = entry.isIntersecting && entry.intersectionRatio >= 0.25;
+        inViewRef.current = mainView;
+        const v = videoRef.current;
+        if (mainView) {
           if (v && v.paused) {
             /* 显式补设 muted —— 同 Lightbox：部分内核不认 React 的 muted prop，
                按「有声」拒绝 play()，视频冻结 */
@@ -319,10 +323,10 @@ function SlideCard({
             v.play().catch(() => {});
           }
         } else {
-          videoRef.current?.pause();
+          v?.pause();
         }
       },
-      { threshold: 0.25 },
+      { threshold: [0, 0.25] },
     );
     io.observe(btn);
     return () => io.disconnect();
@@ -376,6 +380,14 @@ function SlideCard({
               autoPlay
               playsInline
               preload="metadata"
+              onLoadedMetadata={(e) => {
+                /* peek 卡不播放 —— 跳到内容帧（15% 处，封顶 2s），
+                   避免停在第 0 帧黑屏（多数 banner 视频开头是淡入黑场） */
+                const v = e.currentTarget;
+                if (!inViewRef.current && Number.isFinite(v.duration) && v.duration > 0) {
+                  v.currentTime = Math.min(v.duration * 0.15, 2);
+                }
+              }}
               onTimeUpdate={(e) => {
                 const v = e.currentTarget;
                 if (Number.isFinite(v.duration) && v.duration > 0)

@@ -25,9 +25,10 @@ export function Hero() {
      必须用任意值写 px，不能用 scale 阶梯。
        Nav→h1 24 · h1→视频 24 · 视频→文案 40
      手机 Hero 底距为 0 —— 与 HomeMain 首节的 40px 节距会叠加成 80，
-     由 space-y-[40px] 单独承担；md 维持原值（pt 64 / pb 64） */
+     由 space-y-[40px] 单独承担；md 底距 #232 统一 40px（原 pb-16=64 与
+     HomeMain md:pt-16=64 叠成 128px 空带，与全站 40px 节奏不符） */
   return (
-    <section className="mx-auto max-w-[672px] px-6 pt-[24px] pb-0 md:pt-8 md:pb-16 lg:max-w-[864px] xl:max-w-[1088px]">
+    <section className="mx-auto max-w-[672px] px-6 pt-[24px] pb-0 md:pt-8 md:pb-[40px] lg:max-w-[864px] xl:max-w-[1088px]">
       <h1 className="text-hero-h1 text-text-primary">
         {/* #213 头像与文字垂直居中对齐（flex items-center 精确居中） */}
         <span className="flex flex-wrap items-center">
