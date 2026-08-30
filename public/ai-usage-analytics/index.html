@@ -2042,6 +2042,8 @@ function logout() {
   }
   var sb=document.querySelector('.sidebar');
   if(sb)sb.addEventListener('click',function(e){
+    /* #234 可展开组（toggleNavGroup）：点击只展开/收起子项，不关抽屉 */
+    if(e.target.closest('[data-group]'))return;
     if(e.target.closest('[data-page],.nav-item,.nav-child,a,button'))document.body.classList.remove('mnav-open');
   });
   /* 表格卡片化：>4 列表格的每行 → 钉钉式 label:value 卡片（thead 标签盖到 td::before） */
