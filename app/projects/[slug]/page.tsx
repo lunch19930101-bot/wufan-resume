@@ -48,7 +48,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
   return (
     <article className="mx-auto max-w-[672px] px-6 pb-24 pt-8 lg:max-w-[864px] xl:max-w-[1088px]">
       {/* Header */}
-      <header className="flex flex-col gap-3 pb-8">
+      <header className="flex flex-col gap-3 pb-[30px]">
         <h1
           className={cn(
             'text-balance text-3xl tracking-tight text-text-primary',
@@ -106,7 +106,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
       {/* 外链 CTA（可选） */}
       {project.externalUrl && (
-        <section className="border-t border-dashed border-border-subtle pt-8 pb-8">
+        <section className="border-t border-dashed border-border-subtle pt-[30px] pb-[30px]">
           <a
             href={project.externalUrl}
             target="_blank"
@@ -138,7 +138,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
       {/* 相关作品 —— 横向滑动 carousel */}
       {related.length > 0 && (
-        <section className="border-t border-dashed border-border-subtle pt-8 pb-8">
+        <section className="border-t border-dashed border-border-subtle pt-[30px] pb-[30px]">
           <header className="mb-5 flex items-baseline justify-between">
             <h2 className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
               More work
@@ -153,7 +153,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       )}
 
       {/* 底部联系 */}
-      <section className="border-t border-border-subtle pt-8">
+      <section className="border-t border-border-subtle pt-[30px]">
         <p className="text-essay-p text-text-secondary">
           想要了解更多这个项目的过程，或者聊类似的工作？写信到{' '}
           <a
@@ -185,7 +185,7 @@ function DetailSection({
   children: React.ReactNode;
 }) {
   return (
-    <section className="border-t border-dashed border-border-subtle pt-8 pb-8">
+    <section className="border-t border-dashed border-border-subtle pt-[30px] pb-[30px]">
       <header className="mb-6 flex items-baseline gap-3">
         <span className="font-mono text-[11px] tabular-nums text-text-tertiary">
           {String(index).padStart(2, '0')}
