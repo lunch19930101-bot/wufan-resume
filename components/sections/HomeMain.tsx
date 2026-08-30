@@ -39,8 +39,10 @@ export function HomeMain() {
           #230 节间距统一 40px（md+ 原为 32px），页边留白 md pt/pb 64px 不变 */}
       <article className="space-y-[40px] pt-0 pb-[40px] md:pt-16 md:pb-16">
         {/* 1. 统信时期项目轮播 —— 横向滑动作品展示。
-            PC 副本：手机端轮播已上移到 Hero 第一屏（#showcase 锚点在那边） */}
-        <div className="hidden scroll-mt-[104px] md:block">
+            PC 副本：手机端轮播已上移到 Hero 第一屏（#showcase 锚点在那边）。
+            #231 用户指定视频收窄：与 Hero 介绍文同宽 672px（lg/xl 生效），
+            卡宽 cqw 相对外框，收窄后整条等比缩小 */}
+        <div className="hidden max-w-[672px] scroll-mt-[104px] md:block">
           <ShowcaseCarousel />
         </div>
 
