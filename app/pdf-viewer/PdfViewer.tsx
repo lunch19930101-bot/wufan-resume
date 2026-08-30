@@ -131,7 +131,9 @@ export function PdfViewer() {
           <span className="flex size-[26px] items-center justify-center rounded-[6px] bg-gradient-to-br from-[#366FF9] to-[#1B3B8F] font-mono text-[13px] font-semibold text-white shadow-[0_0_16px_rgba(54,111,249,0.45)]">
             W
           </span>
-          <span className="leading-tight">
+          {/* #走查修复（375px）：顶栏 logo 文字（~160px）把「返回站点」挤成两行 ——
+              <sm 只留 W 标（aria-label 仍在），按钮组 shrink-0 防压缩 */}
+          <span className="hidden leading-tight sm:block">
             <span className="block text-[13px] font-medium tracking-wide">吴帆 · 作品集 2025</span>
             <span className="block font-mono text-[9px] uppercase tracking-[0.22em] text-[#5E6F92]">
               Portfolio / PDF Viewer
@@ -153,7 +155,7 @@ export function PdfViewer() {
             href={withBasePath(PDF_HREF)}
             download
             data-cursor="link"
-            className="inline-flex h-[34px] items-center gap-2 rounded-[9px] bg-[#366FF9] px-3.5 text-[13px] font-medium text-white shadow-[0_0_20px_rgba(54,111,249,0.35)] transition-colors hover:bg-[#2C5BE0]"
+            className="inline-flex h-[34px] shrink-0 items-center gap-2 whitespace-nowrap rounded-[9px] bg-[#366FF9] px-3.5 text-[13px] font-medium text-white shadow-[0_0_20px_rgba(54,111,249,0.35)] transition-colors hover:bg-[#2C5BE0]"
           >
             <DownloadIcon className="size-[14px]" />
             下载 PDF
@@ -161,7 +163,7 @@ export function PdfViewer() {
           <a
             href={withBasePath('/')}
             data-cursor="link"
-            className="inline-flex h-[34px] items-center gap-2 rounded-[9px] border border-[#69ACF9]/25 px-3.5 text-[13px] text-[#9FB0CE] transition-colors hover:border-[#69ACF9]/60 hover:text-[#E8EEF9]"
+            className="inline-flex h-[34px] shrink-0 items-center gap-2 whitespace-nowrap rounded-[9px] border border-[#69ACF9]/25 px-3.5 text-[13px] text-[#9FB0CE] transition-colors hover:border-[#69ACF9]/60 hover:text-[#E8EEF9]"
           >
             返回站点
           </a>

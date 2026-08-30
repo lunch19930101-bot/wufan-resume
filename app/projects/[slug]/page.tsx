@@ -59,32 +59,34 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </h1>
         <p className="text-pretty text-base text-text-secondary">{project.description}</p>
 
-        {/* Meta row */}
+        {/* Meta row —— #走查修复：每个「· + 内容」合并为单个 nowrap flex 单元
+            （内距 gap-x-3 与外距同节奏），折行只发生在单元之间，
+            避免第二行以悬空的「·」开头 */}
         <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
           <span className="tabular-nums">{project.year}</span>
           {project.type && (
-            <>
+            <span className="inline-flex items-baseline gap-x-3 whitespace-nowrap">
               <span className="opacity-50">·</span>
               <span>{project.type}</span>
-            </>
+            </span>
           )}
           {project.client && (
-            <>
+            <span className="inline-flex items-baseline gap-x-3 whitespace-nowrap">
               <span className="opacity-50">·</span>
               <span>Client · {project.client}</span>
-            </>
+            </span>
           )}
           {project.role && (
-            <>
+            <span className="inline-flex items-baseline gap-x-3 whitespace-nowrap">
               <span className="opacity-50">·</span>
               <span>Role · {project.role}</span>
-            </>
+            </span>
           )}
           {project.featured && (
-            <>
+            <span className="inline-flex items-baseline gap-x-3 whitespace-nowrap">
               <span className="opacity-50">·</span>
               <span className="text-accent-lime">★ Featured</span>
-            </>
+            </span>
           )}
         </div>
       </header>

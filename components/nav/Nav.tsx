@@ -31,7 +31,11 @@ export function Nav() {
   // 注意：early return 必须在所有 Hooks 之后（React rules-of-hooks）。
   if (pathname.startsWith('/resume')) return null;
 
-  const pageTitle = pathname === '/' ? 'Index' : pathname.split('/').filter(Boolean).pop() ?? '';
+  /* #走查修复（水合 #418）：Next 预渲染 404 页时 usePathname() 返回内部路由
+     '/_not-found'，客户端水合时是 '/404' —— 两侧面包屑文本不一致触发 React
+     #418 文本水合错误；归一成 '404' */
+  const rawTitle = pathname === '/' ? 'Index' : pathname.split('/').filter(Boolean).pop() ?? '';
+  const pageTitle = rawTitle === '_not-found' ? '404' : rawTitle;
   const isProjectPage = pathname.startsWith('/projects/');
 
   return (
@@ -45,7 +49,9 @@ export function Nav() {
               href="/#timeline"
               data-cursor="link"
               aria-label="Back to timeline"
-              className="group inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-text-secondary transition-colors duration-micro ease-out-quart hover:text-text-primary"
+              /* #走查修复：Back 热区过小（原 ~16×50px，低于 44px 触摸标准）
+                 —— 负 margin + 等量 padding 补偿，视觉位置不变，热区 ~44px 高 */
+              className="group -my-3.5 -ml-2 inline-flex items-center gap-1.5 py-3.5 pl-2 font-mono text-[11px] uppercase tracking-wider text-text-secondary transition-colors duration-micro ease-out-quart hover:text-text-primary"
             >
               <svg
                 viewBox="0 0 24 24"

@@ -152,7 +152,9 @@ export function Footer() {
           {/* 第 3 行 —— 天气 + 时间 看板（atom63 weather board / zoned-clock 风格）
               Doto 点阵大数字（font-digital）+ 两组数字夹两点冒号 */}
           <div className="border-t border-dashed border-border-default" aria-hidden />
-          <div className="relative grid grid-cols-2">
+          {/* #走查适配修复：<412px 手机上两列各只剩 ~120px 内容区，40px 数字
+              时钟（~174px）溢出屏幕右缘被裁 —— 手机改单列堆叠，md 起恢复两列 */}
+          <div className="relative grid grid-cols-1 md:grid-cols-2">
             {/* / Beijing —— 天气看板 */}
             <div className="px-6 py-6">
               <p className="font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
@@ -173,7 +175,7 @@ export function Footer() {
             </div>
 
             {/* / Local —— 时间看板（HH∶MM∶SS，冒号 = 两个 3px 点） */}
-            <div className="px-6 py-6">
+            <div className="border-t border-dashed border-border-default px-6 py-6 md:border-t-0">
               <p className="font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
                 / Local
               </p>
@@ -195,7 +197,7 @@ export function Footer() {
 
             <span
               aria-hidden
-              className="pointer-events-none absolute inset-y-0 left-1/2 -ml-px border-l border-dashed border-border-default"
+              className="pointer-events-none absolute inset-y-0 left-1/2 -ml-px hidden border-l border-dashed border-border-default md:block"
             />
           </div>
         </div>
