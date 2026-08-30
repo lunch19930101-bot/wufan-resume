@@ -6,22 +6,22 @@ import { useRef, useState } from 'react';
 import { cn } from '@/lib/utils';
 
 /**
- * AIProjectEntrance —— atom63 风格 "I build in public" 三入口
+ * AIProjectEntrance —— atom63 风格 "I build in public" 项目入口
  *
- * 布局（1:1 复刻 atom63.io）：
- *   ┌──────────────────────────────────────────┐
- *   │   01  AI 简历编辑器   [live]    [↗] [⌥]   │  ← FeaturedCard（占满顶部）
- *   │   描述……                                  │
- *   └──────────────────────────────────────────┘
- *   ┌────────────────────┐ ┌────────────────────┐
- *   │ 02 AI 项目二 [soon]│ │ 03 AI 项目三 [soon]│  ← MiniCard（md+ 并排，手机单列）
- *   │ 描述…… [↗] [⌥]    │ │ 描述…… [↗] [⌥]    │
- *   └────────────────────┘ └────────────────────┘
+ * PC 布局（#229 三列制）：
+ *   ┌──────────┐ ┌──────────┐ ┌──────────┐
+ *   │ 01 [live]│ │ 02 [live]│ │ 03 [live]│   ← MiniCard ×3 一行三列
+ *   │ 描述 [↗] │ │ 描述 [↗] │ │ 描述 [↗] │
+ *   └──────────┘ └──────────┘ └──────────┘
+ *   ┌────────────────────────────────────────┐
+ *   │ 04 [mobile only] …… [📱 请在手机端查看] │   ← LockedMobileCard 通栏
+ *   └────────────────────────────────────────┘     （不可点击，仅展示）
  *
- * - grid-cols-1 gap-3，md:grid-cols-2（手机单列，小卡太窄会挤压按钮行）
- * - 第一张 col-span-2（占满顶部）
+ * - md:grid-cols-3；手机由 MobileProjectDeck 接管（hidden md:grid）
+ * - 按钮文字 md–lg 隐藏只留图标（三列卡宽容不下两组文字钮），lg 起恢复
+ * - 第 4 张（移动端限定）PC 也展示但锁定：虚线边框 + 手机 pill + 提示钮
  * - 卡片视觉：border + bg-bg-elevated，rounded-[var(--showcase-radius)]
- * - 按钮风格：atom63 outline variant，h-[30px]，rounded-lg
+ * - 按钮风格：atom63 outline variant，MiniCard compact h-[26px]
  */
 type AIProject = {
   id: string;
@@ -106,21 +106,22 @@ const projects: AIProject[] = [
 ];
 
 export function AIProjectEntrance() {
-  // mobileOnly 项目（04 移动端限定）只在手机 Deck 出现，PC 网格过滤掉
-  const desktop = projects.filter((p) => !p.mobileOnly);
-  const [featured, ...rest] = desktop;
+  // mobileOnly 项目（04 移动端限定）：手机端 Deck 全量可切；
+  // PC 一行 3 张可点卡 + 第 4 张锁定展示（不可点击，提示看移动端）
+  const clickable = projects.filter((p) => !p.mobileOnly);
+  const mobileOnly = projects.find((p) => p.mobileOnly);
 
   return (
     <section id="ai-projects" aria-label="AI 协作项目" className="w-full scroll-mt-[104px]">
       {/* 手机端：竖向单卡 + 分段切换（参考移动端工作台 / 国资管家的 tab+卡片语言）；
-          PC 维持 atom63 双列网格，md 档全部不变 */}
+          PC 三列网格，md 档起接管（MobileProjectDeck hidden） */}
       <MobileProjectDeck projects={projects} />
-      {/* Grid: 1 top (占满) + 2 bottom。手机端由 MobileProjectDeck 接管（hidden），md 起恢复两列。 */}
-      <div className="hidden gap-3 md:grid md:grid-cols-2">
-        {featured && <FeaturedCard project={featured} />}
-        {rest.map((p) => (
+      {/* PC：一行 3 张 MiniCard + 通栏锁定卡（手机端由 MobileProjectDeck 接管） */}
+      <div className="hidden gap-3 md:grid md:grid-cols-3">
+        {clickable.map((p) => (
           <MiniCard key={p.id} project={p} />
         ))}
+        {mobileOnly && <LockedMobileCard project={mobileOnly} />}
       </div>
     </section>
   );
@@ -340,28 +341,31 @@ function MobileProjectDeck({ projects }: { projects: AIProject[] }) {
 }
 
 /* ============================================================
- * FeaturedCard —— 顶部大卡片，占满两列
+ * LockedMobileCard —— 移动端限定项目的 PC 展示卡（#229）
+ *   - 位于三列一行之下、通栏展示（col-span-3）
+ *   - 完全不可点击：无 Link/按钮跳转，虚线边框 + 手机 pill 标示锁定态
+ *   - 提示引导到移动端查看（手机端 Deck 里该项目可正常进入）
  * ============================================================ */
-function FeaturedCard({ project }: { project: AIProject }) {
-  const isSoon = project.status === 'soon';
-
+function LockedMobileCard({ project }: { project: AIProject }) {
   return (
     <article
       style={{ backgroundImage: project.accent }}
       className={cn(
-        'col-span-1 md:col-span-2 flex flex-col gap-4 p-5 md:p-6',
+        'col-span-1 flex flex-col gap-3 p-4 md:col-span-3 md:p-5',
         'rounded-[var(--showcase-radius)]',
-        'border border-border-subtle bg-bg-elevated',
-        'transition-colors duration-micro ease-out-quart',
+        'border border-dashed border-border-default bg-bg-elevated',
       )}
     >
-      {/* 头部：index + status + year */}
-      <div className="flex items-center justify-between gap-3">
+      {/* 头部：index + mobile pill + year */}
+      <div className="flex items-center justify-between gap-2">
         <div className="flex items-baseline gap-3">
           <span className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary tabular-nums">
             {project.index}
           </span>
-          <StatusPill status={project.status} />
+          <span className="inline-flex items-center gap-1.5 rounded-full border border-border-subtle px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-text-tertiary">
+            <PhoneIcon className="size-2.5" />
+            mobile only
+          </span>
         </div>
         <span className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary tabular-nums">
           {project.year}
@@ -369,40 +373,28 @@ function FeaturedCard({ project }: { project: AIProject }) {
       </div>
 
       {/* 标题 */}
-      <h3 className="text-balance text-xl font-medium tracking-tight text-text-primary md:text-2xl">
+      <h3 className="text-balance text-base font-medium tracking-tight text-text-primary">
         {project.title}
       </h3>
 
-      {/* 描述 —— 手机行高放宽到 1.75 便于滚动阅读 */}
-      <p className="text-pretty text-sm leading-[1.75] text-text-secondary md:leading-relaxed">
+      {/* 描述 —— 与 MiniCard 同款 2 行钳制 */}
+      <p className="line-clamp-2 text-[13px] leading-[1.7] text-text-secondary md:leading-relaxed">
         {project.description}
       </p>
 
-      {/* 按钮组 —— 手机：primary 满宽 44px + github 44px 方形图标钮 */}
-      <div className="mt-auto flex items-center gap-2 pt-1">
-        <ActionButton
-          href={project.tryLiveHref}
-          icon={<ExternalLinkIcon className="size-[16px] md:size-[14px]" />}
-          label="try live"
-          disabled={isSoon}
-          primary
-          mobile="full"
-          newTab
-        />
-        <ActionButton
-          href={project.githubHref}
-          icon={<GithubIcon className="size-[16px] md:size-[14px]" />}
-          label="github"
-          disabled={isSoon}
-          mobile="icon"
-        />
+      {/* 提示 —— 非按钮（span），不可聚焦不可点，仅引导移动端 */}
+      <div className="mt-auto flex items-center pt-1">
+        <span className="inline-flex h-[26px] items-center gap-1.5 rounded-[var(--control-radius)] border border-dashed border-border-default px-2 font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
+          <PhoneIcon className="size-3" />
+          请在手机端查看
+        </span>
       </div>
     </article>
   );
 }
 
 /* ============================================================
- * MiniCard —— 底部小卡片
+ * MiniCard —— PC 三列一行的小卡片（01/02/03）
  * ============================================================ */
 function MiniCard({ project }: { project: AIProject }) {
   const isSoon = project.status === 'soon';
@@ -435,7 +427,8 @@ function MiniCard({ project }: { project: AIProject }) {
         {project.description}
       </p>
 
-      {/* 按钮组 —— 手机：与 Featured 相同的 44px 触控档，卡间距补到 8px */}
+      {/* 按钮组 —— 手机：44px 触控档，卡间距补到 8px；
+          md–lg 三列卡宽不够，只留图标（lg 起恢复文字） */}
       <div className="mt-auto flex items-center gap-[8px] pt-1 md:gap-1.5">
         <ActionButton
           href={project.tryLiveHref}
@@ -446,6 +439,7 @@ function MiniCard({ project }: { project: AIProject }) {
           compact
           mobile="full"
           newTab
+          labelBreakpoint="lg"
         />
         <ActionButton
           href={project.githubHref}
@@ -454,6 +448,7 @@ function MiniCard({ project }: { project: AIProject }) {
           disabled={isSoon}
           compact
           mobile="icon"
+          labelBreakpoint="lg"
         />
       </div>
     </article>
@@ -513,6 +508,7 @@ function ActionButton({
   compact,
   newTab,
   mobile,
+  labelBreakpoint,
 }: {
   href?: string;
   icon: React.ReactNode;
@@ -522,6 +518,8 @@ function ActionButton({
   compact?: boolean;
   newTab?: boolean;
   mobile?: 'full' | 'icon';
+  /** 按钮文字何时恢复显示（#229 三列卡在 md–lg 宽度不够，只留图标） */
+  labelBreakpoint?: 'md' | 'lg';
 }) {
   const mdSize = compact ? 'md:h-[26px] md:px-2' : 'md:h-[30px] md:px-2.5';
   const size =
@@ -549,7 +547,17 @@ function ActionButton({
   const content = (
     <>
       {icon}
-      <span className={mobile === 'icon' ? 'hidden md:inline' : undefined}>{label}</span>
+      <span
+        className={
+          labelBreakpoint === 'lg'
+            ? 'hidden lg:inline'
+            : mobile === 'icon'
+              ? 'hidden md:inline'
+              : undefined
+        }
+      >
+        {label}
+      </span>
     </>
   );
 
@@ -616,6 +624,25 @@ function GithubIcon({ className }: { className?: string }) {
       className={className}
     >
       <path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.56v-2c-3.2.7-3.87-1.36-3.87-1.36-.53-1.34-1.3-1.7-1.3-1.7-1.06-.72.08-.71.08-.71 1.17.08 1.78 1.2 1.78 1.2 1.04 1.79 2.74 1.27 3.41.97.1-.76.41-1.27.74-1.56-2.55-.29-5.24-1.28-5.24-5.69 0-1.26.45-2.29 1.19-3.1-.12-.29-.52-1.46.11-3.05 0 0 .97-.31 3.18 1.18a11 11 0 0 1 5.79 0c2.21-1.49 3.18-1.18 3.18-1.18.63 1.59.23 2.76.11 3.05.74.81 1.19 1.84 1.19 3.1 0 4.42-2.69 5.4-5.25 5.68.42.36.79 1.08.79 2.18v3.23c0 .31.21.68.8.56A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5Z" />
+    </svg>
+  );
+}
+
+/* 手机轮廓 —— mobile only 徽章与「请在手机端查看」提示共用 */
+function PhoneIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={2}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <rect width="14" height="20" x="5" y="2" rx="2" ry="2" />
+      <path d="M12 18h.01" />
     </svg>
   );
 }

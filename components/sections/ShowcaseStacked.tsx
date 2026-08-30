@@ -10,14 +10,15 @@ import { cn, withBasePath } from '@/lib/utils';
  * 位置：长文中「统信开篇」段落之后（最初位置）
  *
  * 布局：
- *   ┌──────────────────────────────────────────┐
- *   │      当前轮到的大图（通栏 16:9）          │
- *   ├────────────┬────────────┬───────────────┤
- *   │   小图 1    │   小图 2   │    小图 3     │
- *   └────────────┴────────────┴───────────────┘
+ *   ┌──────────────────────────────────────────────┐
+ *   │      当前轮到的大图（通栏 16:9）              │
+ *   ├─────────┬─────────┬─────────┬────────────────┤
+ *   │  小图 1 │  小图 2 │  小图 3 │     小图 4      │
+ *   └─────────┴─────────┴─────────┴────────────────┘
  *
- * - 5 张年度 KV 轮播，但版式保持 1 大 + 3 小（不扩成 1 大 4 小）：
- *   小图只显示轮换顺序中当前大图之后的 3 张
+ * - 5 张年度 KV 轮播：md+ 版式 1 大 + 4 小（#229 统一宽后一行可容 4 张，
+ *   全部 5 张同屏）；手机仍 1 大 + 3 小（第 4 张 max-md 隐藏）
+ * - 小图 = 轮换顺序中当前大图之后的其余 4 张
  * - 每 4s 自动轮换：下一张成为大图，其余按序排小图
  * - hover / lightbox 打开 / prefers-reduced-motion 时暂停轮换
  * - 点击任意卡片 → lightbox 查看完整大图（点击任意处 / Esc 关闭）
@@ -94,8 +95,8 @@ export function ShowcaseStacked() {
   }, [openIndex]);
 
   const featured = tiles[active]!;
-  /* 保持 1 大 + 3 小：5 张轮播，小图只取大图之后顺时针的 3 张 */
-  const smalls = [1, 2, 3].map((k) => {
+  /* 1 大 + 4 小（md+）：小图取大图之后顺时针的其余 4 张；手机只露前 3 张 */
+  const smalls = [1, 2, 3, 4].map((k) => {
     const i = (active + k) % tiles.length;
     return { tile: tiles[i]!, i };
   });
@@ -118,16 +119,16 @@ export function ShowcaseStacked() {
         <Tile tile={featured} variant="banner" />
       </button>
 
-      {/* 下：3 小图（非当前大图的其余三张） */}
-      <div className="grid grid-cols-3 gap-3">
-        {smalls.map(({ tile, i }) => (
+      {/* 下：4 小图（md+ 一行 4 张；手机仍 3 张，第 4 张 max-md 隐藏） */}
+      <div className="grid grid-cols-3 gap-3 md:grid-cols-4">
+        {smalls.map(({ tile, i }, j) => (
           <button
             key={i}
             type="button"
             data-cursor="link"
             aria-label={`查看大图 — ${tile.title}`}
             onClick={() => setOpenIndex(i)}
-            className="block w-full text-left"
+            className={cn('block w-full text-left', j === 3 && 'max-md:hidden')}
           >
             <Tile tile={tile} variant="sub" />
           </button>
