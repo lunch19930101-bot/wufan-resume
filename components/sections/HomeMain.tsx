@@ -42,9 +42,10 @@ export function HomeMain() {
       <article className="space-y-[40px] pt-0 pb-[40px] md:pt-0 md:pb-16">
         {/* 1. 统信时期项目轮播 —— 横向滑动作品展示。
             PC 副本：手机端轮播已上移到 Hero 第一屏（#showcase 锚点在那边）。
-            #231 用户指定视频收窄：与 Hero 介绍文同宽 672px（lg/xl 生效），
-            卡宽 cqw 相对外框，收窄后整条等比缩小 */}
-        <div className="hidden max-w-[672px] scroll-mt-[104px] md:block">
+            #231 曾与 Hero 介绍文一起收到 672px；#232 用户反馈右侧大片空白怪，
+            定稿：视频恢复撑满容器（md 608 / lg 800 / xl 1024），仅介绍文保持
+            672px 阅读行宽（编辑式「文字窄、媒体宽」层次） */}
+        <div className="hidden scroll-mt-[104px] md:block">
           <ShowcaseCarousel />
         </div>
 
