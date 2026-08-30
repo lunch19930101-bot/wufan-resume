@@ -119,8 +119,8 @@ export function ShowcaseStacked() {
         <Tile tile={featured} variant="banner" />
       </button>
 
-      {/* 下：4 小图（md+ 一行 4 张；手机仍 3 张，第 4 张 max-md 隐藏） */}
-      <div className="grid grid-cols-3 gap-3 md:grid-cols-4">
+      {/* 下：4 小图 —— 全断点一行 4 张（#232 用户指定：手机也不要 3 张） */}
+      <div className="grid grid-cols-4 gap-3">
         {smalls.map(({ tile, i }, j) => (
           <button
             key={i}
@@ -128,7 +128,7 @@ export function ShowcaseStacked() {
             data-cursor="link"
             aria-label={`查看大图 — ${tile.title}`}
             onClick={() => setOpenIndex(i)}
-            className={cn('block w-full text-left', j === 3 && 'max-md:hidden')}
+            className="block w-full text-left"
           >
             <Tile tile={tile} variant="sub" />
           </button>

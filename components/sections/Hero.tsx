@@ -51,10 +51,10 @@ export function Hero() {
       </div>
 
       {/* 个人介绍 —— atom63 开场长文（按 \n\n 分段，**词** 渲染为加粗强调）
-          #231 用户指定介绍文收窄：lg/xl 不再撑满容器，收到 672px（与下方
-          PC 视频轮播同宽，左缘对齐全站内容）；md 及以下容器本就更窄不受影响 */}
+          #232 定稿（用户指定）：宽度与下方视频/图片一样撑满容器
+          （md 608 / lg 800 / xl 1024），撤销 #231 的 672px 收窄 */}
       {site.intro ? (
-        <div className="mt-[40px] max-w-[672px] space-y-[24px] text-essay-p leading-[27.625px] text-text-secondary md:mt-6 md:space-y-4">
+        <div className="mt-[40px] space-y-[24px] text-essay-p leading-[27.625px] text-text-secondary md:mt-6 md:space-y-4">
           {site.intro.split('\n\n').map((para, i) => (
             <p key={i}>{renderBold(para)}</p>
           ))}
