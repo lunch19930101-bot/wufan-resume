@@ -100,7 +100,9 @@ export function Footer() {
               <a
                 href={`mailto:${site.email}`}
                 data-cursor="link"
-                className="text-lg lowercase text-text-secondary transition-colors duration-micro hover:text-text-primary"
+                /* #Phase1 M2 —— 正文文字链接：下划线从左生长（globals.css .link-grow）。
+                   按 M2 语法文字链接只走下划线，不再叠加颜色 hover */
+                className="link-grow text-lg lowercase text-text-secondary"
               >
                 {site.email}
               </a>
@@ -110,7 +112,7 @@ export function Footer() {
                 <a
                   href={`tel:${site.phone}`}
                   data-cursor="link"
-                  className="text-lg lowercase tabular-nums text-text-secondary transition-colors duration-micro hover:text-text-primary"
+                  className="link-grow text-lg lowercase tabular-nums text-text-secondary"
                 >
                   {site.phone}
                 </a>

@@ -72,7 +72,9 @@ export function Nav() {
               <Link
                 href="/"
                 aria-label={`${site.nameEn} home`}
-                className="shrink-0 text-text-primary outline-none transition-opacity duration-micro hover:opacity-70"
+                /* #Phase1 C4 —— 去掉无条件 outline-none（会吞掉键盘 focus 指示），
+                    全局 :focus-visible outline 接管 */
+                className="shrink-0 text-text-primary transition-opacity duration-micro hover:opacity-70"
               >
                 {site.nameEn}
                 <span className="text-[var(--a63-brand-current)]">.</span>

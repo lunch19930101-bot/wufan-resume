@@ -237,6 +237,52 @@ html:has(.live-resume) {
     overflow-x: hidden;
     overflow-x: clip;
     font-feature-settings: 'kern' 1, 'liga' 1, 'calt' 1;
+    /* #Phase1 T1/T2 —— 中文排版微观规则（方案 v2）：
+       text-autospace：汉字↔拉丁/数字之间自动 ~1/8em 光学空隙（Chromium 实现，
+       其余内核不识别自动降级为现状，纯渐进增强）；
+       line-break: strict —— 严格执行避头尾；
+       hanging-punctuation —— 首尾标点悬挂（Safari 生效，同样可安全降级） */
+    text-autospace: ideograph-alpha ideograph-numeric;
+    line-break: strict;
+    hanging-punctuation: first last;
+  }
+
+  /* ============ #Phase1 视觉升级方案 v2 · 排版/动效语法速赢 ============ */
+
+  /* M2 —— 文字链接 hover 语法：下划线从左生长（320ms out-expo）。
+     只用于正文语境的文字链接（Footer 邮箱/电话等）；
+     chrome 类（导航/按钮/卡片）维持颜色过渡，两种语法不混用。 */
+  .link-grow {
+    padding-bottom: 2px;
+    background-image: linear-gradient(
+      var(--color-accent-lime),
+      var(--color-accent-lime)
+    );
+    background-repeat: no-repeat;
+    background-position: 0 100%;
+    background-size: 0% 1px;
+    transition: background-size 320ms var(--ease-out-expo);
+  }
+  .link-grow:hover {
+    background-size: 100% 1px;
+  }
+
+  /* C4 —— 统一 focus 指示：无自带 ring 的元素（文字链接/Nav logo 等）
+     键盘聚焦时获得 accent 描边；Button 等自带 focus-visible:ring 的组件
+     已声明 outline-none，不受影响。 */
+  :focus-visible {
+    outline: 2px solid var(--color-accent-lime);
+    outline-offset: 3px;
+  }
+
+  /* M4 —— 触摸反馈语法：按压瞬间 0.97 陷落。仅触屏（hover:none）启用，
+     PC 悬停不受影响；用独立 scale 属性而非 transform，
+     不与元素已有的 translate 工具类冲突。 */
+  @media (hover: none) {
+    a:active,
+    button:active {
+      scale: 0.97;
+    }
   }
 
   /* atom63.io 全高左右虚线 —— 版心容器视觉导引（#228 统一宽，与容器同档媒体查询联动）
