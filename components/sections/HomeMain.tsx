@@ -2,7 +2,7 @@
 
 import { type ReactNode } from 'react';
 
-import { withBasePath } from '@/lib/utils';
+import { cn, withBasePath } from '@/lib/utils';
 import { ShowcaseCarousel } from '@/components/sections/ShowcaseCarousel';
 import { ShowcaseStacked } from '@/components/sections/ShowcaseStacked';
 import { AIProjectEntrance } from '@/components/sections/AIProjectEntrance';
@@ -49,16 +49,15 @@ export function HomeMain() {
           <ShowcaseCarousel />
         </div>
 
-        {/* 2. 统信开篇 */}
+        {/* 2. 统信开篇（#237 加粗收敛：每段 ≤2 处成果词，工具名走 Tool 亮色不加粗） */}
         <div id="uniontech" className="scroll-mt-[calc(104px+env(safe-area-inset-top,0px))]">
           <EssayParagraph>
             曾在
             <Favicon src="/images/clients/uniontech.svg" alt="统信软件" />
             <Strong> 统信软件</Strong>
             担任网页设计组组长与资深
-            UI 设计师（武汉，2021–2025）——负责公司官网设计与改版、主页面风格、
-            <Strong>3D 视频制作</Strong>、交互梳理，以及<Strong>后台管理端</Strong>界面与
-            <Strong>组件库</Strong>建设。
+            UI 设计师（武汉，2021–2025）——负责公司官网设计与改版、主页面风格、3D
+            视频制作、交互梳理，以及后台管理端界面与<Strong>组件库</Strong>建设。
           </EssayParagraph>
         </div>
 
@@ -68,16 +67,16 @@ export function HomeMain() {
         </div>
 
         <EssayParagraph>
-          <Strong>统信官网改版</Strong>——负责官网整体<Strong>视觉体系重构</Strong>与落地执行，覆盖全站页面与模块；建立覆盖全站的<Strong>组件库</Strong>，输出色彩、字体、图标、组件、模板等规范。C 端与 B 端视觉统一，整体<Strong>布局自适应</Strong>保证各设备阅读性；期间自学 <Strong>C4D</Strong> 投入实战，首页头图以 <Strong>3D 动态效果</Strong>呈现。项目六个月完成上线，设计体系支持后续产品线持续扩展。
+          <Strong>统信官网改版</Strong>——负责官网整体<Strong>视觉体系重构</Strong>与落地执行，覆盖全站页面与模块；建立覆盖全站的组件库，输出色彩、字体、图标、组件、模板等规范。C 端与 B 端视觉统一，整体布局自适应保证各设备阅读性；期间自学 <Tool>C4D</Tool> 投入实战，首页头图以 3D 动态效果呈现。项目六个月完成上线，设计体系支持后续产品线持续扩展。
         </EssayParagraph>
 
         <EssayParagraph>
-          <Strong>统信生态大会</Strong>——公司年度最高规格的品牌活动。把 2020–2024 五届大会物料统一进<Strong>同一视觉体系</Strong>：抽取五届主视觉的共同基因作为基线，年份主题作为变量嵌入，既保留每届特征、又让品牌识别一以贯之。大会专题与官网改版<Strong>互为延续</Strong>，按访问年份自动匹配对应物料的视觉样式。
+          <Strong>统信生态大会</Strong>——公司年度最高规格的品牌活动。把 2020–2024 五届大会物料统一进<Strong>同一视觉体系</Strong>：抽取五届主视觉的共同基因作为基线，年份主题作为变量嵌入，既保留每届特征、又让品牌识别一以贯之。大会专题与官网改版互为延续，按访问年份自动匹配对应物料的视觉样式。
         </EssayParagraph>
 
         {/* 4. 设计系统 / 组件库工程化 */}
         <EssayParagraph>
-          在视觉之外，我同时负责<Strong>设计系统</Strong>的工程化落地——与开发团队定制<Strong>设计语言</Strong>、开发周期、<Strong>组件库代码化</Strong>，让<Strong>设计还原走查</Strong>与后续迭代的效率得到极大提升。同时把 <Strong>AI 协作</Strong>引入工作流——从 <Strong>MJ、豆包、即梦</Strong>等 AI 设计工具起步，到现在用 <Strong>Claude Code</Strong> 打通设计与开发的衔接，效率一路提升。
+          在视觉之外，我同时负责<Strong>设计系统</Strong>的工程化落地——与开发团队定制设计语言、开发周期、<Strong>组件库代码化</Strong>，让设计还原走查与后续迭代的效率得到极大提升。同时把 AI 协作引入工作流——从 <Tool>MJ、豆包、即梦</Tool>等 AI 设计工具起步，到现在用 <Tool>Claude Code</Tool> 打通设计与开发的衔接，效率一路提升。
         </EssayParagraph>
 
         {/* 5. 平安银行时代 */}
@@ -88,20 +87,19 @@ export function HomeMain() {
             <Strong> 平安银行</Strong>
             度过了四年（深圳，2016–2020）——担任设计组组长与高级
             UI 设计师。从口袋银行家
-            UI、主页面风格优化，到<Strong>数字化网点 PC 端</Strong>、<Strong>组件库</Strong>
-            建设，这段经历塑造了我对 <Strong>B 端复杂业务系统</Strong>的理解。
+            UI、主页面风格优化，到数字化网点 PC
+            端、组件库建设，这段经历塑造了我对 <Strong>B 端复杂业务系统</Strong>的理解。
           </EssayParagraph>
         </div>
 
-        {/* 6. 平安时期代表作（精简——上一段工作经历） */}
+        {/* 6. 平安时期代表作（#237：列表段零加粗——项目名走 Tool 亮色分层） */}
         <EssayParagraph>
-          平安时期的代表作——<Strong>网点服务小程序</Strong>把传统门店业务转为清晰、易操作的线上预约办理流程；<Strong>Pocket Banker 2.0</Strong>围绕「高效、简单、数据可视化」重塑；<Strong>传送门</Strong>以悬浮窗加自定义常用入口，解决角色权限切换的高频痛点；<Strong>后台管理系统</Strong>汇集全行大数据，为网点门店、中台数据、人才库三大模块做视觉升级并建立统一组件库。
+          平安时期的代表作——<Tool>网点服务小程序</Tool>把传统门店业务转为清晰、易操作的线上预约办理流程；<Tool>Pocket Banker 2.0</Tool>围绕「高效、简单、数据可视化」重塑；<Tool>传送门</Tool>以悬浮窗加自定义常用入口，解决角色权限切换的高频痛点；<Tool>后台管理系统</Tool>汇集全行大数据，为网点门店、中台数据、人才库三大模块做视觉升级并建立统一组件库。
         </EssayParagraph>
 
-        {/* 7. AI 工具栈 */}
+        {/* 7. AI 工具栈（#237：纯列举段零加粗，全部 Tool 亮色） */}
         <EssayParagraph>
-          精通 <Strong>Figma、Sketch、C4D、Ps</Strong>
-          等设计软件，以及各平台 AI 软件（<Strong>Claude Code、ChatGPT、Codex、HBuilderX</Strong>）等。能够独立完成<Strong>平面视觉设计</Strong>、移动端以及 PC 端 <Strong>UI/UX 设计</Strong>、<Strong>3D 设计</Strong>、<Strong>后台系统设计</Strong>。
+          精通 <Tool>Figma、Sketch、C4D、Ps</Tool> 等设计软件，以及各平台 AI 软件（<Tool>Claude Code、ChatGPT、Codex、HBuilderX</Tool>）等。能够独立完成平面视觉设计、移动端以及 PC 端 UI/UX 设计、3D 设计、后台系统设计。
         </EssayParagraph>
 
         {/* 8. AI 协作三入口 —— atom63 "I build in public" 1:1 复刻 */}
@@ -111,7 +109,7 @@ export function HomeMain() {
 
         {/* 9. 团队管理 */}
         <EssayParagraph>
-          <Strong>六年团队管理</Strong>经验——负责 UI 团队的<Strong>主视觉提升</Strong>、工作安排与<Strong>团队文化建设</Strong>。管理之外，我始终守在视觉一线——工具的每一次迁移都是一条学习曲线：从 <Strong>PS、Sketch</Strong> 到 <Strong>Figma</Strong>，再到 AI 工具的持续跟进，从<Strong>豆包、即梦</Strong>到 <Strong>Gemini</Strong>，再到如今日常使用的 <Strong>ChatGPT 与 Claude Code</Strong>。良好的设计能力与沟通协调能力，抗压能力强，持续学习，保持创新。
+          <Strong>六年团队管理</Strong>经验——负责 UI 团队的主视觉提升、工作安排与团队文化建设。管理之外，我始终守在视觉一线——工具的每一次迁移都是一条学习曲线：从 <Tool>PS、Sketch</Tool> 到 <Tool>Figma</Tool>，再到 AI 工具的持续跟进，从<Tool>豆包、即梦</Tool>到 <Tool>Gemini</Tool>，再到如今日常使用的 <Tool>ChatGPT 与 Claude Code</Tool>。良好的设计能力与沟通协调能力，抗压能力强，持续学习，保持创新。
         </EssayParagraph>
 
         {/* 10. 项目合集 Timeline —— 原页面底部上移至此 */}
@@ -119,24 +117,48 @@ export function HomeMain() {
           <ProjectShowcase />
         </div>
 
-        {/* 11. 收尾 —— 求职状态 + 简历直达（#235 走查：核心转化动作不能只藏在 Menu 里） */}
-        <EssayParagraph>
-          我目前在武汉市，求职中随时可入职。
-          <a
-            href={withBasePath('/pdf-viewer/')}
-            data-cursor="link"
-            className="ml-2 text-text-primary underline decoration-text-tertiary underline-offset-[6px] transition-colors hover:decoration-text-primary"
-          >
-            查看简历 / 作品集 PDF
-          </a>
-          <a
-            href={withBasePath('/resumes/wufan-resume.docx')}
-            data-cursor="link"
-            className="ml-3 text-text-primary underline decoration-text-tertiary underline-offset-[6px] transition-colors hover:decoration-text-primary"
-          >
-            下载 Word 版
-          </a>
-        </EssayParagraph>
+        {/* 11. 收尾 —— 求职状态 + 简历直达（#237 走查：核心转化按钮化，
+            主次分明 + OPEN TO WORK 呼吸状态灯；移动端 48px 触控档全宽堆叠） */}
+        <div className="flex flex-col gap-5">
+          <EssayParagraph>我目前在武汉市，求职中随时可入职。</EssayParagraph>
+          <p className="flex items-center gap-2.5 font-mono text-[11px] uppercase tracking-wider text-text-secondary">
+            <span
+              aria-hidden
+              className="dot-breathe dot-ping size-[6px] shrink-0 rounded-full bg-accent-lime text-accent-lime"
+            />
+            Open to work · 随时入职
+          </p>
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <a
+              href={withBasePath('/pdf-viewer/')}
+              data-cursor="link"
+              className={cn(
+                'inline-flex h-[48px] items-center justify-center gap-2 rounded-[var(--control-radius)]',
+                'bg-text-primary px-6 text-sm font-[550] tracking-tight text-text-inverse',
+                'transition-all duration-micro ease-out-quart',
+                'hover:-translate-y-0.5 hover:shadow-[var(--shadow-elev-2)]',
+                'motion-reduce:transition-none motion-reduce:hover:translate-y-0',
+              )}
+            >
+              <DocumentTextIcon className="size-4" />
+              查看简历 / 作品集 PDF
+            </a>
+            <a
+              href={withBasePath('/resumes/wufan-resume.docx')}
+              data-cursor="link"
+              className={cn(
+                'inline-flex h-[48px] items-center justify-center gap-2 rounded-[var(--control-radius)]',
+                'border border-border-default bg-bg-elevated px-6 text-sm text-text-primary',
+                'transition-all duration-micro ease-out-quart',
+                'hover:-translate-y-0.5 hover:border-border-strong hover:shadow-[var(--shadow-elev-1)]',
+                'motion-reduce:transition-none motion-reduce:hover:translate-y-0',
+              )}
+            >
+              <DownloadIcon className="size-4" />
+              下载 Word 版
+            </a>
+          </div>
+        </div>
       </article>
     </main>
   );
@@ -164,6 +186,54 @@ function EssayParagraph({ children }: { children: ReactNode }) {
  * ============================================================ */
 function Strong({ children }: { children: ReactNode }) {
   return <span className="font-[550] text-text-primary">{children}</span>;
+}
+
+/* ============================================================
+ * Tool —— #237 加粗收敛引入：工具名 / 项目名的中性强调。
+ *   亮色但不加粗（颜色分层替代字重分层），把 Strong 留给
+ *   每段 ≤2 处真正的成果词；纯列举段（工具栈、代表作清单）
+ *   零 Strong、全部 Tool。
+ * ============================================================ */
+function Tool({ children }: { children: ReactNode }) {
+  return <span className="text-text-primary/90">{children}</span>;
+}
+
+/* ============================================================
+ * Icons —— 简历 CTA 按钮（#237 按钮化）
+ * ============================================================ */
+function DocumentTextIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.75}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8Z" />
+      <path d="M14 2v6h6M9 13h6M9 17h4" />
+    </svg>
+  );
+}
+
+function DownloadIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth={1.75}
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      aria-hidden="true"
+      className={className}
+    >
+      <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3" />
+    </svg>
+  );
 }
 
 /* ============================================================

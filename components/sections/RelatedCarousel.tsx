@@ -23,7 +23,7 @@ export function RelatedCarousel({ projects }: { projects: Project[] }) {
     const el = scrollRef.current;
     if (!el) return;
     const firstCard = el.querySelector<HTMLElement>('[data-card]');
-    const cardWidth = firstCard ? firstCard.offsetWidth + 8 : 280;
+    const cardWidth = firstCard ? firstCard.offsetWidth + 12 : 280;
     el.scrollBy({ left: dir * cardWidth, behavior: 'smooth' });
   };
 
@@ -79,11 +79,11 @@ export function RelatedCarousel({ projects }: { projects: Project[] }) {
           <ChevronRightIcon className="size-[14px]" />
         </button>
 
-        {/* 横向滑动轨道 */}
+        {/* 横向滑动轨道 —— #237：gap 8→12px + rail-fade 两端渐隐 */}
         <div
           ref={scrollRef}
           className={cn(
-            'hide-scrollbar flex gap-2',
+            'hide-scrollbar rail-fade flex gap-3',
             'overflow-x-auto scroll-smooth',
             'py-1',
           )}

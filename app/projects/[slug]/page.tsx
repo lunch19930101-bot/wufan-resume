@@ -9,7 +9,7 @@ import {
   type ProjectType,
 } from '@/lib/projects';
 import { site } from '@/lib/config';
-import { cn } from '@/lib/utils';
+import { cn, withBasePath } from '@/lib/utils';
 import { ProjectGallery } from '@/components/sections/ProjectGallery';
 import { RelatedCarousel } from '@/components/sections/RelatedCarousel';
 
@@ -59,37 +59,38 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </h1>
         <p className="text-pretty text-base text-text-secondary">{project.description}</p>
 
-        {/* Meta row —— #走查修复：每个「· + 内容」合并为单个 nowrap flex 单元
-            （内距 gap-x-3 与外距同节奏），折行只发生在单元之间，
-            避免第二行以悬空的「·」开头 */}
-        <div className="mt-2 flex flex-wrap items-center gap-x-3 gap-y-1 font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
-          <span className="tabular-nums">{project.year}</span>
+        {/* Meta —— #237 走查修复：改为「标签在上 / 值在下」的定义式单元，
+            单元之间换行（值内部不再断出悬空的「·」；375px 两列即齐） */}
+        <div className="mt-4 flex flex-wrap gap-x-[40px] gap-y-3">
+          <MetaItem label="年份" value={project.year} />
           {project.type && (
-            <span className="inline-flex items-baseline gap-x-3 whitespace-nowrap">
-              <span className="opacity-50">·</span>
-              <span>{project.type}</span>
-            </span>
+            <MetaItem
+              label="类型"
+              value={TYPE_LABEL[project.type as ProjectType] ?? project.type}
+            />
           )}
-          {project.client && (
-            <span className="inline-flex items-baseline gap-x-3 whitespace-nowrap">
-              <span className="opacity-50">·</span>
-              <span>Client · {project.client}</span>
-            </span>
-          )}
-          {project.role && (
-            <span className="inline-flex items-baseline gap-x-3 whitespace-nowrap">
-              <span className="opacity-50">·</span>
-              <span>Role · {project.role}</span>
-            </span>
-          )}
+          {project.client && <MetaItem label="客户" value={project.client} />}
+          {project.role && <MetaItem label="角色" value={project.role} />}
           {project.featured && (
-            <span className="inline-flex items-baseline gap-x-3 whitespace-nowrap">
-              <span className="opacity-50">·</span>
-              <span className="text-accent-lime">★ Featured</span>
-            </span>
+            <MetaItem label="状态" value="★ Featured" accent />
           )}
         </div>
       </header>
+
+      {/* 封面横条 —— #237 走查：作品集首屏要有作品（元信息后、正文前，
+          0 滚动即可感知项目气质；无封面项目自动跳过） */}
+      {project.cover && (
+        <div className="pb-[32px]">
+          <div className="tile-fade overflow-hidden rounded-[var(--showcase-radius)] border border-border-subtle">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img
+              src={withBasePath(project.cover)}
+              alt={`${project.title} 封面`}
+              className="aspect-[16/9] w-full object-cover"
+            />
+          </div>
+        </div>
+      )}
 
       {/* 01 · 项目背景 */}
       <DetailSection index={1} title="项目背景" label="Background">
@@ -154,14 +155,15 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </section>
       )}
 
-      {/* 底部联系 */}
+      {/* 底部联系 —— #237：邮箱改等宽小写（与页脚 /Contact 同语言，
+          消除衬线大字号邮箱与工程图纸气质的冲突） */}
       <section className="border-t border-border-subtle pt-[32px]">
         <p className="text-essay-p text-text-secondary">
           想要了解更多这个项目的过程，或者聊类似的工作？写信到{' '}
           <a
             href={`mailto:${site.email}`}
             data-cursor="link"
-            className="text-text-primary underline decoration-border-strong decoration-1 underline-offset-4 transition-colors duration-micro ease-out-quart hover:decoration-accent-lime"
+            className="link-grow font-mono text-[15px] lowercase text-text-secondary"
           >
             {site.email}
           </a>
@@ -169,6 +171,36 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </p>
       </section>
     </article>
+  );
+}
+
+/* ============================================================
+ * MetaItem —— 元信息定义式单元（#237：标签在上、值在下；
+ * 值整体 nowrap 于单元内，换行只发生在单元之间）
+ * ============================================================ */
+function MetaItem({
+  label,
+  value,
+  accent,
+}: {
+  label: string;
+  value: string;
+  accent?: boolean;
+}) {
+  return (
+    <div className="flex flex-col gap-[6px]">
+      <span className="font-mono text-[10px] uppercase tracking-wider text-text-tertiary opacity-70">
+        {label}
+      </span>
+      <span
+        className={cn(
+          'font-mono text-[12px] tabular-nums',
+          accent ? 'text-accent-lime' : 'text-text-secondary',
+        )}
+      >
+        {value}
+      </span>
+    </div>
   );
 }
 

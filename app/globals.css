@@ -560,6 +560,64 @@ html:has(.live-resume) {
   }
 }
 
+/* ============ #237 视觉提升 —— 状态呼吸 / 滑轨渐隐 ============ */
+
+/* 状态点呼吸（LIVE 徽标 / OPEN TO WORK 状态灯）—— 透明度缓脉冲 */
+.dot-breathe {
+  animation: dot-breathe 2.4s ease-in-out infinite;
+}
+@keyframes dot-breathe {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}
+
+/* 状态点扩散环（配合 .dot-breathe 叠用）—— currentColor 向外晕开一圈 */
+.dot-ping {
+  animation: dot-ping 2.4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+@keyframes dot-ping {
+  0% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, currentColor 40%, transparent);
+  }
+  70% {
+    box-shadow: 0 0 0 7px transparent;
+  }
+  100% {
+    box-shadow: 0 0 0 0 transparent;
+  }
+}
+
+/* 横滑轨道两端渐隐 —— 暗示「这排卡片可以继续滑」，
+   同时消掉第三张卡被右缘硬裁切的灰边（左缘 20px / 右缘 44px） */
+.rail-fade {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 20px,
+    #000 calc(100% - 44px),
+    transparent 100%
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent 0,
+    #000 20px,
+    #000 calc(100% - 44px),
+    transparent 100%
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dot-breathe,
+  .dot-ping {
+    animation: none;
+  }
+}
+
 /* atom63 DotMarquee —— 点阵跑马灯（LED 板，a63-DotMarquee 逆向 1:1）
    点阵字由点亮/未点亮的小方块组成（非字体、非棋盘底纹）；
    本站取 pitch 7px / 点 3.5px（用户指定「稍微小一点点」） */

@@ -403,7 +403,9 @@ function MiniCard({ project }: { project: AIProject }) {
         'col-span-1 flex flex-col gap-3 p-4 md:p-5',
         'rounded-[var(--showcase-radius)]',
         'border border-border-subtle bg-bg-elevated',
-        'transition-colors duration-micro ease-out-quart',
+        // #237 hover 势能 —— 卡内按钮聚焦时卡框同步亮起
+        'transition-[border-color,box-shadow] duration-micro ease-out-quart',
+        'hover:border-border-default hover:shadow-[var(--shadow-elev-1)]',
       )}
     >
       {/* 头部：index + status */}
@@ -466,7 +468,7 @@ function StatusPill({ status }: { status: 'live' | 'soon' }) {
           'border border-accent-lime/30 bg-accent-lime/10 text-accent-lime',
         )}
       >
-        <span className="size-1 rounded-full bg-accent-lime" />
+        <span className="dot-breathe size-1 rounded-full bg-accent-lime" />
         live
       </span>
     );

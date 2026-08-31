@@ -36,7 +36,7 @@ export function ProjectShowcase() {
     const el = scrollRef.current;
     if (!el) return;
     const firstCard = el.querySelector<HTMLElement>('[data-card]');
-    const cardWidth = firstCard ? firstCard.offsetWidth + 8 : 280;
+    const cardWidth = firstCard ? firstCard.offsetWidth + 12 : 280;
     el.scrollBy({ left: dir * cardWidth, behavior: 'smooth' });
   };
 
@@ -110,7 +110,7 @@ export function ProjectShowcase() {
           <div
             ref={scrollRef}
             className={cn(
-              'hide-scrollbar flex gap-2',
+              'hide-scrollbar rail-fade flex gap-3',
               'overflow-x-auto scroll-smooth',
               'py-1',
             )}
@@ -149,6 +149,10 @@ export function WorkCard({ project }: { project: Project }) {
         //   xl 1440 屏：(1088 - 40) / 2.5 ≈ 419px / 卡片
         'w-[calc((100cqw-2.5rem)/2.5)]',
         'aspect-[3/4]',
+        // #237 hover 势能 —— 卡片层浮起 3px + 投影（内部图缩放原本就有）
+        'transition-all duration-[200ms] ease-out-quart',
+        'hover:-translate-y-[3px] hover:shadow-[var(--shadow-elev-3)]',
+        'motion-reduce:transition-none motion-reduce:hover:translate-y-0',
       )}
     >
       {/* INNER 缩放层 */}
@@ -189,23 +193,24 @@ export function WorkCard({ project }: { project: Project }) {
         aria-hidden
       />
 
-      {/* 右上角 icon badge —— 圆形玻璃感；箭头颜色随封面深浅（深白 / 浅黑） */}
+      {/* 右上角 icon badge —— 圆形玻璃感；箭头颜色随封面深浅（深白 / 浅黑）
+          #237：16→28px + 箭头 8→14px（远低于触控标准的装饰小角标放大到可识别） */}
       <div
         className={cn(
-          'absolute right-3 top-3 z-10 flex size-4 items-center justify-center rounded-full',
+          'absolute right-3 top-3 z-10 flex size-[28px] items-center justify-center rounded-full',
           'bg-background/10 backdrop-blur-sm',
         )}
         aria-hidden
       >
         <ExternalArrowIcon
           className={cn(
-            'size-2 opacity-70 transition-opacity duration-micro ease-out-quart group-hover:opacity-100',
+            'size-3.5 opacity-70 transition-opacity duration-micro ease-out-quart group-hover:opacity-100',
             project.coverTone === 'light' ? 'text-black' : 'text-white',
           )}
         />
       </div>
 
-      {/* 底部 caption —— 不放介绍文字（详情页已足够），只留年份 + 标题 + 类型 */}
+      {/* 底部 caption —— 年份 + 标题 + 一句话价值主张（#237）+ 类型 */}
       <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-1 p-3.5 pt-10">
         <span className="font-mono text-sm tracking-wide text-white/70 tabular-nums">
           {project.year}
@@ -213,6 +218,9 @@ export function WorkCard({ project }: { project: Project }) {
         <h3 className="line-clamp-2 text-balance text-base leading-snug font-[550] text-white">
           {project.title}
         </h3>
+        <p className="line-clamp-1 text-[11px] leading-[1.6] text-white/55">
+          {project.description}
+        </p>
         {project.type && (
           <span className="mt-1 inline-flex w-fit items-center rounded-full border border-white/20 bg-white/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-white/75">
             {project.type}
