@@ -343,7 +343,7 @@ export function Footer() {
             <p className="font-mono text-mono-micro tracking-wide text-text-tertiary">
               {cnHour === null
                 ? '···'
-                : `${isDay ? '白天 · 06–18' : '夜间 · 18–06'} — ${greet(cnHour)}`}
+                : `${isDay ? '白天 · 06:00–18:00' : '夜间 · 18:00–06:00'} — ${greet(cnHour)}`}
             </p>
           </div>
         </div>
@@ -459,18 +459,20 @@ function greet(h: number): string {
   return '晚安 · 今天也认真收了尾';
 }
 
-/** 天气图标贴片 —— 花瓣网切图素材（public/weather/*.png，透明底 + CSS 投影分离）。
- *  按 WMO 分组 + 昼夜取图；素材里没有纯「阴天」图标，阴天复用 太阳云/月亮云。
- *  ?v=2 —— v2 去黑底换透明底后强制刷缓存（v1 是深色圆角贴片） */
+/** 天气图标贴片 —— v3 手绘 SVG 渲染的 144px 方形透明 PNG（public/weather/*.png，
+ *  仿花瓣参考的软渐变无描边风格；方形画布天然不拉伸，alpha 出图无黑边）。
+ *  按 WMO 分组 + 昼夜取图；阴天有专属双云图标。
+ *  ?v=3 —— v3 全套重绘后强制刷缓存（v2 花瓣切图有拉伸与黑边） */
 function weatherTileSrc(code: number, isDay: boolean): string {
   const g = wmoGroup(code);
   const dn = isDay ? 'day' : 'night';
-  if (g === 'clear') return withBasePath(`/weather/clear-${dn}.png?v=2`);
-  if (g === 'partly' || g === 'cloud') return withBasePath(`/weather/partly-${dn}.png?v=2`);
-  if (g === 'fog') return withBasePath('/weather/fog.png?v=2');
-  if (g === 'rain') return withBasePath(`/weather/rain-${dn}.png?v=2`);
-  if (g === 'snow') return withBasePath(`/weather/snow-${dn}.png?v=2`);
-  return withBasePath(`/weather/storm-${dn}.png?v=2`);
+  if (g === 'clear') return withBasePath(`/weather/clear-${dn}.png?v=3`);
+  if (g === 'partly') return withBasePath(`/weather/partly-${dn}.png?v=3`);
+  if (g === 'cloud') return withBasePath('/weather/cloud.png?v=3');
+  if (g === 'fog') return withBasePath('/weather/fog.png?v=3');
+  if (g === 'rain') return withBasePath(`/weather/rain-${dn}.png?v=3`);
+  if (g === 'snow') return withBasePath(`/weather/snow-${dn}.png?v=3`);
+  return withBasePath(`/weather/storm-${dn}.png?v=3`);
 }
 
 /** 看板底色 —— 当前天气 → 浅色径向渐变色（rgba 供 boardBg 拼接）。
