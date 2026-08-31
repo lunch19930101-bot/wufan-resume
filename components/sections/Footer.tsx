@@ -157,6 +157,18 @@ export function Footer() {
      时钟/看板/问候条共用同一状态，三处联动） */
   const isDay = cnHour !== null && cnHour >= 6 && cnHour < 18;
 
+  /* 看板底色 —— 随实况天气换浅色径向渐变（右上，贴片落点处的光晕）；
+     拿不到天气时退回 #237 昼夜暖/冷光，看板永不空场 */
+  const boardBg = (() => {
+    if (!weather) {
+      return isDay
+        ? 'radial-gradient(120% 100% at 100% 0%, rgba(255,190,90,0.05) 0%, rgba(255,190,90,0) 55%)'
+        : 'radial-gradient(120% 100% at 100% 0%, rgba(96,140,255,0.08) 0%, rgba(96,140,255,0) 55%)';
+    }
+    const [r, g, b, a] = weatherTint(weather.code, weather.isDay);
+    return `radial-gradient(120% 100% at 100% 0%, rgba(${r},${g},${b},${a}) 0%, rgba(${r},${g},${b},0) 55%)`;
+  })();
+
   return (
     /* z-30 —— 必须低于 Nav (z-50) 与 MobileQuickNav (z-40)：手机滚到底时
        footer 内容会滚到 fixed Nav 底下，footer 层级更高会盖住 Nav 的
@@ -236,25 +248,30 @@ export function Footer() {
           <div
             className="relative grid grid-cols-1 md:grid-cols-2"
             style={{
-              /* 昼夜色温联动 —— 白天右上淡暖光 / 夜间冷蓝辉（极低透明度，
-                 不破坏工程图纸气质，昼夜切换时可感知） */
-              backgroundImage: isDay
-                ? 'radial-gradient(120% 100% at 100% 0%, rgba(255,190,90,0.05) 0%, rgba(255,190,90,0) 55%)'
-                : 'radial-gradient(120% 100% at 100% 0%, rgba(96,140,255,0.08) 0%, rgba(96,140,255,0) 55%)',
+              /* 底色 = 当前天气的浅色渐变（boardBg）；天气元素纹理（雨丝/雪粒/
+                 光芒/星点/云雾/雷闪）由下方 .wx-fx 覆盖层叠加 */
+              backgroundImage: boardBg,
             }}
           >
+            {/* 天气元素纹理层 —— globals.css .wx-*，随实况切换，压在底色之上、
+                文字之下（两侧 cell 均 relative，DOM 顺序在其后） */}
+            {weather && (
+              <span aria-hidden className={cn('wx-fx', weatherFx(weather.code, weather.isDay))} />
+            )}
+
             {/* / 武汉 —— 天气看板（实时；右上角贴片图标随昼夜与天气现象切换） */}
             <div className="relative px-6 py-6">
               <p className="font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
                 / 武汉 · Wuhan
               </p>
               {weather && (
-                /* 花瓣切图贴片 —— 正好落在昼夜径向渐变的光晕处（右上角） */
+                /* 花瓣切图贴片（透明底）—— 落在天气光晕处；
+                    白云在浅底上靠 drop-shadow 做分离 */
                 <img
                   src={weatherTileSrc(weather.code, weather.isDay)}
                   alt=""
                   aria-hidden
-                  className="absolute right-6 top-6 size-[48px]"
+                  className="absolute right-6 top-6 size-[48px] [filter:drop-shadow(0_2px_6px_rgba(41,37,32,0.3))]"
                 />
               )}
               <div className="mt-3 flex items-center gap-2.5">
@@ -276,8 +293,9 @@ export function Footer() {
             </div>
 
             {/* / Local —— 时间看板（HH∶MM∶SS，冒号 = 两个 3px 点）
-                #237 昼夜：标签行右侧挂 昼/夜 徽标，随时可见当前状态 */}
-            <div className="border-t border-dashed border-border-default px-6 py-6 md:border-t-0">
+                #237 昼夜：标签行右侧挂 昼/夜 徽标，随时可见当前状态
+                relative —— 抬到 .wx-fx 纹理层之上（文字不吃雨丝/雪粒） */}
+            <div className="relative border-t border-dashed border-border-default px-6 py-6 md:border-t-0">
               <div className="flex items-center justify-between gap-3">
                 <p className="font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
                   / Local
@@ -441,17 +459,43 @@ function greet(h: number): string {
   return '晚安 · 今天也认真收了尾';
 }
 
-/** 天气图标贴片 —— 花瓣网切图素材（public/weather/*.png，深底圆角贴片）。
- *  按 WMO 分组 + 昼夜取图；素材里没有纯「阴天」图标，阴天复用 太阳云/月亮云 */
+/** 天气图标贴片 —— 花瓣网切图素材（public/weather/*.png，透明底 + CSS 投影分离）。
+ *  按 WMO 分组 + 昼夜取图；素材里没有纯「阴天」图标，阴天复用 太阳云/月亮云。
+ *  ?v=2 —— v2 去黑底换透明底后强制刷缓存（v1 是深色圆角贴片） */
 function weatherTileSrc(code: number, isDay: boolean): string {
   const g = wmoGroup(code);
   const dn = isDay ? 'day' : 'night';
-  if (g === 'clear') return withBasePath(`/weather/clear-${dn}.png`);
-  if (g === 'partly' || g === 'cloud') return withBasePath(`/weather/partly-${dn}.png`);
-  if (g === 'fog') return withBasePath('/weather/fog.png');
-  if (g === 'rain') return withBasePath(`/weather/rain-${dn}.png`);
-  if (g === 'snow') return withBasePath(`/weather/snow-${dn}.png`);
-  return withBasePath(`/weather/storm-${dn}.png`);
+  if (g === 'clear') return withBasePath(`/weather/clear-${dn}.png?v=2`);
+  if (g === 'partly' || g === 'cloud') return withBasePath(`/weather/partly-${dn}.png?v=2`);
+  if (g === 'fog') return withBasePath('/weather/fog.png?v=2');
+  if (g === 'rain') return withBasePath(`/weather/rain-${dn}.png?v=2`);
+  if (g === 'snow') return withBasePath(`/weather/snow-${dn}.png?v=2`);
+  return withBasePath(`/weather/storm-${dn}.png?v=2`);
+}
+
+/** 看板底色 —— 当前天气 → 浅色径向渐变色（rgba 供 boardBg 拼接）。
+ *  晴/多云分昼夜暖冷两档；雾雨雪雷各用自己的色相，透明度都压在 0.1 上下 */
+function weatherTint(code: number, isDay: boolean): [number, number, number, number] {
+  const g = wmoGroup(code);
+  if (g === 'clear') return isDay ? [255, 187, 62, 0.1] : [96, 140, 255, 0.1];
+  if (g === 'partly') return isDay ? [255, 187, 62, 0.07] : [96, 140, 255, 0.07];
+  if (g === 'cloud') return [148, 160, 180, 0.09];
+  if (g === 'fog') return [148, 148, 148, 0.08];
+  if (g === 'rain') return [96, 150, 220, 0.1];
+  if (g === 'snow') return [150, 195, 255, 0.12];
+  return [126, 110, 220, 0.1]; // storm
+}
+
+/** 看板纹理层 —— 当前天气 → globals.css .wx-* 类（雨丝/雪粒/光芒/星点/云雾/雷闪） */
+function weatherFx(code: number, isDay: boolean): string {
+  const g = wmoGroup(code);
+  if (g === 'clear') return isDay ? 'wx-clear-day' : 'wx-clear-night';
+  if (g === 'partly') return isDay ? 'wx-partly-day' : 'wx-partly-night';
+  if (g === 'cloud') return 'wx-cloud';
+  if (g === 'fog') return 'wx-fog';
+  if (g === 'rain') return 'wx-rain';
+  if (g === 'snow') return 'wx-snow';
+  return 'wx-storm';
 }
 
 /** SignalLostIcon —— 离线占位（天线断线） */
