@@ -147,10 +147,13 @@ export function HomeMain() {
  *   17px / Geist 400 / #b4b4b4
  *   手机端行高放宽到 1.85（中文排版比拉丁需要更松的节奏，
  *   1.625 在小屏上显得密），md 起恢复 atom63 原版 1.625
+ *   #236 宽度走查：去掉 measure-max（44em=748px 限宽）——
+ *   首页文案与虚线/展示图片/Hero 同宽（608/800/1024），
+ *   限宽只保留在详情页 Prose（阅读场景不同）
  * ============================================================ */
 function EssayParagraph({ children }: { children: ReactNode }) {
   return (
-    <p className="text-pretty text-essay-p measure-max leading-[1.85] text-text-secondary md:leading-[1.625]">
+    <p className="text-pretty text-essay-p leading-[1.85] text-text-secondary md:leading-[1.625]">
       {children}
     </p>
   );
