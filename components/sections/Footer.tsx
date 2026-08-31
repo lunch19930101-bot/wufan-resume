@@ -333,7 +333,7 @@ export function Footer() {
             />
           </div>
 
-          {/* 昼夜情景条 —— 状态（白天/夜间 + 时段范围）+ 时段问候，
+          {/* 昼夜情景条 —— 状态（白天/夜间）+ 时段问候，
               与天气图标、时钟徽标、看板色温共用同一昼夜判定 */}
           <div className="border-t border-dashed border-border-default" aria-hidden />
           <div className="flex items-center gap-2 px-6 py-4">
@@ -345,7 +345,7 @@ export function Footer() {
             <p className="font-mono text-mono-micro tracking-wide text-text-tertiary">
               {cnHour === null
                 ? '···'
-                : `${isDay ? '白天 · 06:00–18:00' : '夜间 · 18:00–06:00'} — ${greet(cnHour)}`}
+                : `${isDay ? '白天' : '夜间'} — ${greet(cnHour)}`}
             </p>
           </div>
         </div>
@@ -464,17 +464,17 @@ function greet(h: number): string {
 /** 天气图标贴片 —— v3 手绘 SVG 渲染的 144px 方形透明 PNG（public/weather/*.png，
  *  仿花瓣参考的软渐变无描边风格；方形画布天然不拉伸，alpha 出图无黑边）。
  *  按 WMO 分组 + 昼夜取图；阴天有专属双云图标。
- *  ?v=4 —— v4 云朵重建（3 圆相切无凹谷）后强制刷缓存 */
+ *  ?v=5 —— v5 花瓣参考原图直抠（等比无拉伸）后强制刷缓存 */
 function weatherTileSrc(code: number, isDay: boolean): string {
   const g = wmoGroup(code);
   const dn = isDay ? 'day' : 'night';
-  if (g === 'clear') return withBasePath(`/weather/clear-${dn}.png?v=4`);
-  if (g === 'partly') return withBasePath(`/weather/partly-${dn}.png?v=4`);
-  if (g === 'cloud') return withBasePath('/weather/cloud.png?v=4');
-  if (g === 'fog') return withBasePath('/weather/fog.png?v=4');
-  if (g === 'rain') return withBasePath(`/weather/rain-${dn}.png?v=4`);
-  if (g === 'snow') return withBasePath(`/weather/snow-${dn}.png?v=4`);
-  return withBasePath(`/weather/storm-${dn}.png?v=4`);
+  if (g === 'clear') return withBasePath(`/weather/clear-${dn}.png?v=5`);
+  if (g === 'partly') return withBasePath(`/weather/partly-${dn}.png?v=5`);
+  if (g === 'cloud') return withBasePath('/weather/cloud.png?v=5');
+  if (g === 'fog') return withBasePath('/weather/fog.png?v=5');
+  if (g === 'rain') return withBasePath(`/weather/rain-${dn}.png?v=5`);
+  if (g === 'snow') return withBasePath(`/weather/snow-${dn}.png?v=5`);
+  return withBasePath(`/weather/storm-${dn}.png?v=5`);
 }
 
 /** 贴片同色投影 —— 颜色取自 make_weather3.mjs 里该组图标的主色端
