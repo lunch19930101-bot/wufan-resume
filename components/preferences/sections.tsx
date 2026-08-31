@@ -19,21 +19,22 @@ import {
 /*  Options                                                            */
 /* ------------------------------------------------------------------ */
 
+/* 中文名与 id 一一对应；id 是持久化在 localStorage 的偏好键，保持英文不动 */
 export const MODE_OPTIONS: { id: Mode; name: string }[] = [
-  { id: 'light', name: 'Light' },
-  { id: 'dark', name: 'Dark' },
-  { id: 'system', name: 'Auto' },
+  { id: 'light', name: '浅色' },
+  { id: 'dark', name: '深色' },
+  { id: 'system', name: '自动' },
 ];
 
 export const THEME_OPTIONS: { id: Theme; name: string }[] = [
-  { id: 'modern', name: 'Modern' },
-  { id: 'aqua', name: 'Aqua' },
+  { id: 'modern', name: '现代' },
+  { id: 'aqua', name: '水青' },
   { id: 'retro', name: 'Y2K' },
-  { id: 'terminal', name: 'Terminal' },
+  { id: 'terminal', name: '终端' },
 ];
 
 export const BRAND_OPTIONS: { id: Brand; name: string }[] = [
-  { id: 'auto', name: 'Auto' },
+  { id: 'auto', name: '自动' },
   { id: 'b1', name: 'b1' },
   { id: 'b2', name: 'b2' },
   { id: 'b3', name: 'b3' },
@@ -52,24 +53,24 @@ export const SURFACE_OPTIONS: { id: Surface; name: string }[] = [
 ];
 
 export const TYPE_SCALE_OPTIONS: { id: TypeScale; name: string }[] = [
-  { id: 'compact', name: 'Compact' },
-  { id: 'normal', name: 'Normal' },
-  { id: 'comfortable', name: 'Comfortable' },
-  { id: 'large', name: 'Large' },
+  { id: 'compact', name: '紧凑' },
+  { id: 'normal', name: '标准' },
+  { id: 'comfortable', name: '舒适' },
+  { id: 'large', name: '大号' },
 ];
 
 export const RADIUS_OPTIONS: { id: Radius; name: string }[] = [
-  { id: 'none', name: 'None' },
-  { id: 'subtle', name: 'Subtle' },
-  { id: 'default', name: 'Default' },
-  { id: 'round', name: 'Round' },
+  { id: 'none', name: '直角' },
+  { id: 'subtle', name: '微圆' },
+  { id: 'default', name: '默认' },
+  { id: 'round', name: '全圆' },
 ];
 
 export const FONT_OPTIONS: { id: Font; name: string }[] = [
-  { id: 'sans', name: 'Sans' },
-  { id: 'serif', name: 'Serif' },
-  { id: 'mono', name: 'Mono' },
-  { id: 'pixel', name: 'Pixel' },
+  { id: 'sans', name: '无衬线' },
+  { id: 'serif', name: '衬线' },
+  { id: 'mono', name: '等宽' },
+  { id: 'pixel', name: '像素' },
 ];
 
 /* ------------------------------------------------------------------ */
@@ -306,7 +307,7 @@ function RangeControl({
   value: number;
   onChange: (v: number) => void;
 }) {
-  const display = value === 0 ? 'Off' : `${value}%`;
+  const display = value === 0 ? '关' : `${value}%`;
   return (
     <div className="grid gap-2.5" data-slot="range-token-control">
       <div className="flex items-center justify-between gap-3">
@@ -593,9 +594,9 @@ export function PreferencesPanel({
 }) {
   return (
     <div className="grid gap-5" data-slot="appearance-panel">
-      <Section title="Mode">
+      <Section title="模式">
         <VisualCardGrid
-          ariaLabel="Mode"
+          ariaLabel="模式"
           columns={3}
           options={MODE_OPTIONS}
           value={prefs.mode}
@@ -604,9 +605,9 @@ export function PreferencesPanel({
         />
       </Section>
 
-      <Section title="Theme">
+      <Section title="主题">
         <SegmentedControl
-          ariaLabel="Theme"
+          ariaLabel="主题"
           options={THEME_OPTIONS}
           value={prefs.theme}
           onChange={(v) => update('theme', v)}
@@ -621,9 +622,9 @@ export function PreferencesPanel({
         />
       </Section>
 
-      <Section title="Primary">
+      <Section title="强调色">
         <SegmentedControl
-          ariaLabel="Primary"
+          ariaLabel="强调色"
           options={BRAND_OPTIONS}
           value={prefs.brand}
           onChange={(v) => update('brand', v)}
@@ -631,9 +632,9 @@ export function PreferencesPanel({
         />
       </Section>
 
-      <Section title="Surface">
+      <Section title="表面">
         <SegmentedControl
-          ariaLabel="Surface"
+          ariaLabel="表面"
           options={SURFACE_OPTIONS}
           value={prefs.surface}
           onChange={(v) => update('surface', v)}
@@ -641,9 +642,9 @@ export function PreferencesPanel({
         />
       </Section>
 
-      <Section title="Type scale">
+      <Section title="字号">
         <VisualCardGrid
-          ariaLabel="Type scale"
+          ariaLabel="字号"
           size="sm"
           columns={4}
           options={TYPE_SCALE_OPTIONS}
@@ -653,9 +654,9 @@ export function PreferencesPanel({
         />
       </Section>
 
-      <Section title="Radius">
+      <Section title="圆角">
         <VisualCardGrid
-          ariaLabel="Radius"
+          ariaLabel="圆角"
           size="sm"
           columns={4}
           options={RADIUS_OPTIONS}
@@ -665,9 +666,9 @@ export function PreferencesPanel({
         />
       </Section>
 
-      <Section title="Font">
+      <Section title="字体">
         <VisualCardGrid
-          ariaLabel="Font"
+          ariaLabel="字体"
           size="sm"
           columns={4}
           options={FONT_OPTIONS}

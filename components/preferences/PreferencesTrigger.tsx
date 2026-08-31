@@ -29,7 +29,7 @@ export function PreferencesTrigger({
     <button
       type="button"
       onClick={onClick}
-      aria-label="Open preferences"
+      aria-label="打开偏好设置"
       aria-expanded={expanded}
       aria-haspopup="dialog"
       data-site-config-trigger=""

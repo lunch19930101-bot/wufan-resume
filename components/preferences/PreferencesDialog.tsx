@@ -139,7 +139,7 @@ export function PreferencesDialog({
         <header className="flex shrink-0 items-start justify-between gap-3 border-b border-border-subtle px-4 py-3">
           <div className="min-w-0">
             <h2 id={`${id}-title`} className="text-sm font-semibold text-text-primary">
-              Preferences
+              偏好设置
             </h2>
             <p className="mt-0.5 text-xs text-text-secondary">
               调整网站表面、强调色、字体与交互手感。
@@ -148,7 +148,7 @@ export function PreferencesDialog({
           <button
             type="button"
             onClick={() => onOpenChange(false)}
-            aria-label="Close preferences"
+            aria-label="关闭偏好设置"
             data-cursor="link"
             className={cn(
               '-me-1 -mt-1 inline-flex size-[28px] shrink-0 items-center justify-center',
@@ -186,7 +186,7 @@ export function PreferencesDialog({
         )}
       >
         <RotateIcon className="size-[14px]" />
-        Reset all
+        全部重置
       </button>
     </div>,
     document.body,

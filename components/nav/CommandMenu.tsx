@@ -113,7 +113,7 @@ export function CommandMenu({
       <button
         ref={triggerRef}
         type="button"
-        aria-label="Open menu"
+        aria-label="打开菜单"
         data-site-menu-trigger=""
         data-cursor="link"
         className={cn(
@@ -155,7 +155,7 @@ export function CommandMenu({
       <button
         ref={triggerRef}
         type="button"
-        aria-label="Open menu"
+        aria-label="打开菜单"
         aria-expanded={open}
         aria-haspopup="listbox"
         data-site-menu-trigger=""
@@ -171,7 +171,7 @@ export function CommandMenu({
         )}
       >
         <MenuIcon className="size-[14px]" />
-        <span className="text-[11px] font-medium leading-none">Menu</span>
+        <span className="text-[11px] font-medium leading-none">菜单</span>
       </button>
 
       {visible && createPortal(
@@ -196,7 +196,7 @@ export function CommandMenu({
           <div
             ref={containerRef}
             role="dialog"
-            aria-label="Site menu"
+            aria-label="站点菜单"
             data-slot="command-root"
             data-state={open ? 'open' : 'closed'}
             className={cn(
@@ -235,20 +235,20 @@ export function CommandMenu({
                 <div
                   tabIndex={-1}
                   role="listbox"
-                  aria-label="Site menu"
+                  aria-label="站点菜单"
                   data-slot="command-list"
                   className="a63-Command-list py-4 px-2"
                 >
             {/* Navigate */}
-            <Group label="Navigate">
+            <Group label="导航">
               <Item
                 icon={<HomeIcon />}
-                label="Index"
+                label="首页"
                 onClick={() => goTo('/')}>
               </Item>
               <Item
                 icon={<TimelineIcon />}
-                label="Timeline"
+                label="时间线"
                 onClick={() => goTo('/#timeline')}
               />
             </Group>
@@ -277,10 +277,10 @@ export function CommandMenu({
             <Separator />
 
             {/* Contact —— 邮箱 + 电话 + 微信（替代原 Elsewhere 社交链接） */}
-            <Group label="Contact">
+            <Group label="联系">
               <Item
                 icon={<MailIcon />}
-                label={copied ? 'Email copied' : `Copy email · ${site.email}`}
+                label={copied ? '邮箱已复制' : `复制邮箱 · ${site.email}`}
                 onClick={copyEmail}
               />
               {site.phone && (
@@ -294,7 +294,7 @@ export function CommandMenu({
               {site.wechat && (
                 <Item
                   icon={<ChatIcon />}
-                  label={wechatCopied ? 'WeChat copied' : `Copy WeChat · ${site.wechat}`}
+                  label={wechatCopied ? '微信已复制' : `复制微信 · ${site.wechat}`}
                   onClick={copyWechat}
                 />
               )}
@@ -303,10 +303,10 @@ export function CommandMenu({
             <Separator />
 
             {/* Actions */}
-            <Group label="Actions">
+            <Group label="操作">
               <Item
                 icon={<GearIcon />}
-                label="Preferences"
+                label="偏好设置"
                 shortcut="⌘+,"
                 onClick={() => {
                   setOpen(false);
