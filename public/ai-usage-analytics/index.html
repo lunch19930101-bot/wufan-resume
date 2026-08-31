@@ -1868,7 +1868,7 @@ function logout() {
 
 /* —— 4. 统计卡 → 04 灰底内嵌块：8px 圆角 / 标签 12 灰 / 数值 20 品牌蓝 600 —— */
 .stat-card{background:#F7F8FA!important;border:0!important;border-radius:8px!important;padding:12px!important;min-height:0!important;justify-content:flex-start!important}
-.sc-label{font-size:12px!important;line-height:18px!important;color:var(--text-secondary)!important;margin-bottom:2px!important}
+.sc-label{font-size:12px!important;line-height:18px!important;font-weight:500!important;color:var(--text-secondary)!important;margin-bottom:2px!important}
 .sc-value{font-size:20px!important;line-height:28px!important;font-weight:600!important;color:var(--theme-primary)!important;letter-spacing:-.2px!important;font-family:var(--font-din)!important}
 .sc-sub,.sc-badge{font-size:12px!important;line-height:18px!important}
 .sc-icon{display:none!important}
@@ -2244,6 +2244,11 @@ function logout() {
   .top-nav{height:calc(var(--topnav-h) + env(safe-area-inset-top,0px))!important;padding-top:env(safe-area-inset-top,0px)!important}
   .sidebar{padding-top:env(safe-area-inset-top,0px)!important}
   .login-wrap{padding-top:env(safe-area-inset-top,0px)!important;padding-bottom:env(safe-area-inset-bottom,0px)!important}
+}
+/* ========== #206 PC 统计语言对齐 demo01（#202b/#205 同源）：label 13/20/500 · 数值 26/34/500 ========== */
+@media (min-width:769px){
+.sc-label{font-size:13px!important;line-height:20px!important;font-weight:500!important}
+.sc-value{font-size:26px!important;line-height:34px!important;font-weight:500!important;letter-spacing:-.5px!important}
 }
 </style>
 <style>
