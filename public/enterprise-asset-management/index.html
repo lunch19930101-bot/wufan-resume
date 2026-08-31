@@ -9920,6 +9920,39 @@ body:not(.light) .modal::before{background:rgba(255,255,255,.15)}
 #panel-map-location div[style*="display:flex;gap:16px;height:calc(100vh - 140px)"]{flex-direction:column!important;height:auto!important}
 #panel-map-location div[style*="flex:1;position:relative"]{height:52vh!important;flex:none!important}
 }
+/* ========== #205 资产经营（operation 系列）与资产管理统计语言对齐 ========== */
+/* 根因：operation 六个面板是内联样式（label 14px / 数值 30px / 白玻璃卡 / 4 列网格），
+   不吃 .stat-card/.sc-label/.sc-value 的 04 化移动端规则与 #202b PC 规则，
+   移动端与 PC 都比资产管理组大一号 → 用属性选择器交集对齐（不动 3000 行内联 HTML） */
+@media (max-width:768px){
+/* 1) 内联 4/3 列统计网格 → 2 列（#204d 的 flex-wrap 只对 flex 行有效，grid 漏网） */
+[id^="panel-operation"] div[style*="grid-template-columns:repeat(4,1fr)"]{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin:12px 0 0!important}
+[id^="panel-operation"] div[style*="grid-template-columns:repeat(3,1fr)"]{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:8px!important;margin:12px 0 0!important}
+/* 1b) 页面下方「租赁业务/合同概况」等 1fr 1fr 双列卡 → 单列（窄屏标题被压竖排） */
+[id^="panel-operation"] div[style*="grid-template-columns:1fr 1fr"]{grid-template-columns:1fr!important}
+/* 2) 内联统计卡 → 04 灰底内嵌块（8px 圆角 / 无边线 / 12px 内距）；双属性交集防误伤 */
+[id^="panel-operation"] div[style*="background:rgba(255,255,255,0.65)"][style*="padding:20px"],
+[id^="panel-operation"] div[style*="background:rgba(255,255,255,0.85)"][style*="padding:20px 24px"]{background:#F7F8FA!important;border:0!important;border-radius:8px!important;padding:12px!important}
+body:not(.light) [id^="panel-operation"] div[style*="background:rgba(255,255,255,0.65)"][style*="padding:20px"],
+body:not(.light) [id^="panel-operation"] div[style*="background:rgba(255,255,255,0.85)"][style*="padding:20px 24px"]{background:rgba(255,255,255,.05)!important}
+/* 3) 标签 14px → 04 的 12px/18/500 次要色（sc-label 同源） */
+[id^="panel-operation"] div[style*="font-size:14px;color:rgba(0,0,0,0.6)"]{font-size:12px!important;line-height:18px!important;font-weight:500!important;color:var(--text-secondary)!important;margin-bottom:0!important}
+/* 4) 数值 30px → 20px/28/600 品牌蓝；长数字 24px → 18px/26（sc-value 同源） */
+[id^="panel-operation"] div[style*="font-size:30px"]{font-size:20px!important;line-height:28px!important;font-weight:600!important;color:var(--theme-primary)!important;letter-spacing:-.2px!important;margin-top:2px!important;margin-bottom:0!important}
+[id^="panel-operation"] div[style*="font-size:24px"]{font-size:18px!important;line-height:26px!important;font-weight:600!important;color:var(--theme-primary)!important;letter-spacing:-.2px!important;margin-top:2px!important;margin-bottom:0!important}
+[id^="panel-operation"] div[style*="font-size:30px"] span,
+[id^="panel-operation"] div[style*="font-size:24px"] span{color:var(--theme-primary)!important}
+/* 5) 副注 12px → 11px/16 muted（sc-unit 同源） */
+[id^="panel-operation"] div[style*="font-size:12px;color:rgba(0,0,0,0.4)"]{font-size:11px!important;line-height:16px!important}
+}
+@media (min-width:769px){
+/* PC 对齐：label 14→13/20/500、数值 30→26/34（#202b sc-value 同源）、长数字 24→22/30 */
+[id^="panel-operation"] div[style*="font-size:14px;color:rgba(0,0,0,0.6)"]{font-size:13px!important;line-height:20px!important;font-weight:500!important}
+[id^="panel-operation"] div[style*="font-size:30px"]{font-size:26px!important;line-height:34px!important;letter-spacing:-.5px!important}
+[id^="panel-operation"] div[style*="font-size:24px"]{font-size:22px!important;line-height:30px!important;letter-spacing:-.4px!important}
+/* 租赁/账单卡硬编码 #007AFF 数值 → 主题蓝（dark 下自动跟随） */
+[id^="panel-operation"] div[style*="color:#007AFF"]{color:var(--theme-primary)!important}
+}
 </style>
 <script>
 (function(){
