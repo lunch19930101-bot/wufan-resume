@@ -4,7 +4,7 @@ import { Fragment, useEffect, useState } from 'react';
 import { usePathname } from 'next/navigation';
 
 import { site } from '@/lib/config';
-import { cn } from '@/lib/utils';
+import { cn, withBasePath } from '@/lib/utils';
 
 /**
  * Footer — atom63.io 风格 colophon
@@ -158,7 +158,10 @@ export function Footer() {
   const isDay = cnHour !== null && cnHour >= 6 && cnHour < 18;
 
   return (
-    <footer className="relative z-[60] pb-24">
+    /* z-30 —— 必须低于 Nav (z-50) 与 MobileQuickNav (z-40)：手机滚到底时
+       footer 内容会滚到 fixed Nav 底下，footer 层级更高会盖住 Nav 的
+       backdrop-blur（#走查修复：手机端底部 Nav 失去模糊） */
+    <footer className="relative z-30 pb-24">
       {/* GridRule 1 —— 贯穿全屏的虚线 + 两端菱形 */}
       <GridRule />
 
@@ -240,19 +243,22 @@ export function Footer() {
                 : 'radial-gradient(120% 100% at 100% 0%, rgba(96,140,255,0.08) 0%, rgba(96,140,255,0) 55%)',
             }}
           >
-            {/* / 武汉 —— 天气看板（实时；图标随昼夜与天气现象切换） */}
-            <div className="px-6 py-6">
+            {/* / 武汉 —— 天气看板（实时；右上角贴片图标随昼夜与天气现象切换） */}
+            <div className="relative px-6 py-6">
               <p className="font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
                 / 武汉 · Wuhan
               </p>
+              {weather && (
+                /* 花瓣切图贴片 —— 正好落在昼夜径向渐变的光晕处（右上角） */
+                <img
+                  src={weatherTileSrc(weather.code, weather.isDay)}
+                  alt=""
+                  aria-hidden
+                  className="absolute right-6 top-6 size-[48px]"
+                />
+              )}
               <div className="mt-3 flex items-center gap-2.5">
-                {weather ? (
-                  <WeatherIcon
-                    code={weather.code}
-                    isDay={weather.isDay}
-                    className="size-[18px] shrink-0 text-text-tertiary"
-                  />
-                ) : (
+                {!weather && (
                   <SignalLostIcon className="size-[18px] shrink-0 text-text-tertiary opacity-60" />
                 )}
                 <p className="font-digital text-[40px] font-bold leading-none tabular-nums text-text-primary">
@@ -435,80 +441,17 @@ function greet(h: number): string {
   return '晚安 · 今天也认真收了尾';
 }
 
-/** WeatherIcon —— 线条风格与 mono 标签一致；晴/多云分昼夜（太阳 / 月亮） */
-function WeatherIcon({
-  code,
-  isDay,
-  className,
-}: {
-  code: number;
-  isDay: boolean;
-  className?: string;
-}) {
+/** 天气图标贴片 —— 花瓣网切图素材（public/weather/*.png，深底圆角贴片）。
+ *  按 WMO 分组 + 昼夜取图；素材里没有纯「阴天」图标，阴天复用 太阳云/月亮云 */
+function weatherTileSrc(code: number, isDay: boolean): string {
   const g = wmoGroup(code);
-  const props = {
-    viewBox: '0 0 24 24',
-    fill: 'none',
-    stroke: 'currentColor',
-    strokeWidth: 1.75,
-    strokeLinecap: 'round' as const,
-    strokeLinejoin: 'round' as const,
-    'aria-hidden': true,
-    className,
-  };
-
-  if (g === 'clear') {
-    return isDay ? <SunIcon {...props} /> : <MoonIcon {...props} />;
-  }
-  if (g === 'partly') {
-    return (
-      <svg {...props}>
-        {isDay ? (
-          <circle cx="8" cy="8" r="3" />
-        ) : (
-          <path d="M10 4.5A5.5 5.5 0 1 0 15.5 10 4 4 0 0 1 10 4.5Z" />
-        )}
-        <path d="M17.5 19a3.5 3.5 0 1 0-1.6-6.62A5 5 0 0 0 6.3 13.2 3.5 3.5 0 0 0 7 19h10.5Z" />
-      </svg>
-    );
-  }
-  if (g === 'cloud') {
-    return (
-      <svg {...props}>
-        <path d="M17.5 19a4.5 4.5 0 1 0-1.96-8.55A6 6 0 1 0 6 19h11.5Z" />
-      </svg>
-    );
-  }
-  if (g === 'fog') {
-    return (
-      <svg {...props}>
-        <path d="M17.5 15a4.5 4.5 0 1 0-1.96-8.55A6 6 0 1 0 6 15h11.5Z" />
-        <path d="M5 19h14M7 22h10" />
-      </svg>
-    );
-  }
-  if (g === 'rain') {
-    return (
-      <svg {...props}>
-        <path d="M17.5 14a4.5 4.5 0 1 0-1.96-8.55A6 6 0 1 0 6 14h11.5Z" />
-        <path d="M8 17v3M12 17v3M16 17v3" />
-      </svg>
-    );
-  }
-  if (g === 'snow') {
-    return (
-      <svg {...props}>
-        <path d="M17.5 14a4.5 4.5 0 1 0-1.96-8.55A6 6 0 1 0 6 14h11.5Z" />
-        <path d="M8 17.5v.01M12 19v.01M16 17.5v.01M10 21v.01M14 21.5v.01" />
-      </svg>
-    );
-  }
-  return (
-    <svg {...props}>
-      <path d="M17.5 13a4.5 4.5 0 1 0-1.96-8.55A6 6 0 1 0 6 13h11.5Z" />
-      <path d="m13 12-2 5h3l-2 5" />
-    </svg>
-  );
+  const dn = isDay ? 'day' : 'night';
+  if (g === 'clear') return withBasePath(`/weather/clear-${dn}.png`);
+  if (g === 'partly' || g === 'cloud') return withBasePath(`/weather/partly-${dn}.png`);
+  if (g === 'fog') return withBasePath('/weather/fog.png');
+  if (g === 'rain') return withBasePath(`/weather/rain-${dn}.png`);
+  if (g === 'snow') return withBasePath(`/weather/snow-${dn}.png`);
+  return withBasePath(`/weather/storm-${dn}.png`);
 }
 
 /** SignalLostIcon —— 离线占位（天线断线） */
