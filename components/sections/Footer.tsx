@@ -153,6 +153,10 @@ export function Footer() {
   /* 看板时间拆组：HH / MM / SS 各一组，冒号用两点（atom63 zoned-clock） */
   const timeParts = beijingTime.split(':');
 
+  /* 昼夜状态 —— 按武汉本地小时 06–18 判定（不依赖天气 API 是否成功，
+     时钟/看板/问候条共用同一状态，三处联动） */
+  const isDay = cnHour !== null && cnHour >= 6 && cnHour < 18;
+
   return (
     <footer className="relative z-[60] pb-24">
       {/* GridRule 1 —— 贯穿全屏的虚线 + 两端菱形 */}
@@ -226,7 +230,16 @@ export function Footer() {
           <div className="border-t border-dashed border-border-default" aria-hidden />
           {/* #走查适配修复：<412px 手机上两列各只剩 ~120px 内容区，40px 数字
               时钟（~174px）溢出屏幕右缘被裁 —— 手机改单列堆叠，md 起恢复两列 */}
-          <div className="relative grid grid-cols-1 md:grid-cols-2">
+          <div
+            className="relative grid grid-cols-1 md:grid-cols-2"
+            style={{
+              /* 昼夜色温联动 —— 白天右上淡暖光 / 夜间冷蓝辉（极低透明度，
+                 不破坏工程图纸气质，昼夜切换时可感知） */
+              backgroundImage: isDay
+                ? 'radial-gradient(120% 100% at 100% 0%, rgba(255,190,90,0.05) 0%, rgba(255,190,90,0) 55%)'
+                : 'radial-gradient(120% 100% at 100% 0%, rgba(96,140,255,0.08) 0%, rgba(96,140,255,0) 55%)',
+            }}
+          >
             {/* / 武汉 —— 天气看板（实时；图标随昼夜与天气现象切换） */}
             <div className="px-6 py-6">
               <p className="font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
@@ -256,11 +269,22 @@ export function Footer() {
               </p>
             </div>
 
-            {/* / Local —— 时间看板（HH∶MM∶SS，冒号 = 两个 3px 点） */}
+            {/* / Local —— 时间看板（HH∶MM∶SS，冒号 = 两个 3px 点）
+                #237 昼夜：标签行右侧挂 昼/夜 徽标，随时可见当前状态 */}
             <div className="border-t border-dashed border-border-default px-6 py-6 md:border-t-0">
-              <p className="font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
-                / Local
-              </p>
+              <div className="flex items-center justify-between gap-3">
+                <p className="font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
+                  / Local
+                </p>
+                <span className="inline-flex items-center gap-1.5 font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
+                  {isDay ? (
+                    <SunIcon className="size-3" />
+                  ) : (
+                    <MoonIcon className="size-3" />
+                  )}
+                  {isDay ? '白天' : '夜间'}
+                </span>
+              </div>
               <div
                 role="timer"
                 aria-label={`北京时间 ${beijingTime}`}
@@ -283,15 +307,19 @@ export function Footer() {
             />
           </div>
 
-          {/* 情景条 —— 随武汉时间变化的时段问候（看板的「人在」信号） */}
+          {/* 昼夜情景条 —— 状态（白天/夜间 + 时段范围）+ 时段问候，
+              与天气图标、时钟徽标、看板色温共用同一昼夜判定 */}
           <div className="border-t border-dashed border-border-default" aria-hidden />
-          <div className="flex items-center gap-2.5 px-6 py-4">
-            <span
-              aria-hidden
-              className="dot-breathe dot-ping size-[5px] shrink-0 rounded-full bg-accent-lime text-accent-lime"
-            />
+          <div className="flex items-center gap-2 px-6 py-4">
+            {isDay ? (
+              <SunIcon className="size-3 shrink-0 text-text-tertiary" />
+            ) : (
+              <MoonIcon className="size-3 shrink-0 text-text-tertiary" />
+            )}
             <p className="font-mono text-mono-micro tracking-wide text-text-tertiary">
-              {cnHour === null ? '···' : greet(cnHour)}
+              {cnHour === null
+                ? '···'
+                : `${isDay ? '白天 · 06–18' : '夜间 · 18–06'} — ${greet(cnHour)}`}
             </p>
           </div>
         </div>
