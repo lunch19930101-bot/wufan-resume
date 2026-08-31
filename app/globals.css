@@ -20,29 +20,30 @@
 [data-theme='dark'] {
   color-scheme: dark;
 
-  /* --- Background layers（atom63.io #111 系）--- */
-  --color-bg-canvas: #111111;
-  --color-bg-surface: #161616;
-  --color-bg-elevated: #1c1c1c;
-  --color-bg-overlay: rgba(0, 0, 0, 0.8);
-  /* atom63 surface-muted —— 项目卡片占位底色（n1-dark-3 #222）*/
-  --color-bg-muted: #222222;
-  --color-bg-card: #1a1a1a;
+  /* --- Background layers（#Phase2 C1：5 档 → OKLCH 均匀 9 档，掺 0.4% 冷偏）---
+     #0f0f12→#131317→#17171c→#1c1c22→#212127→#27272e→#2e2e36→#3a3a43→#6b6b76
+     层级由亮度扛，border 只留语义分隔职责 */
+  --color-bg-canvas: #0f0f12;
+  --color-bg-surface: #131317;
+  --color-bg-elevated: #1c1c22;
+  --color-bg-overlay: rgba(10, 10, 14, 0.8);
+  /* atom63 surface-muted —— 项目卡片占位底色 */
+  --color-bg-muted: #212127;
+  --color-bg-card: #17171c;
   /* atom63 accent —— row hover（surface-control-hover）*/
   --color-bg-accent: rgba(255, 255, 255, 0.04);
 
-  /* --- Borders --- */
-  /* 1:1 对齐 atom63.io —— 纯色实值（n1-dark-{5,6,7}），不再用半透 rgba。
-     dashed 横线/竖线视觉更稳，不随背景明暗漂移。 */
-  --color-border-subtle: #313131; /* n1-dark-5 —— 弱分隔（卡片描边） */
-  --color-border-default: #3a3a3a; /* n1-dark-6 —— 主要虚线（body::after + grid-rule + nav border） */
-  --color-border-strong: #484848; /* n1-dark-7 —— 强调描边（control edge） */
+  /* --- Borders（C1 色阶第 7/8 档 + 外延一档强描边）--- */
+  --color-border-subtle: #2e2e36; /* 弱分隔（卡片描边） */
+  --color-border-default: #3a3a43; /* 主要虚线（body::after + grid-rule + nav border） */
+  --color-border-strong: #4a4a55; /* 强调描边（control edge） */
 
-  /* --- Text（双灰阶 + 50% 半透）--- */
+  /* --- Text（#Phase2 C3：三级 → 四级实色；半透混色在不同底色上漂移）--- */
   --color-text-primary: #eeeeee;
-  --color-text-secondary: #b4b4b4;
-  --color-text-tertiary: rgba(180, 180, 180, 0.5);
-  --color-text-inverse: #111111;
+  --color-text-secondary: #b0b0b6;
+  --color-text-tertiary: #8a8a92;
+  --color-text-fourth: #5d5d66; /* 已过期/禁用/装饰性脚注 —— 原被迫挤占 tertiary */
+  --color-text-inverse: #0f0f12;
 
   /* --- Accents（改语义为品牌蓝；键名保留 lime 兼容旧引用）--- */
   --color-accent-lime: #2c7fff;
@@ -65,7 +66,7 @@
   --shadow-glow-vermillion: 0 0 32px rgba(255, 92, 40, 0.22);
 
   /* --- Glass --- */
-  --glass-bg: rgba(17, 17, 17, 0.8);
+  --glass-bg: rgba(15, 15, 18, 0.8);
   --glass-border: rgba(255, 255, 255, 0.08);
   --glass-highlight: rgba(255, 255, 255, 0.14);
 }
@@ -78,20 +79,22 @@ html:has(.live-resume) {
   --color-bg-surface: #ffffff;
   --color-bg-elevated: #ffffff;
   --color-bg-overlay: rgba(255, 255, 255, 0.8);
-  /* atom63 surface-muted —— 项目卡片占位底色（n1-light-3 #f0f0f0）*/
+  /* atom63 surface-muted —— 项目卡片占位底色 */
   --color-bg-muted: #f0f0f0;
-  --color-bg-card: #f9f9f9;
+  --color-bg-card: #f7f7f8;
   /* atom63 accent —— row hover */
   --color-bg-accent: rgba(0, 0, 0, 0.04);
 
-  /* 1:1 对齐 atom63.io —— 纯色实值（n1-light-{3,4,5}） */
-  --color-border-subtle: #f0f0f0; /* n1-light-3 */
-  --color-border-default: #e8e8e8; /* n1-light-4 */
-  --color-border-strong: #e0e0e0; /* n1-light-5 */
+  /* C1 亮面对偶色阶（向下第 5/6/7 档） */
+  --color-border-subtle: #ebebeb; /* 弱分隔（卡片描边） */
+  --color-border-default: #e2e2e3; /* 主要虚线 */
+  --color-border-strong: #d8d8d9; /* 强调描边 */
 
+  /* C3 四级实色（tertiary 去半透，新增 fourth） */
   --color-text-primary: #0a0a0a;
   --color-text-secondary: #555555;
-  --color-text-tertiary: rgba(85, 85, 85, 0.5);
+  --color-text-tertiary: #8c8c92;
+  --color-text-fourth: #b8b8bd; /* 已过期/禁用/装饰性脚注 */
   --color-text-inverse: #fafafa;
 
   --color-accent-lime: #2c7fff;
@@ -120,6 +123,9 @@ html:has(.live-resume) {
  * Spacing — 4px base unit
  * ============================================================ */
 :root {
+  /* #Phase2 G3：手机档页面壳层水平边距（原 px-6=32px → 20px）*/
+  --pad-x-m: 20px;
+
   --space-1: 4px;
   --space-2: 8px;
   --space-3: 12px;
@@ -400,44 +406,58 @@ html:has(.live-resume) {
   */
   .grid-rule {
     position: relative;
-    height: 0;
-    border-top: 1px dashed var(--color-border-default);
+    height: 1px;
+    /* #Phase2 G2：6px 实 / 13px 空（≈1:2 邮汇比例）替代浏览器默认 4/4 虚线——
+       672 宽全屏横线上 4/4 点过密成「噪音带」；repeating-gradient 可控节奏 */
+    border-top: 0;
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--color-border-default) 0 6px,
+      transparent 6px 19px
+    );
     background-color: transparent;
+  }
+  /* G2：小屏（<768）线噪音 ×0.6 —— 层次靠亮度差（C1），不靠线 */
+  @media (max-width: 47.99rem) {
+    .grid-rule {
+      opacity: 0.6;
+    }
   }
   .grid-rule::before,
   .grid-rule::after {
     content: '';
     position: absolute;
     top: 50%;
-    width: 4px;
-    height: 4px;
+    /* G2：section boundary 菱形 4px → 6px（内部分隔仍 4px，尺寸分级） */
+    width: 6px;
+    height: 6px;
     transform: translate(0, -50%) rotate(45deg);
     background-color: var(--color-border-default);
     pointer-events: none;
   }
   .grid-rule::before {
-    /* 左侧菱形：与 body::after 的左竖线（版心左边缘）对齐 */
-    left: calc(50% - 21rem - 2px);
+    /* 左侧菱形：与 body::after 的左竖线（版心左边缘）对齐（6px 菱形半宽 3px） */
+    left: calc(50% - 21rem - 3px);
   }
   .grid-rule::after {
     /* 右侧菱形：与 body::after 的右竖线（版心右边缘）对齐 */
-    right: calc(50% - 21rem - 2px);
+    right: calc(50% - 21rem - 3px);
   }
   /* #228 统一宽：lg 864（半宽 27rem）/ xl 1088（半宽 34rem），与 body::after 同档 */
   @media (min-width: 64rem) {
     .grid-rule::before {
-      left: calc(50% - 27rem - 2px);
+      left: calc(50% - 27rem - 3px);
     }
     .grid-rule::after {
-      right: calc(50% - 27rem - 2px);
+      right: calc(50% - 27rem - 3px);
     }
   }
   @media (min-width: 80rem) {
     .grid-rule::before {
-      left: calc(50% - 34rem - 2px);
+      left: calc(50% - 34rem - 3px);
     }
     .grid-rule::after {
-      right: calc(50% - 34rem - 2px);
+      right: calc(50% - 34rem - 3px);
     }
   }
 }
@@ -446,6 +466,34 @@ html:has(.live-resume) {
  * Helpers
  * ============================================================ */
 @layer utilities {
+  /* #Phase2 G2：底边线 6/13 节奏（替代 border-dashed 4/4）——用于 Nav 底线等水平分隔 */
+  .dash-b-6-13 {
+    border-bottom: 0;
+    background-image: repeating-linear-gradient(
+      to right,
+      var(--color-border-default) 0 6px,
+      transparent 6px 19px
+    );
+    background-size: 100% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+  }
+
+  /* #Phase2 G3：手机档流式边距 20px（px-6=32px → 20px，多 24px 内容宽给正文）。
+     仅命中页面壳层链（mx-auto+max-w-672+px-6），内距类 px-6 不受影响；
+     伴随的 -mx-6 破容器与 w-[calc(100%+4rem)] 等量跟随，避免 12px 出屏 */
+  @media (max-width: 47.99rem) {
+    .mx-auto.max-w-\[672px\].px-6 {
+      padding-inline: var(--pad-x-m);
+    }
+    .-mx-6 {
+      margin-inline: calc(-1 * var(--pad-x-m));
+    }
+    .-mx-6.w-\[calc\(100\%\+4rem\)\] {
+      width: calc(100% + 2 * var(--pad-x-m));
+    }
+  }
+
   .text-balance {
     text-wrap: balance;
   }

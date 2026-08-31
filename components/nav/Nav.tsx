@@ -41,7 +41,8 @@ export function Nav() {
   return (
     <>
       {/* #216 h = 58px + 刘海屏状态栏安全区（viewport-fit=cover 后需要自己避开 notch） */}
-      <header className="fixed inset-x-0 top-0 z-50 h-[calc(58px+env(safe-area-inset-top,0px))] border-b border-dashed border-border-default bg-bg-canvas/80 pt-[env(safe-area-inset-top,0px)] backdrop-blur-md">
+      {/* #Phase2 G2：底线改 6/13 节奏虚线（globals.css .dash-b-6-13），与 GridRule 同语法 */}
+      <header className="dash-b-6-13 fixed inset-x-0 top-0 z-50 h-[calc(58px+env(safe-area-inset-top,0px))] border-border-default bg-bg-canvas/80 pt-[env(safe-area-inset-top,0px)] backdrop-blur-md">
         <nav className="mx-auto flex h-full max-w-[672px] items-center justify-between px-6 lg:max-w-[864px] xl:max-w-[1088px]">
           {/* 左：详情页显示 Back 按钮，其他页面显示 logo + / + pageTitle */}
           {isProjectPage ? (

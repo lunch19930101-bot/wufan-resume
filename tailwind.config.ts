@@ -28,6 +28,8 @@ const config: Config = {
           primary: 'var(--color-text-primary)',
           secondary: 'var(--color-text-secondary)',
           tertiary: 'var(--color-text-tertiary)',
+          /* #Phase2 C3：四级实色 —— fourth 给已过期/禁用/装饰性脚注 */
+          fourth: 'var(--color-text-fourth)',
           inverse: 'var(--color-text-inverse)',
         },
         border: {
