@@ -265,13 +265,15 @@ export function Footer() {
                 / 武汉 · Wuhan
               </p>
               {weather && (
-                /* 花瓣切图贴片（透明底）—— 落在天气光晕处；
-                    白云在浅底上靠 drop-shadow 做分离 */
+                /* v3 手绘贴片（透明底）—— 落在天气光晕处；
+                    同色双层投影（贴身 + 大晕）把贴片从浅色天气底上托出来，
+                    颜色随天气组走：暖阳 / 星蓝 / 雨蓝 / 雪蓝 / 雷灰，不用黑 */
                 <img
                   src={weatherTileSrc(weather.code, weather.isDay)}
                   alt=""
                   aria-hidden
-                  className="absolute right-6 top-6 size-[48px] [filter:drop-shadow(0_2px_6px_rgba(41,37,32,0.3))]"
+                  className="absolute right-6 top-6 size-[64px]"
+                  style={{ filter: weatherShadow(weather.code, weather.isDay) }}
                 />
               )}
               <div className="mt-3 flex items-center gap-2.5">
@@ -473,6 +475,27 @@ function weatherTileSrc(code: number, isDay: boolean): string {
   if (g === 'rain') return withBasePath(`/weather/rain-${dn}.png?v=3`);
   if (g === 'snow') return withBasePath(`/weather/snow-${dn}.png?v=3`);
   return withBasePath(`/weather/storm-${dn}.png?v=3`);
+}
+
+/** 贴片同色投影 —— 颜色取自 make_weather3.mjs 里该组图标的主色端
+ *  （暖阳 #F5A054 / 月亮 #7B82DE / 云 #C9CDE8 / 雨滴 #8E96E8 /
+ *    雪花 #AAB8EE / 雷云浅端 #A9AECB —— 深端 #7378A2 会读成黑），不用黑。
+ *  双层：贴身小阴影 + 大半径同色光晕，浅色天气底上把贴片托醒目 */
+function weatherShadow(code: number, isDay: boolean): string {
+  const g = wmoGroup(code);
+  const hue =
+    g === 'clear' || g === 'partly'
+      ? isDay
+        ? '#F5A054'
+        : '#7B82DE'
+      : g === 'cloud'
+        ? '#C9CDE8'
+        : g === 'fog' || g === 'rain'
+          ? '#8E96E8'
+          : g === 'snow'
+            ? '#AAB8EE'
+            : '#A9AECB';
+  return `drop-shadow(0 2px 5px ${hue}66) drop-shadow(0 8px 20px ${hue}59)`;
 }
 
 /** 看板底色 —— 当前天气 → 浅色径向渐变色（rgba 供 boardBg 拼接）。
