@@ -45,9 +45,11 @@
   --color-text-fourth: #5d5d66; /* 已过期/禁用/装饰性脚注 —— 原被迫挤占 tertiary */
   --color-text-inverse: #0f0f12;
 
-  /* --- Accents（改语义为品牌蓝；键名保留 lime 兼容旧引用）--- */
-  --color-accent-lime: #2c7fff;
-  --color-accent-lime-dim: rgba(44, 127, 255, 0.18);
+  /* --- Accents（#Phase2 C2 改名：蓝=交互强调。blue 为正名，lime 保留为兼容别名）--- */
+  --color-accent-blue: #2c7fff;
+  --color-accent-blue-dim: rgba(44, 127, 255, 0.18);
+  --color-accent-lime: var(--color-accent-blue); /* 兼容旧引用 */
+  --color-accent-lime-dim: var(--color-accent-blue-dim); /* 兼容旧引用 */
   --color-accent-vermillion: #ff5c28;
   --color-accent-vermillion-dim: rgba(255, 92, 40, 0.18);
 
@@ -97,8 +99,10 @@ html:has(.live-resume) {
   --color-text-fourth: #b8b8bd; /* 已过期/禁用/装饰性脚注 */
   --color-text-inverse: #fafafa;
 
-  --color-accent-lime: #2c7fff;
-  --color-accent-lime-dim: rgba(44, 127, 255, 0.18);
+  --color-accent-blue: #2c7fff;
+  --color-accent-blue-dim: rgba(44, 127, 255, 0.18);
+  --color-accent-lime: var(--color-accent-blue); /* 兼容旧引用 */
+  --color-accent-lime-dim: var(--color-accent-blue-dim); /* 兼容旧引用 */
   --color-accent-vermillion: #e0451a;
   --color-accent-vermillion-dim: rgba(224, 69, 26, 0.12);
 
@@ -125,6 +129,13 @@ html:has(.live-resume) {
 :root {
   /* #Phase2 G3：手机档页面壳层水平边距（原 px-6=32px → 20px）*/
   --pad-x-m: 20px;
+
+  /* #Phase2 T4：字重四级音阶（MiSans VF 连续轴；DINOT 无 VF 自动落最近档 500）
+     规则：页内标题/卡片标题/强调词 550 · 正文 400 · 500 用于次级 UI */
+  --fw-regular: 400;
+  --fw-medium: 500;
+  --fw-demibold: 550;
+  --fw-bold: 620;
 
   --space-1: 4px;
   --space-2: 8px;
@@ -319,6 +330,14 @@ html:has(.live-resume) {
       max-width: calc(68rem * var(--a63-type-scale, 1)); /* 1088px × type-scale */
     }
   }
+  /* #Phase2 G4：中缝导引线移动端退场 —— <768 两条线贴在视口左右缘（width:100%
+     钳制后 border 落在 0 与 100%），只剩线噪与 zoom 关联 bug 面；
+     手机构图本不依赖中缝，明确退场 */
+  @media (max-width: 47.99rem) {
+    body::after {
+      display: none;
+    }
+  }
   /* #235 走查：<672px 手机上版心=全屏，虚线贴屏幕左右两缘（圆角屏上更明显），
      被读作「边缘有线挡着」—— 导引线的意义是标版心边界，此时已无意义，隐藏 */
   @media (max-width: 41.99rem) {
@@ -492,6 +511,25 @@ html:has(.live-resume) {
     .-mx-6.w-\[calc\(100\%\+4rem\)\] {
       width: calc(100% + 2 * var(--pad-x-m));
     }
+  }
+  /* #Phase2 G3 平板过渡带（768–1023）：px-6=32px 在此档两侧留白突兀（容器 672
+     定宽直接贴边），改流式 clamp —— 平板 ~31–48px 渐进，≥lg 交还 px-6 */
+  @media (min-width: 48rem) and (max-width: 63.99rem) {
+    .mx-auto.max-w-\[672px\].px-6 {
+      padding-inline: clamp(24px, 4vw, 48px);
+    }
+    .-mx-6 {
+      margin-inline: calc(-1 * clamp(24px, 4vw, 48px));
+    }
+    .-mx-6.w-\[calc\(100\%\+4rem\)\] {
+      width: calc(100% + 2 * clamp(24px, 4vw, 48px));
+    }
+  }
+
+  /* #Phase2 T5：行长锁 38–44 字 —— prose 段落不随 864/1088 容器放宽（~52 字/行），
+     媒体（图/轮播/gallery）继续吃满容器，「文窄图宽」是版式语言 */
+  .measure-max {
+    max-width: 44em;
   }
 
   .text-balance {

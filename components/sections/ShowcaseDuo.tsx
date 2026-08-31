@@ -116,7 +116,7 @@ function DuoCard({ item }: { item: Item }) {
 
       {/* 左下角 caption */}
       <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-0.5 p-3.5">
-        <h3 className="text-balance text-base leading-snug font-medium text-white">
+        <h3 className="text-balance text-base leading-snug font-[550] text-white">
           {item.title}
         </h3>
         <p className="text-pretty text-xs leading-snug text-white/65">

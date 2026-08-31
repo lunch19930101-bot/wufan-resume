@@ -38,8 +38,11 @@ const config: Config = {
           strong: 'var(--color-border-strong)',
         },
         accent: {
-          lime: 'var(--color-accent-lime)',
-          'lime-dim': 'var(--color-accent-lime-dim)',
+          /* #Phase2 C2：accent 正名 blue（蓝=交互强调）；lime 保留为兼容别名 */
+          blue: 'var(--color-accent-blue)',
+          'blue-dim': 'var(--color-accent-blue-dim)',
+          lime: 'var(--color-accent-blue)',
+          'lime-dim': 'var(--color-accent-blue-dim)',
           vermillion: 'var(--color-accent-vermillion)',
           'vermillion-dim': 'var(--color-accent-vermillion-dim)',
         },

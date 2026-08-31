@@ -150,7 +150,7 @@ export function HomeMain() {
  * ============================================================ */
 function EssayParagraph({ children }: { children: ReactNode }) {
   return (
-    <p className="text-pretty text-essay-p leading-[1.85] text-text-secondary md:leading-[1.625]">
+    <p className="text-pretty text-essay-p measure-max leading-[1.85] text-text-secondary md:leading-[1.625]">
       {children}
     </p>
   );
@@ -160,7 +160,7 @@ function EssayParagraph({ children }: { children: ReactNode }) {
  * Strong —— 段内强调词（接近 primary）
  * ============================================================ */
 function Strong({ children }: { children: ReactNode }) {
-  return <span className="font-medium text-text-primary">{children}</span>;
+  return <span className="font-[550] text-text-primary">{children}</span>;
 }
 
 /* ============================================================

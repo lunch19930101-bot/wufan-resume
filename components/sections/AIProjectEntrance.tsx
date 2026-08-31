@@ -8,18 +8,15 @@ import { cn } from '@/lib/utils';
 /**
  * AIProjectEntrance —— atom63 风格 "I build in public" 项目入口
  *
- * PC 布局（#229 三列制）：
- *   ┌──────────┐ ┌──────────┐ ┌──────────┐
- *   │ 01 [live]│ │ 02 [live]│ │ 03 [live]│   ← MiniCard ×3 一行三列
- *   │ 描述 [↗] │ │ 描述 [↗] │ │ 描述 [↗] │
- *   └──────────┘ └──────────┘ └──────────┘
- *   ┌────────────────────────────────────────┐
- *   │ 04 [mobile only] …… [📱 请在手机端查看] │   ← LockedMobileCard 通栏
- *   └────────────────────────────────────────┘     （不可点击，仅展示）
+ * PC 布局（#230 自适应四列制，替代 #229 三列+通栏的 3+1）：
+ *   ┌─────┐ ┌─────┐ ┌─────┐ ┌─────┐
+ *   │ 01  │ │ 02  │ │ 03  │ │ 04📱│   ← lg 起一行四列（放得下就 4 个）
+ *   └─────┘ └─────┘ └─────┘ └─────┘
+ *   md–lg：2×2（每卡 ~326px，描述完整两行）
+ *   04（移动端限定）为第 4 格锁定卡：虚线边框 + 手机 pill，不可点击
  *
- * - md:grid-cols-3；手机由 MobileProjectDeck 接管（hidden md:grid）
- * - 按钮文字 md–lg 隐藏只留图标（三列卡宽容不下两组文字钮），lg 起恢复
- * - 第 4 张（移动端限定）PC 也展示但锁定：虚线边框 + 手机 pill + 提示钮
+ * - md:grid-cols-2 lg:grid-cols-4；手机由 MobileProjectDeck 接管（hidden md:grid）
+ * - 按钮文字 xl 起恢复（lg 四列卡宽 ~201px 容不下两组文字钮，只留图标）
  * - 卡片视觉：border + bg-bg-elevated，rounded-[var(--showcase-radius)]
  * - 按钮风格：atom63 outline variant，MiniCard compact h-[26px]
  */
@@ -114,10 +111,10 @@ export function AIProjectEntrance() {
   return (
     <section id="ai-projects" aria-label="AI 协作项目" className="w-full scroll-mt-[calc(104px+env(safe-area-inset-top,0px))]">
       {/* 手机端：竖向单卡 + 分段切换（参考移动端工作台 / 国资管家的 tab+卡片语言）；
-          PC 三列网格，md 档起接管（MobileProjectDeck hidden） */}
+          PC 自适应网格，md 档起接管（MobileProjectDeck hidden） */}
       <MobileProjectDeck projects={projects} />
-      {/* PC：一行 3 张 MiniCard + 通栏锁定卡（手机端由 MobileProjectDeck 接管） */}
-      <div className="hidden gap-3 md:grid md:grid-cols-3">
+      {/* PC：#230 自适应 —— md 2×2，lg 起一行四列（04 锁定卡占第 4 格，不再通栏） */}
+      <div className="hidden gap-3 md:grid md:grid-cols-2 lg:grid-cols-4">
         {clickable.map((p) => (
           <MiniCard key={p.id} project={p} />
         ))}
@@ -304,7 +301,7 @@ function MobileProjectDeck({ projects }: { projects: AIProject[] }) {
               </div>
 
               {/* 标题 */}
-              <h3 className="text-balance text-xl font-medium tracking-tight text-text-primary">
+              <h3 className="text-balance text-xl font-[550] tracking-tight text-text-primary">
                 {p.title}
               </h3>
 
@@ -341,8 +338,8 @@ function MobileProjectDeck({ projects }: { projects: AIProject[] }) {
 }
 
 /* ============================================================
- * LockedMobileCard —— 移动端限定项目的 PC 展示卡（#229）
- *   - 位于三列一行之下、通栏展示（col-span-3）
+ * LockedMobileCard —— 移动端限定项目的 PC 展示卡（#230：四列制第 4 格）
+ *   - 与 01/02/03 同规格一格（不再 col-span 通栏）
  *   - 完全不可点击：无 Link/按钮跳转，虚线边框 + 手机 pill 标示锁定态
  *   - 提示引导到移动端查看（手机端 Deck 里该项目可正常进入）
  * ============================================================ */
@@ -351,7 +348,7 @@ function LockedMobileCard({ project }: { project: AIProject }) {
     <article
       style={{ backgroundImage: project.accent }}
       className={cn(
-        'col-span-1 flex flex-col gap-3 p-4 md:col-span-3 md:p-5',
+        'flex flex-col gap-3 p-4 md:p-5',
         'rounded-[var(--showcase-radius)]',
         'border border-dashed border-border-default bg-bg-elevated',
       )}
@@ -373,7 +370,7 @@ function LockedMobileCard({ project }: { project: AIProject }) {
       </div>
 
       {/* 标题 */}
-      <h3 className="text-balance text-base font-medium tracking-tight text-text-primary">
+      <h3 className="text-balance text-base font-[550] tracking-tight text-text-primary">
         {project.title}
       </h3>
 
@@ -418,7 +415,7 @@ function MiniCard({ project }: { project: AIProject }) {
       </div>
 
       {/* 标题 */}
-      <h3 className="text-balance text-base font-medium tracking-tight text-text-primary">
+      <h3 className="text-balance text-base font-[550] tracking-tight text-text-primary">
         {project.title}
       </h3>
 
@@ -428,7 +425,7 @@ function MiniCard({ project }: { project: AIProject }) {
       </p>
 
       {/* 按钮组 —— 手机：44px 触控档，卡间距补到 8px；
-          md–lg 三列卡宽不够，只留图标（lg 起恢复文字） */}
+          #230 四列制：md–xl 卡宽不够只留图标，xl 起恢复文字 */}
       <div className="mt-auto flex items-center gap-[8px] pt-1 md:gap-1.5">
         <ActionButton
           href={project.tryLiveHref}
@@ -439,7 +436,7 @@ function MiniCard({ project }: { project: AIProject }) {
           compact
           mobile="full"
           newTab
-          labelBreakpoint="lg"
+          labelBreakpoint="xl"
         />
         <ActionButton
           href={project.githubHref}
@@ -448,7 +445,7 @@ function MiniCard({ project }: { project: AIProject }) {
           disabled={isSoon}
           compact
           mobile="icon"
-          labelBreakpoint="lg"
+          labelBreakpoint="xl"
         />
       </div>
     </article>
@@ -518,8 +515,8 @@ function ActionButton({
   compact?: boolean;
   newTab?: boolean;
   mobile?: 'full' | 'icon';
-  /** 按钮文字何时恢复显示（#229 三列卡在 md–lg 宽度不够，只留图标） */
-  labelBreakpoint?: 'md' | 'lg';
+  /** 按钮文字何时恢复显示（#230 四列卡在 md–xl 宽度不够，只留图标） */
+  labelBreakpoint?: 'md' | 'lg' | 'xl';
 }) {
   const mdSize = compact ? 'md:h-[26px] md:px-2' : 'md:h-[30px] md:px-2.5';
   const size =
@@ -549,11 +546,13 @@ function ActionButton({
       {icon}
       <span
         className={
-          labelBreakpoint === 'lg'
-            ? 'hidden lg:inline'
-            : mobile === 'icon'
-              ? 'hidden md:inline'
-              : undefined
+          labelBreakpoint === 'xl'
+            ? 'hidden xl:inline'
+            : labelBreakpoint === 'lg'
+              ? 'hidden lg:inline'
+              : mobile === 'icon'
+                ? 'hidden md:inline'
+                : undefined
         }
       >
         {label}

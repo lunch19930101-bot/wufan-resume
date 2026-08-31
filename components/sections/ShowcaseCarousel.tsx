@@ -439,7 +439,7 @@ function SlideCard({
         <span className="font-mono text-[10px] tracking-wide text-white/50 tabular-nums">
           {String(index + 1).padStart(2, '0')} / {String(total).padStart(2, '0')}
         </span>
-        <h3 className="text-balance text-[13px] leading-snug font-medium text-white">
+        <h3 className="text-balance text-[13px] leading-snug font-[550] text-white">
           {item.title}
         </h3>
         <p className="text-pretty text-[10px] leading-snug text-white/65">

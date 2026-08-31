@@ -67,13 +67,13 @@ export function Hero() {
 /* ---------------------------------------------------------------- */
 
 /**
- * renderBold —— 把 **技能/术语** 片段渲染为 font-medium 强调
+ * renderBold —— 把 **技能/术语** 片段渲染为 font-[550] 强调
  * （与 HomeMain 的 Strong 一致：加粗 + 主文字色）
  */
 function renderBold(text: string) {
   return text.split('**').map((chunk, i) =>
     i % 2 === 1 ? (
-      <strong key={i} className="font-medium text-text-primary">
+      <strong key={i} className="font-[550] text-text-primary">
         {chunk}
       </strong>
     ) : (

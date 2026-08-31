@@ -210,7 +210,7 @@ export function WorkCard({ project }: { project: Project }) {
         <span className="font-mono text-sm tracking-wide text-white/70 tabular-nums">
           {project.year}
         </span>
-        <h3 className="line-clamp-2 text-balance text-base leading-snug font-medium text-white">
+        <h3 className="line-clamp-2 text-balance text-base leading-snug font-[550] text-white">
           {project.title}
         </h3>
         {project.type && (

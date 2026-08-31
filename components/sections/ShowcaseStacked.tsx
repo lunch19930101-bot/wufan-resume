@@ -230,7 +230,7 @@ function Tile({
       {/* 左下角文字 —— 大图：标题 + 副标题；小图：只留极小年份标签，不挡画面 */}
       {isBanner ? (
         <div className="absolute inset-x-0 bottom-0 z-10 flex flex-col gap-0.5 p-3.5">
-          <h3 className="text-balance text-lg leading-snug font-medium text-white">
+          <h3 className="text-balance text-lg leading-snug font-[550] text-white">
             {tile.title}
           </h3>
           <p className="text-pretty text-xs leading-snug text-white/65">
