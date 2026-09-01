@@ -13,6 +13,7 @@ import {
   TDRainIcon,
   TDSnowIcon,
   TDStormIcon,
+  BrandClaudeIcon,
 } from '@/components/icons';
 
 /**
@@ -372,7 +373,9 @@ export function Footer() {
       <div className="mx-auto max-w-[672px] px-6 lg:max-w-[864px] xl:max-w-[1088px]">
         <div className="flex flex-col gap-3 py-6 sm:flex-row sm:items-center sm:justify-between">
           <p className="font-mono text-mono-micro text-text-tertiary">
-            © {year} {site.name} · Designed & built with Claude Code · WF0101
+            © {year} {site.name} · Designed & built with{' '}
+            <BrandClaudeIcon className="mx-[0.1em] inline size-[1em] translate-y-[0.08em] text-[#D97757]" />
+            Claude Code · WF0101
           </p>
           {/* 回到顶部 —— 胶囊按钮：自绘「to-top」字形（顶栏 + 箭头），
               悬停箭头上升够到顶栏，active 把顶栏顶得微弹、右箭头上跳 */}

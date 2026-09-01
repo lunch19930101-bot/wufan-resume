@@ -16,9 +16,9 @@ import {
   TDShopIcon,
   TDUserIcon,
   TDStarFilledIcon,
-  TDFlagIcon,
-  TDEditIcon,
-  TDImageIcon,
+  TDFlagFilledIcon,
+  TDEditFilledIcon,
+  TDImageFilledIcon,
   TDLayersIcon,
   TDMailIcon,
 } from '@/components/icons';
@@ -73,33 +73,33 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
         {/* Meta —— #237 走查修复：改为「标签在上 / 值在下」的定义式单元，
             单元之间换行（值内部不再断出悬空的「·」；375px 两列即齐）
-            2026-09 图标化：每个单元 label 行挂 TDesign 线性小图标 + 独立色相，
-            五项五色（蓝/紫/橙/青/金），信息密度不变、可扫读性提升 */}
+            2026-09 图标化：label 行挂 TDesign 线性小图标——统一单色
+            （继承 label 的 tertiary 灰），克制作旧五色混杂 */}
         <div className="mt-4 flex flex-wrap gap-x-[40px] gap-y-3">
           <MetaItem
             label="年份"
             value={project.year}
-            icon={<TDCalendarIcon className="size-[12px] text-[#4E9BFF]" />}
+            icon={<TDCalendarIcon className="size-[12px]" />}
           />
           {project.type && (
             <MetaItem
               label="类型"
               value={TYPE_LABEL[project.type as ProjectType] ?? project.type}
-              icon={<TDTagIcon className="size-[12px] text-[#A78BFA]" />}
+              icon={<TDTagIcon className="size-[12px]" />}
             />
           )}
           {project.client && (
             <MetaItem
               label="客户"
               value={project.client}
-              icon={<TDShopIcon className="size-[12px] text-[#FB923C]" />}
+              icon={<TDShopIcon className="size-[12px]" />}
             />
           )}
           {project.role && (
             <MetaItem
               label="角色"
               value={project.role}
-              icon={<TDUserIcon className="size-[12px] text-[#2DD4BF]" />}
+              icon={<TDUserIcon className="size-[12px]" />}
             />
           )}
           {project.featured && (
@@ -112,19 +112,18 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
                 </span>
               }
               accent
-              icon={<TDStarFilledIcon className="size-[12px] text-[#F5C518]" />}
+              icon={<TDStarFilledIcon className="size-[12px]" />}
             />
           )}
         </div>
       </header>
 
-      {/* 01 · 项目背景（章节图标 = TDesign 线性 + 各自色相） */}
+      {/* 01 · 项目背景（章节图标 = TDesign 面性 -filled，统一单色中性 chip） */}
       <DetailSection
         index={1}
         title="项目背景"
         label="Background"
-        icon={<TDFlagIcon className="size-[14px]" />}
-        tint="#4E9BFF"
+        icon={<TDFlagFilledIcon className="size-[13px]" />}
       >
         <Prose text={content.background} />
       </DetailSection>
@@ -134,8 +133,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         index={2}
         title="设计过程"
         label="Process"
-        icon={<TDEditIcon className="size-[14px]" />}
-        tint="#A78BFA"
+        icon={<TDEditFilledIcon className="size-[13px]" />}
       >
         <Prose text={content.process} />
       </DetailSection>
@@ -145,8 +143,7 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         index={3}
         title="项目设计图"
         label="Design Images"
-        icon={<TDImageIcon className="size-[14px]" />}
-        tint="#FB923C"
+        icon={<TDImageFilledIcon className="size-[13px]" />}
       >
         <ProjectGallery gallery={project.gallery} title={project.title} />
       </DetailSection>
@@ -258,22 +255,21 @@ function MetaItem({
 
 /* ============================================================
  * DetailSection —— 详情页通用章节壳
- * 2026-09：标题前挂 24px 图标 chip（TDesign 线性图标 + tint 8% 底 + 描边），
- * 与左侧序号、右侧英文 label 构成「01 ▦ 标题 ····· LABEL」的章节签名
+ * 2026-09：标题前挂 24px 图标 chip（TDesign 面性 -filled 图标，
+ * 统一 secondary 单色 + 中性底/描边），与左侧序号、右侧英文
+ * label 构成「01 ▦ 标题 ····· LABEL」的章节签名
  * ============================================================ */
 function DetailSection({
   index,
   title,
   label,
   icon,
-  tint,
   children,
 }: {
   index: number;
   title: string;
   label: string;
   icon?: React.ReactNode;
-  tint?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -285,12 +281,7 @@ function DetailSection({
         {icon && (
           <span
             aria-hidden
-            style={
-              tint
-                ? { backgroundColor: `${tint}14`, color: tint, borderColor: `${tint}33` }
-                : undefined
-            }
-            className="flex size-[24px] items-center justify-center rounded-[6px] border border-border-subtle bg-bg-elevated"
+            className="flex size-[24px] items-center justify-center rounded-[6px] border border-border-subtle bg-bg-elevated text-text-secondary"
           >
             {icon}
           </span>

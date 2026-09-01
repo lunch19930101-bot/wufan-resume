@@ -1186,42 +1186,7 @@ html[data-a63-surface]::before {
  *    静息状态维持工程图纸的黑白灰，不破坏 Make to Think 气质）
  * ============================================================ */
 
-/* 1) .tool-card —— 工具卡：品牌色描边 + 辉光 + 对角流光扫过
-      --tc 由每张卡内联指定（品牌色），color-mix 派生透明度 */
-.tool-card {
-  position: relative;
-}
-.tool-card:hover {
-  border-color: color-mix(in srgb, var(--tc) 45%, transparent);
-  box-shadow:
-    0 8px 22px -8px color-mix(in srgb, var(--tc) 45%, transparent),
-    0 2px 8px -4px color-mix(in srgb, var(--tc) 30%, transparent);
-}
-.tool-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  left: -60%;
-  width: 55%;
-  transform: skewX(-16deg) translateX(0);
-  background: linear-gradient(
-    90deg,
-    transparent,
-    color-mix(in srgb, var(--tc) 20%, transparent),
-    transparent
-  );
-  opacity: 0;
-  pointer-events: none;
-}
-.tool-card:hover::after {
-  opacity: 1;
-  transform: skewX(-16deg) translateX(320%);
-  transition:
-    transform 720ms var(--ease-out-expo),
-    opacity 200ms linear;
-}
-
-/* 2) .aurora-ring —— hover 极光描边：conic 五色环沿卡片旋转
+/* 1) .aurora-ring —— hover 极光描边：conic 五色环沿卡片旋转
       1px 环由 mask 挖出（content-box xor）；--ang 用 @property 注册后才可动画 */
 @property --ang {
   syntax: '<angle>';
@@ -1264,7 +1229,7 @@ html[data-a63-surface]::before {
   }
 }
 
-/* 3) .shine —— 主 CTA 悬停扫光：一道高光斜切着划过按钮 */
+/* 2) .shine —— 主 CTA 悬停扫光：一道高光斜切着划过按钮 */
 .shine {
   position: relative;
   overflow: hidden;
@@ -1290,7 +1255,7 @@ html[data-a63-surface]::before {
   transition: transform 760ms var(--ease-out-quart);
 }
 
-/* 4) .aurora-blob —— 高斯模糊彩色光斑（2026 soft-glow 趋势）：
+/* 3) .aurora-blob —— 高斯模糊彩色光斑（2026 soft-glow 趋势）：
       绝对定位挂在区块装饰层，尺寸/颜色由调用方内联给 */
 .aurora-blob {
   position: absolute;
@@ -1301,7 +1266,6 @@ html[data-a63-surface]::before {
 
 /* 流光全家 —— reduced-motion 一并静默 */
 @media (prefers-reduced-motion: reduce) {
-  .tool-card::after,
   .shine::after {
     display: none;
   }
