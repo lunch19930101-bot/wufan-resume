@@ -9,7 +9,7 @@ import {
   type ProjectType,
 } from '@/lib/projects';
 import { site } from '@/lib/config';
-import { cn, withBasePath } from '@/lib/utils';
+import { cn } from '@/lib/utils';
 import { ProjectGallery } from '@/components/sections/ProjectGallery';
 import { RelatedCarousel } from '@/components/sections/RelatedCarousel';
 
@@ -76,21 +76,6 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
           )}
         </div>
       </header>
-
-      {/* 封面横条 —— #237 走查：作品集首屏要有作品（元信息后、正文前，
-          0 滚动即可感知项目气质；无封面项目自动跳过） */}
-      {project.cover && (
-        <div className="pb-[32px]">
-          <div className="tile-fade overflow-hidden rounded-[var(--showcase-radius)] border border-border-subtle">
-            {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img
-              src={withBasePath(project.cover)}
-              alt={`${project.title} 封面`}
-              className="aspect-[16/9] w-full object-cover"
-            />
-          </div>
-        </div>
-      )}
 
       {/* 01 · 项目背景 */}
       <DetailSection index={1} title="项目背景" label="Background">

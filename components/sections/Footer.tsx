@@ -166,7 +166,7 @@ export function Footer() {
         : 'radial-gradient(120% 100% at 100% 0%, rgba(96,140,255,0.08) 0%, rgba(96,140,255,0) 55%)';
     }
     const [r, g, b, a] = weatherTint(weather.code);
-    return `radial-gradient(120% 100% at 100% 0%, rgba(${r},${g},${b},${a}) 0%, rgba(${r},${g},${b},0) 55%)`;
+    return `linear-gradient(225deg, rgba(${r},${g},${b},${a}) 0%, rgba(${r},${g},${b},${Math.round(a * 0.28 * 1000) / 1000}) 45%, rgba(${r},${g},${b},0) 78%)`;
   })();
 
   return (
@@ -272,7 +272,7 @@ export function Footer() {
                   src={weatherTileSrc(weather.code)}
                   alt=""
                   aria-hidden
-                  className="absolute right-6 top-6 size-[64px]"
+                  className="absolute right-6 top-6 size-[100px]"
                   style={{ filter: weatherShadow(weather.code) }}
                 />
               )}
@@ -300,7 +300,7 @@ export function Footer() {
             <div className="relative border-t border-dashed border-border-default px-6 py-6 md:border-t-0">
               <div className="flex items-center justify-between gap-3">
                 <p className="font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
-                  / Local
+                  / 当前地区时间
                 </p>
                 <span className="inline-flex items-center gap-1.5 font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
                   {isDay ? (
@@ -361,18 +361,29 @@ export function Footer() {
           <p className="font-mono text-mono-micro text-text-tertiary">
             © {year} {site.name} · Designed & built with Claude Code · WF0101
           </p>
+          {/* 回到顶部 —— 胶囊小按钮：默认 🙂，悬停换 🚀、箭头上跳，按下火箭窜升 */}
           <button
             type="button"
             data-cursor="link"
             onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
             className={cn(
-              'inline-flex w-fit items-center gap-1.5',
-              'font-mono text-mono-micro uppercase tracking-wider text-text-tertiary',
-              'transition-colors duration-micro ease-out-quart hover:text-text-primary',
+              'group inline-flex w-fit items-center gap-2',
+              'rounded-full border border-border-default bg-bg-surface px-4 py-[7px]',
+              'font-mono text-mono-micro uppercase tracking-wider text-text-secondary',
+              'transition-all duration-micro ease-out-quart',
+              'hover:border-text-primary hover:text-text-primary active:scale-95',
             )}
           >
+            <span className="relative block size-[14px]">
+              <span className="absolute inset-0 text-[13px] leading-none transition-opacity duration-micro group-hover:opacity-0">
+                🙂
+              </span>
+              <span className="absolute inset-0 text-[13px] leading-none opacity-0 transition-opacity duration-micro group-hover:opacity-100 group-active:-translate-y-1">
+                🚀
+              </span>
+            </span>
             Back to top
-            <ArrowUpIcon className="size-3" />
+            <ArrowUpIcon className="size-3 transition-transform duration-micro ease-out-quart group-hover:-translate-y-[2px] group-active:-translate-y-[4px]" />
           </button>
         </div>
       </div>
@@ -464,14 +475,15 @@ function greet(h: number): string {
   return '晚安 · 今天也认真收了尾';
 }
 
-/** 天气图标贴片 —— v7：用户提供的 6 张 3D 参考图直切（make_weather8.py to_tile，
- *  bbox 裁切 + 等比缩放，绝不拉伸），144px 方形透明 PNG（public/weather/*.png）。
+/** 天气图标贴片 —— v7：用户提供的 6 张 3D 参考图直切（make_weather9 to_tile，
+ *  bbox 裁切 + 等比缩放，绝不拉伸），256px 方形透明 PNG（public/weather/*.png），
+ *  显示 100px → 2.56x 视网膜密度。
  *  按天气分组取图，不分昼夜；雾与阴共用云朵贴片。
- *  ?v=7 —— cloud.png 等文件名与旧版相同，强刷缓存 */
+ *  ?v=8 —— cloud.png 等文件名与旧版相同，强刷缓存 */
 function weatherTileSrc(code: number): string {
   const g = wmoGroup(code);
-  if (g === 'fog') return withBasePath('/weather/cloud.png?v=7');
-  return withBasePath(`/weather/${g}.png?v=7`);
+  if (g === 'fog') return withBasePath('/weather/cloud.png?v=8');
+  return withBasePath(`/weather/${g}.png?v=8`);
 }
 
 /** 贴片同色投影 —— 色相取自该贴片参考图的实测特征色（饱和像素均值，
@@ -492,20 +504,22 @@ function weatherShadow(code: number): string {
             : g === 'snow'
               ? '#B2C2DA'
               : '#B072FA'; // storm
-  return `drop-shadow(0 2px 5px ${hue}66) drop-shadow(0 8px 20px ${hue}59)`;
+  return `drop-shadow(0 3px 8px ${hue}66) drop-shadow(0 12px 28px ${hue}59)`;
 }
 
-/** 看板底色 —— 当前天气 → 贴片参考图主色向白提亮 35% 的浅色调
- *  （「底部的渐变使用她们里面的颜色的浅色调」），透明度压在 0.1 上下 */
+/** 看板底色 —— 当前天气 → 该贴片主色系的浅色渐变（用户定调）：
+ *  晴=橙 / 雨=蓝 / 雷=紫 / 阴(含风感)=灰 / 雪=蓝白；
+ *  多云=暖杏（比晴浅一档）、雾=灰白（比阴浅一档），各自区分。
+ *  225° 对角渐变：贴片所在的右上角最浓，向左下渐隐，文字区保持可读 */
 function weatherTint(code: number): [number, number, number, number] {
   const g = wmoGroup(code);
-  if (g === 'clear') return [253, 213, 143, 0.1];
-  if (g === 'partly') return [253, 213, 143, 0.07];
-  if (g === 'cloud') return [219, 226, 242, 0.09];
-  if (g === 'fog') return [219, 226, 242, 0.08];
-  if (g === 'rain') return [220, 234, 251, 0.1];
-  if (g === 'snow') return [232, 239, 251, 0.12];
-  return [226, 220, 249, 0.1]; // storm
+  if (g === 'clear') return [252, 190, 90, 0.42]; // 橙
+  if (g === 'partly') return [251, 217, 164, 0.4]; // 暖杏
+  if (g === 'cloud') return [198, 203, 213, 0.42]; // 灰
+  if (g === 'fog') return [217, 221, 229, 0.4]; // 灰白
+  if (g === 'rain') return [166, 198, 240, 0.42]; // 蓝
+  if (g === 'snow') return [211, 227, 248, 0.45]; // 蓝白
+  return [199, 178, 245, 0.42]; // 紫（雷）
 }
 
 /** 看板纹理层 —— 当前天气 → globals.css .wx-* 类（雨丝/雪粒/光芒/星点/云雾/雷闪）。
