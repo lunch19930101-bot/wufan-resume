@@ -16,7 +16,7 @@ import { cn, withBasePath } from '@/lib/utils';
  *   4. Build area：3 行 2 列，自包含 max-w-[672px] 区块
  *        Build   | Shipped
  *        Engine  | Viewport
- *        Beijing | Local    ← 看板行：Doto 点阵大数字（天气 + HH∶MM∶SS 时间）
+ *        Beijing | 北京时区 ← 看板行：Doto 点阵大数字（天气 + HH∶MM∶SS 时间）
  *      行间用 max-w-[672px] 宽度的 border-top 分隔；中心垂直分隔线贯穿每行
  *   5. GridRule（full-bleed + 两端菱形）—— Build 下沿 / boundary
  *   6. / Copyright
@@ -294,13 +294,14 @@ export function Footer() {
               </p>
             </div>
 
-            {/* / Local —— 时间看板（HH∶MM∶SS，冒号 = 两个 3px 点）
+            {/* / 北京时区 —— 时间看板（HH∶MM∶SS，冒号 = 两个 3px 点）
+                标签写明时区（钟面为北京 GMT+8，与下方日期行呼应）
                 #237 昼夜：标签行右侧挂 昼/夜 徽标，随时可见当前状态
                 relative —— 抬到 .wx-fx 纹理层之上（文字不吃雨丝/雪粒） */}
             <div className="relative border-t border-dashed border-border-default px-6 py-6 md:border-t-0">
               <div className="flex items-center justify-between gap-3">
                 <p className="font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
-                  / 当前地区时间
+                  / 北京时区
                 </p>
                 <span className="inline-flex items-center gap-1.5 font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
                   {isDay ? (
@@ -361,7 +362,8 @@ export function Footer() {
           <p className="font-mono text-mono-micro text-text-tertiary">
             © {year} {site.name} · Designed & built with Claude Code · WF0101
           </p>
-          {/* 回到顶部 —— 胶囊小按钮：默认 🙂，悬停换 🚀、箭头上跳，按下火箭窜升 */}
+          {/* 回到顶部 —— 胶囊按钮：自绘「to-top」字形（顶栏 + 箭头），
+              悬停箭头上升够到顶栏，active 把顶栏顶得微弹、右箭头上跳 */}
           <button
             type="button"
             data-cursor="link"
@@ -374,14 +376,27 @@ export function Footer() {
               'hover:border-text-primary hover:text-text-primary active:scale-95',
             )}
           >
-            <span className="relative block size-[14px]">
-              <span className="absolute inset-0 text-[13px] leading-none transition-opacity duration-micro group-hover:opacity-0">
-                🙂
-              </span>
-              <span className="absolute inset-0 text-[13px] leading-none opacity-0 transition-opacity duration-micro group-hover:opacity-100 group-active:-translate-y-1">
-                🚀
-              </span>
-            </span>
+            <svg
+              viewBox="0 0 16 16"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth={1.6}
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+              className="size-[15px] shrink-0"
+            >
+              {/* 顶栏 —— 被箭头撞到时微微上弹 */}
+              <path
+                d="M3.25 2.75h9.5"
+                className="transition-transform duration-micro ease-out-quart group-active:-translate-y-[1px]"
+              />
+              {/* 箭头 —— 悬停上升去够顶栏，active 顶上去 */}
+              <path
+                d="M8 13.25V6.25M4.9 9.35 8 6.25l3.1 3.1"
+                className="transition-transform duration-micro ease-out-quart group-hover:-translate-y-[2px] group-active:-translate-y-[3px]"
+              />
+            </svg>
             Back to top
             <ArrowUpIcon className="size-3 transition-transform duration-micro ease-out-quart group-hover:-translate-y-[2px] group-active:-translate-y-[4px]" />
           </button>
