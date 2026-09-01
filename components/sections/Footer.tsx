@@ -464,17 +464,17 @@ function greet(h: number): string {
 /** 天气图标贴片 —— v3 手绘 SVG 渲染的 144px 方形透明 PNG（public/weather/*.png，
  *  仿花瓣参考的软渐变无描边风格；方形画布天然不拉伸，alpha 出图无黑边）。
  *  按 WMO 分组 + 昼夜取图；阴天有专属双云图标。
- *  ?v=5 —— v5 花瓣参考原图直抠（等比无拉伸）后强制刷缓存 */
+ *  ?v=6 —— v6 临摹参考马卡龙淡彩的自绘图标（3 圆胖云 + 花边光环太阳 + 蓝紫月牙）后强制刷缓存 */
 function weatherTileSrc(code: number, isDay: boolean): string {
   const g = wmoGroup(code);
   const dn = isDay ? 'day' : 'night';
-  if (g === 'clear') return withBasePath(`/weather/clear-${dn}.png?v=5`);
-  if (g === 'partly') return withBasePath(`/weather/partly-${dn}.png?v=5`);
-  if (g === 'cloud') return withBasePath('/weather/cloud.png?v=5');
-  if (g === 'fog') return withBasePath('/weather/fog.png?v=5');
-  if (g === 'rain') return withBasePath(`/weather/rain-${dn}.png?v=5`);
-  if (g === 'snow') return withBasePath(`/weather/snow-${dn}.png?v=5`);
-  return withBasePath(`/weather/storm-${dn}.png?v=5`);
+  if (g === 'clear') return withBasePath(`/weather/clear-${dn}.png?v=6`);
+  if (g === 'partly') return withBasePath(`/weather/partly-${dn}.png?v=6`);
+  if (g === 'cloud') return withBasePath('/weather/cloud.png?v=6');
+  if (g === 'fog') return withBasePath('/weather/fog.png?v=6');
+  if (g === 'rain') return withBasePath(`/weather/rain-${dn}.png?v=6`);
+  if (g === 'snow') return withBasePath(`/weather/snow-${dn}.png?v=6`);
+  return withBasePath(`/weather/storm-${dn}.png?v=6`);
 }
 
 /** 贴片同色投影 —— 颜色取自 make_weather3.mjs 里该组图标的主色端
