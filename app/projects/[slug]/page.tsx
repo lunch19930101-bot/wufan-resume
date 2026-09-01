@@ -11,10 +11,10 @@ import {
 import { site } from '@/lib/config';
 import { cn } from '@/lib/utils';
 import {
-  TDCalendarIcon,
-  TDTagIcon,
-  TDShopIcon,
-  TDUserIcon,
+  TDCalendarFilledIcon,
+  TDTagFilledIcon,
+  TDShopFilledIcon,
+  TDUserFilledIcon,
   TDStarFilledIcon,
   TDFlagFilledIcon,
   TDEditFilledIcon,
@@ -73,33 +73,33 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 
         {/* Meta —— #237 走查修复：改为「标签在上 / 值在下」的定义式单元，
             单元之间换行（值内部不再断出悬空的「·」；375px 两列即齐）
-            2026-09 图标化：label 行挂 TDesign 线性小图标——统一单色
-            （继承 label 的 tertiary 灰），克制作旧五色混杂 */}
+            2026-09 图标化：label 行挂 TDesign 面性小图标（用户指定
+            面性）——统一单色（继承 label 的 tertiary 灰），克制作旧五色混杂 */}
         <div className="mt-4 flex flex-wrap gap-x-[40px] gap-y-3">
           <MetaItem
             label="年份"
             value={project.year}
-            icon={<TDCalendarIcon className="size-[12px]" />}
+            icon={<TDCalendarFilledIcon className="size-[12px]" />}
           />
           {project.type && (
             <MetaItem
               label="类型"
               value={TYPE_LABEL[project.type as ProjectType] ?? project.type}
-              icon={<TDTagIcon className="size-[12px]" />}
+              icon={<TDTagFilledIcon className="size-[12px]" />}
             />
           )}
           {project.client && (
             <MetaItem
               label="客户"
               value={project.client}
-              icon={<TDShopIcon className="size-[12px]" />}
+              icon={<TDShopFilledIcon className="size-[12px]" />}
             />
           )}
           {project.role && (
             <MetaItem
               label="角色"
               value={project.role}
-              icon={<TDUserIcon className="size-[12px]" />}
+              icon={<TDUserFilledIcon className="size-[12px]" />}
             />
           )}
           {project.featured && (
@@ -118,12 +118,15 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         </div>
       </header>
 
-      {/* 01 · 项目背景（章节图标 = TDesign 面性 -filled，统一单色中性 chip） */}
+      {/* 01 · 项目背景（章节图标 = TDesign 面性 -filled 白 glyphs，
+          挂 Apple/iOS 设置页式渐变圆角方块 chip——26px / 7px 圆角 /
+          同色系柔光投影，每章一个色相） */}
       <DetailSection
         index={1}
         title="项目背景"
         label="Background"
-        icon={<TDFlagFilledIcon className="size-[13px]" />}
+        icon={<TDFlagFilledIcon className="size-[14px]" />}
+        chipClassName="bg-gradient-to-b from-[#5CA9FF] to-[#1B6DF3] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35),inset_0_-1px_0_0_rgba(0,0,0,0.15),0_2px_8px_rgba(43,105,235,0.45)]"
       >
         <Prose text={content.background} />
       </DetailSection>
@@ -133,7 +136,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         index={2}
         title="设计过程"
         label="Process"
-        icon={<TDEditFilledIcon className="size-[13px]" />}
+        icon={<TDEditFilledIcon className="size-[14px]" />}
+        chipClassName="bg-gradient-to-b from-[#A78BFA] to-[#7C3AED] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35),inset_0_-1px_0_0_rgba(0,0,0,0.15),0_2px_8px_rgba(124,58,237,0.4)]"
       >
         <Prose text={content.process} />
       </DetailSection>
@@ -143,7 +147,8 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         index={3}
         title="项目设计图"
         label="Design Images"
-        icon={<TDImageFilledIcon className="size-[13px]" />}
+        icon={<TDImageFilledIcon className="size-[14px]" />}
+        chipClassName="bg-gradient-to-b from-[#4ED8C3] to-[#0E9F8A] shadow-[inset_0_1px_0_0_rgba(255,255,255,0.35),inset_0_-1px_0_0_rgba(0,0,0,0.15),0_2px_8px_rgba(14,159,138,0.4)]"
       >
         <ProjectGallery gallery={project.gallery} title={project.title} />
       </DetailSection>
@@ -255,21 +260,24 @@ function MetaItem({
 
 /* ============================================================
  * DetailSection —— 详情页通用章节壳
- * 2026-09：标题前挂 24px 图标 chip（TDesign 面性 -filled 图标，
- * 统一 secondary 单色 + 中性底/描边），与左侧序号、右侧英文
- * label 构成「01 ▦ 标题 ····· LABEL」的章节签名
+ * 2026-09：标题前挂 Apple/iOS 设置页式图标 chip——26px 渐变圆角
+ * 方块 + 白色面性 glyph，顶部一道 inset 高光（玻璃光泽）+ 底部
+ * 微投影提层次；每章一个色相（01 蓝 / 02 紫 / 03 青），
+ * 与左侧序号、右侧英文 label 构成「01 ▦ 标题 ····· LABEL」签名
  * ============================================================ */
 function DetailSection({
   index,
   title,
   label,
   icon,
+  chipClassName,
   children,
 }: {
   index: number;
   title: string;
   label: string;
   icon?: React.ReactNode;
+  chipClassName?: string;
   children: React.ReactNode;
 }) {
   return (
@@ -281,7 +289,10 @@ function DetailSection({
         {icon && (
           <span
             aria-hidden
-            className="flex size-[24px] items-center justify-center rounded-[6px] border border-border-subtle bg-bg-elevated text-text-secondary"
+            className={cn(
+              'flex size-[26px] shrink-0 items-center justify-center rounded-[7px] text-white',
+              chipClassName,
+            )}
           >
             {icon}
           </span>

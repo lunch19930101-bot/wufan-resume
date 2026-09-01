@@ -305,3 +305,39 @@ export function BrandPhotoshopIcon({ className }: { className?: string }) {
   );
 }
 
+
+/** TDesign · calendar-filled */
+export function TDCalendarFilledIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+      <path fill="currentColor" d="M6 1.5V4H2V9H22V4H18V1.5H16V4H8V1.5H6Z" />
+    </svg>
+  );
+}
+
+/** TDesign · tag-filled */
+export function TDTagFilledIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+      <path fill="currentColor" d="M0.978516 13.1206L10.878 23.0201L20.9999 12.9145L21 2.99805L11.1002 3.01525L0.978516 13.1206ZM14.9961 9.00382V7H16.9999L17.0001 9.00399L14.9961 9.00382Z" />
+    </svg>
+  );
+}
+
+/** TDesign · shop-filled */
+export function TDShopFilledIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+      <path fill="currentColor" d="M12 1C9.51472 1 7.5 3.01472 7.5 5.5V7H3V23H21V7H16.5V5.5C16.5 3.01472 14.4853 1 12 1ZM14.5 5.5V7H9.5V5.5C9.5 4.11929 10.6193 3 12 3C13.3807 3 14.5 4.11929 14.5 5.5ZM7.5 12V9H9.5V12H7.5ZM14.5 12V9H16.5V12H14.5Z" />
+    </svg>
+  );
+}
+
+/** TDesign · user-filled */
+export function TDUserFilledIcon({ className }: { className?: string }) {
+  return (
+    <svg viewBox="0 0 24 24" fill="none" aria-hidden="true" className={className}>
+      <path fill="currentColor" d="M6.5 7.5C6.5 4.46243 8.96243 2 12 2C15.0376 2 17.5 4.46243 17.5 7.5C17.5 10.5376 15.0376 13 12 13C8.96243 13 6.5 10.5376 6.5 7.5ZM3 19C3 16.2386 5.23858 14 8 14H16C18.7614 14 21 16.2386 21 19V22H3V19Z" />
+    </svg>
+  );
+}

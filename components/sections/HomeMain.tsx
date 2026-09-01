@@ -8,13 +8,7 @@ import { ShowcaseStacked } from '@/components/sections/ShowcaseStacked';
 import { AIProjectEntrance } from '@/components/sections/AIProjectEntrance';
 import { ProjectShowcase } from '@/components/sections/ProjectShowcase';
 import {
-  BrandFigmaIcon,
-  BrandSketchIcon,
-  BrandCinemaIcon,
-  BrandPhotoshopIcon,
-  BrandClaudeIcon,
   BrandOpenAIIcon,
-  BrandGeminiIcon,
   BrandMidjourneyIcon,
 } from '@/components/icons';
 
@@ -77,7 +71,7 @@ export function HomeMain() {
         </div>
 
         <EssayParagraph>
-          <Strong>统信官网改版</Strong>——负责官网整体<Strong>视觉体系重构</Strong>与落地执行，覆盖全站页面与模块；建立覆盖全站的组件库，输出色彩、字体、图标、组件、模板等规范。C 端与 B 端视觉统一，整体布局自适应保证各设备阅读性；期间自学 <Tool><ToolMark color="#5A7BFF"><BrandCinemaIcon className="size-full" /></ToolMark>C4D</Tool> 投入实战，首页头图以 3D 动态效果呈现。项目六个月完成上线，设计体系支持后续产品线持续扩展。
+          <Strong>统信官网改版</Strong>——负责官网整体<Strong>视觉体系重构</Strong>与落地执行，覆盖全站页面与模块；建立覆盖全站的组件库，输出色彩、字体、图标、组件、模板等规范。C 端与 B 端视觉统一，整体布局自适应保证各设备阅读性；期间自学 <Tool><BrandMark src="/images/brands/c4d.svg">C4D</BrandMark></Tool> 投入实战，首页头图以 3D 动态效果呈现。项目六个月完成上线，设计体系支持后续产品线持续扩展。
         </EssayParagraph>
 
         <EssayParagraph>
@@ -86,7 +80,7 @@ export function HomeMain() {
 
         {/* 4. 设计系统 / 组件库工程化 */}
         <EssayParagraph>
-          在视觉之外，我同时负责<Strong>设计系统</Strong>的工程化落地——与开发团队定制设计语言、开发周期、<Strong>组件库代码化</Strong>，让设计还原走查与后续迭代的效率得到极大提升。同时把 AI 协作引入工作流——从 <Tool><ToolMark color="#B9C0CC"><BrandMidjourneyIcon className="size-full" /></ToolMark>MJ、<ToolMark color="#6E8BFF"><GlyphMark>豆</GlyphMark></ToolMark>豆包、<ToolMark color="#FF5C8A"><GlyphMark>即</GlyphMark></ToolMark>即梦</Tool>等 AI 设计工具起步，到现在用 <Tool><ToolMark color="#D97757"><BrandClaudeIcon className="size-full" /></ToolMark>Claude Code</Tool> 打通设计与开发的衔接，效率一路提升。
+          在视觉之外，我同时负责<Strong>设计系统</Strong>的工程化落地——与开发团队定制设计语言、开发周期、<Strong>组件库代码化</Strong>，让设计还原走查与后续迭代的效率得到极大提升。同时把 AI 协作引入工作流——从 <Tool><span className="whitespace-nowrap"><ToolMark color="#B9C0CC"><BrandMidjourneyIcon className="size-full" /></ToolMark>MJ</span>、<BrandMark src="/images/brands/doubao.png">豆包</BrandMark>、<BrandMark src="/images/brands/jimeng.png">即梦</BrandMark></Tool>等 AI 设计工具起步，到现在用 <Tool><BrandMark src="/images/brands/claude.svg">Claude Code</BrandMark></Tool> 打通设计与开发的衔接，效率一路提升。
         </EssayParagraph>
 
         {/* 5. 平安银行时代 */}
@@ -111,7 +105,7 @@ export function HomeMain() {
             2026-09：工具名前加品牌裸 logo（同统信/平安的 inline favicon
             形式，无底色无框），扫读时工具一眼可辨 */}
         <EssayParagraph>
-          精通 <Tool><ToolMark color="#F24E1E"><BrandFigmaIcon className="size-full" /></ToolMark>Figma、<ToolMark color="#F7B500"><BrandSketchIcon className="size-full" /></ToolMark>Sketch、<ToolMark color="#5A7BFF"><BrandCinemaIcon className="size-full" /></ToolMark>C4D、<ToolMark color="#31A8FF"><BrandPhotoshopIcon className="size-full" /></ToolMark>Ps</Tool> 等设计软件，以及各平台 AI 软件（<Tool><ToolMark color="#D97757"><BrandClaudeIcon className="size-full" /></ToolMark>Claude Code、<ToolMark><BrandOpenAIIcon className="size-full" /></ToolMark>ChatGPT、<ToolMark><BrandOpenAIIcon className="size-full" /></ToolMark>Codex、<ToolMark color="#3DBA54"><GlyphMark>HX</GlyphMark></ToolMark>HBuilderX</Tool>）等。能够独立完成平面视觉设计、移动端以及 PC 端 UI/UX 设计、3D 设计、后台系统设计。
+          精通 <Tool><BrandMark src="/images/brands/figma.svg">Figma</BrandMark>、<BrandMark src="/images/brands/sketch.png">Sketch</BrandMark>、<BrandMark src="/images/brands/c4d.svg">C4D</BrandMark>、<BrandMark src="/images/brands/photoshop.png">Ps</BrandMark></Tool> 等设计软件，以及各平台 AI 软件（<Tool><BrandMark src="/images/brands/claude.svg">Claude Code</BrandMark>、<span className="whitespace-nowrap"><ToolMark><BrandOpenAIIcon className="size-full" /></ToolMark>ChatGPT</span>、<span className="whitespace-nowrap"><ToolMark><BrandOpenAIIcon className="size-full" /></ToolMark>Codex</span>、<BrandMark src="/images/brands/hbuilderx.png">HBuilderX</BrandMark></Tool>）等。能够独立完成平面视觉设计、移动端以及 PC 端 UI/UX 设计、3D 设计、后台系统设计。
         </EssayParagraph>
 
         {/* 8. AI 协作三入口 —— atom63 "I build in public" 1:1 复刻 */}
@@ -121,7 +115,7 @@ export function HomeMain() {
 
         {/* 9. 团队管理 */}
         <EssayParagraph>
-          <Strong>六年团队管理</Strong>经验——负责 UI 团队的主视觉提升、工作安排与团队文化建设。管理之外，我始终守在视觉一线——工具的每一次迁移都是一条学习曲线：从 <Tool><ToolMark color="#31A8FF"><BrandPhotoshopIcon className="size-full" /></ToolMark>PS、<ToolMark color="#F7B500"><BrandSketchIcon className="size-full" /></ToolMark>Sketch</Tool> 到 <Tool><ToolMark color="#F24E1E"><BrandFigmaIcon className="size-full" /></ToolMark>Figma</Tool>，再到 AI 工具的持续跟进，从<Tool><ToolMark color="#6E8BFF"><GlyphMark>豆</GlyphMark></ToolMark>豆包、<ToolMark color="#FF5C8A"><GlyphMark>即</GlyphMark></ToolMark>即梦</Tool>到 <Tool><ToolMark color="#9F86EA"><BrandGeminiIcon className="size-full" /></ToolMark>Gemini</Tool>，再到如今日常使用的 <Tool><ToolMark><BrandOpenAIIcon className="size-full" /></ToolMark>ChatGPT 与 <ToolMark color="#D97757"><BrandClaudeIcon className="size-full" /></ToolMark>Claude Code</Tool>。良好的设计能力与沟通协调能力，抗压能力强，持续学习，保持创新。
+          <Strong>六年团队管理</Strong>经验——负责 UI 团队的主视觉提升、工作安排与团队文化建设。管理之外，我始终守在视觉一线——工具的每一次迁移都是一条学习曲线：从 <Tool><BrandMark src="/images/brands/photoshop.png">PS</BrandMark>、<BrandMark src="/images/brands/sketch.png">Sketch</BrandMark></Tool> 到 <Tool><BrandMark src="/images/brands/figma.svg">Figma</BrandMark></Tool>，再到 AI 工具的持续跟进，从<Tool><BrandMark src="/images/brands/doubao.png">豆包</BrandMark>、<BrandMark src="/images/brands/jimeng.png">即梦</BrandMark></Tool>到 <Tool><BrandMark src="/images/brands/gemini.svg">Gemini</BrandMark></Tool>，再到如今日常使用的 <Tool><span className="whitespace-nowrap"><ToolMark><BrandOpenAIIcon className="size-full" /></ToolMark>ChatGPT</span> 与 <BrandMark src="/images/brands/claude.svg">Claude Code</BrandMark></Tool>。良好的设计能力与沟通协调能力，抗压能力强，持续学习，保持创新。
         </EssayParagraph>
 
         {/* 10. 项目合集 Timeline —— 原页面底部上移至此 */}
@@ -292,10 +286,27 @@ function ToolMark({ color, children }: { color?: string; children: ReactNode }) 
   );
 }
 
-/* GlyphMark —— 无官方 SVG 的工具（豆包/即梦/HBuilderX）用
- *   品牌色裸字形当 mark：加粗 + 0.82em，读作「字标」而非正文错字 */
-function GlyphMark({ children }: { children: ReactNode }) {
-  return <span className="text-[0.82em] font-semibold leading-none">{children}</span>;
+/* BrandMark —— 2026-09 官网现行真彩 logo（/images/brands/）：
+ *   figma / sketch / c4d / photoshop / claude / gemini / doubao /
+ *   jimeng / hbuilderx，<img> 直出官方资产，天然色、无底色无框，
+ *   与统信/平安 Favicon 同一形式。
+ *   children = 工具名：logo 与名字包进 whitespace-nowrap 粘成
+ *   一个不可折行单元（走查修复：HBuilderX 的 logo 曾被单独甩在
+ *   上一行行尾，与名字分离） */
+function BrandMark({ src, children }: { src: string; children?: ReactNode }) {
+  return (
+    <span className="whitespace-nowrap">
+      <ToolMark>
+        <img
+          src={withBasePath(src)}
+          alt=""
+          loading="lazy"
+          className="size-full object-contain"
+        />
+      </ToolMark>
+      {children}
+    </span>
+  );
 }
 
 /* ============================================================
