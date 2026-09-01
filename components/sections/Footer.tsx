@@ -165,7 +165,7 @@ export function Footer() {
         ? 'radial-gradient(120% 100% at 100% 0%, rgba(255,190,90,0.05) 0%, rgba(255,190,90,0) 55%)'
         : 'radial-gradient(120% 100% at 100% 0%, rgba(96,140,255,0.08) 0%, rgba(96,140,255,0) 55%)';
     }
-    const [r, g, b, a] = weatherTint(weather.code, weather.isDay);
+    const [r, g, b, a] = weatherTint(weather.code);
     return `radial-gradient(120% 100% at 100% 0%, rgba(${r},${g},${b},${a}) 0%, rgba(${r},${g},${b},0) 55%)`;
   })();
 
@@ -265,15 +265,15 @@ export function Footer() {
                 / 武汉 · Wuhan
               </p>
               {weather && (
-                /* v3 手绘贴片（透明底）—— 落在天气光晕处；
+                /* v7 用户参考图直切贴片（透明底，无昼夜分版）—— 落在天气光晕处；
                     同色双层投影（贴身 + 大晕）把贴片从浅色天气底上托出来，
-                    颜色随天气组走：暖阳 / 星蓝 / 雨蓝 / 雪蓝 / 雷灰，不用黑 */
+                    色相取自该贴片自身的实测特征色，不用黑 */
                 <img
-                  src={weatherTileSrc(weather.code, weather.isDay)}
+                  src={weatherTileSrc(weather.code)}
                   alt=""
                   aria-hidden
                   className="absolute right-6 top-6 size-[64px]"
-                  style={{ filter: weatherShadow(weather.code, weather.isDay) }}
+                  style={{ filter: weatherShadow(weather.code) }}
                 />
               )}
               <div className="mt-3 flex items-center gap-2.5">
@@ -441,14 +441,17 @@ const WMO_LABEL: Record<number, string> = {
 
 type WeatherGroup = 'clear' | 'partly' | 'cloud' | 'fog' | 'rain' | 'snow' | 'storm';
 
+/* 分组规则（v7：贴片 = 用户 6 张参考图一一对应，无昼夜分版）：
+   晴=太阳 / 少云·多云=云+太阳 / 阴·雾=云朵 / 雨=云+雨滴 / 雪=云+雪花 / 雷=云+闪电 */
 function wmoGroup(code: number): WeatherGroup {
   if (code === 0) return 'clear';
+  if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) return 'rain';
+  if ((code >= 71 && code <= 77) || code === 85 || code === 86) return 'snow';
+  if (code >= 95) return 'storm';
   if (code === 1 || code === 2) return 'partly';
   if (code === 3) return 'cloud';
   if (code === 45 || code === 48) return 'fog';
-  if ((code >= 51 && code <= 67) || (code >= 80 && code <= 82)) return 'rain';
-  if ((code >= 71 && code <= 77) || code === 85 || code === 86) return 'snow';
-  return 'storm';
+  return 'cloud';
 }
 
 /** 时段问候 —— 武汉本地（Asia/Shanghai）小时 → 一句有性格的短话 */
@@ -461,57 +464,52 @@ function greet(h: number): string {
   return '晚安 · 今天也认真收了尾';
 }
 
-/** 天气图标贴片 —— v3 手绘 SVG 渲染的 144px 方形透明 PNG（public/weather/*.png，
- *  仿花瓣参考的软渐变无描边风格；方形画布天然不拉伸，alpha 出图无黑边）。
- *  按 WMO 分组 + 昼夜取图；阴天有专属双云图标。
- *  ?v=6 —— v6 临摹参考马卡龙淡彩的自绘图标（3 圆胖云 + 花边光环太阳 + 蓝紫月牙）后强制刷缓存 */
-function weatherTileSrc(code: number, isDay: boolean): string {
+/** 天气图标贴片 —— v7：用户提供的 6 张 3D 参考图直切（make_weather8.py to_tile，
+ *  bbox 裁切 + 等比缩放，绝不拉伸），144px 方形透明 PNG（public/weather/*.png）。
+ *  按天气分组取图，不分昼夜；雾与阴共用云朵贴片。
+ *  ?v=7 —— cloud.png 等文件名与旧版相同，强刷缓存 */
+function weatherTileSrc(code: number): string {
   const g = wmoGroup(code);
-  const dn = isDay ? 'day' : 'night';
-  if (g === 'clear') return withBasePath(`/weather/clear-${dn}.png?v=6`);
-  if (g === 'partly') return withBasePath(`/weather/partly-${dn}.png?v=6`);
-  if (g === 'cloud') return withBasePath('/weather/cloud.png?v=6');
-  if (g === 'fog') return withBasePath('/weather/fog.png?v=6');
-  if (g === 'rain') return withBasePath(`/weather/rain-${dn}.png?v=6`);
-  if (g === 'snow') return withBasePath(`/weather/snow-${dn}.png?v=6`);
-  return withBasePath(`/weather/storm-${dn}.png?v=6`);
+  if (g === 'fog') return withBasePath('/weather/cloud.png?v=7');
+  return withBasePath(`/weather/${g}.png?v=7`);
 }
 
-/** 贴片同色投影 —— 颜色取自 make_weather3.mjs 里该组图标的主色端
- *  （暖阳 #F5A054 / 月亮 #7B82DE / 云 #C9CDE8 / 雨滴 #8E96E8 /
- *    雪花 #AAB8EE / 雷云浅端 #A9AECB —— 深端 #7378A2 会读成黑），不用黑。
+/** 贴片同色投影 —— 色相取自该贴片参考图的实测特征色（饱和像素均值，
+ *  淡蓝系压暗 12% 保证可读）：金阳 #FCBA4A / 暖阳 #FDC359 / 云影 #B4C2DE /
+ *  雨蓝 #99B8DC / 雪蓝 #B2C2DA / 雷紫 #B072FA，不用黑。
  *  双层：贴身小阴影 + 大半径同色光晕，浅色天气底上把贴片托醒目 */
-function weatherShadow(code: number, isDay: boolean): string {
+function weatherShadow(code: number): string {
   const g = wmoGroup(code);
   const hue =
-    g === 'clear' || g === 'partly'
-      ? isDay
-        ? '#F5A054'
-        : '#7B82DE'
-      : g === 'cloud'
-        ? '#C9CDE8'
-        : g === 'fog' || g === 'rain'
-          ? '#8E96E8'
-          : g === 'snow'
-            ? '#AAB8EE'
-            : '#A9AECB';
+    g === 'clear'
+      ? '#FCBA4A'
+      : g === 'partly'
+        ? '#FDC359'
+        : g === 'cloud' || g === 'fog'
+          ? '#B4C2DE'
+          : g === 'rain'
+            ? '#99B8DC'
+            : g === 'snow'
+              ? '#B2C2DA'
+              : '#B072FA'; // storm
   return `drop-shadow(0 2px 5px ${hue}66) drop-shadow(0 8px 20px ${hue}59)`;
 }
 
-/** 看板底色 —— 当前天气 → 浅色径向渐变色（rgba 供 boardBg 拼接）。
- *  晴/多云分昼夜暖冷两档；雾雨雪雷各用自己的色相，透明度都压在 0.1 上下 */
-function weatherTint(code: number, isDay: boolean): [number, number, number, number] {
+/** 看板底色 —— 当前天气 → 贴片参考图主色向白提亮 35% 的浅色调
+ *  （「底部的渐变使用她们里面的颜色的浅色调」），透明度压在 0.1 上下 */
+function weatherTint(code: number): [number, number, number, number] {
   const g = wmoGroup(code);
-  if (g === 'clear') return isDay ? [255, 187, 62, 0.1] : [96, 140, 255, 0.1];
-  if (g === 'partly') return isDay ? [255, 187, 62, 0.07] : [96, 140, 255, 0.07];
-  if (g === 'cloud') return [148, 160, 180, 0.09];
-  if (g === 'fog') return [148, 148, 148, 0.08];
-  if (g === 'rain') return [96, 150, 220, 0.1];
-  if (g === 'snow') return [150, 195, 255, 0.12];
-  return [126, 110, 220, 0.1]; // storm
+  if (g === 'clear') return [253, 213, 143, 0.1];
+  if (g === 'partly') return [253, 213, 143, 0.07];
+  if (g === 'cloud') return [219, 226, 242, 0.09];
+  if (g === 'fog') return [219, 226, 242, 0.08];
+  if (g === 'rain') return [220, 234, 251, 0.1];
+  if (g === 'snow') return [232, 239, 251, 0.12];
+  return [226, 220, 249, 0.1]; // storm
 }
 
-/** 看板纹理层 —— 当前天气 → globals.css .wx-* 类（雨丝/雪粒/光芒/星点/云雾/雷闪） */
+/** 看板纹理层 —— 当前天气 → globals.css .wx-* 类（雨丝/雪粒/光芒/星点/云雾/雷闪）。
+ *  贴片虽不分昼夜，纹理层保留昼夜区分（光芒 vs 星点） */
 function weatherFx(code: number, isDay: boolean): string {
   const g = wmoGroup(code);
   if (g === 'clear') return isDay ? 'wx-clear-day' : 'wx-clear-night';
