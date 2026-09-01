@@ -10,6 +10,18 @@ import {
 } from '@/lib/projects';
 import { site } from '@/lib/config';
 import { cn } from '@/lib/utils';
+import {
+  TDCalendarIcon,
+  TDTagIcon,
+  TDShopIcon,
+  TDUserIcon,
+  TDStarFilledIcon,
+  TDFlagIcon,
+  TDEditIcon,
+  TDImageIcon,
+  TDLayersIcon,
+  TDMailIcon,
+} from '@/components/icons';
 import { ProjectGallery } from '@/components/sections/ProjectGallery';
 import { RelatedCarousel } from '@/components/sections/RelatedCarousel';
 
@@ -60,35 +72,82 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
         <p className="text-pretty text-base text-text-secondary">{project.description}</p>
 
         {/* Meta —— #237 走查修复：改为「标签在上 / 值在下」的定义式单元，
-            单元之间换行（值内部不再断出悬空的「·」；375px 两列即齐） */}
+            单元之间换行（值内部不再断出悬空的「·」；375px 两列即齐）
+            2026-09 图标化：每个单元 label 行挂 TDesign 线性小图标 + 独立色相，
+            五项五色（蓝/紫/橙/青/金），信息密度不变、可扫读性提升 */}
         <div className="mt-4 flex flex-wrap gap-x-[40px] gap-y-3">
-          <MetaItem label="年份" value={project.year} />
+          <MetaItem
+            label="年份"
+            value={project.year}
+            icon={<TDCalendarIcon className="size-[12px] text-[#4E9BFF]" />}
+          />
           {project.type && (
             <MetaItem
               label="类型"
               value={TYPE_LABEL[project.type as ProjectType] ?? project.type}
+              icon={<TDTagIcon className="size-[12px] text-[#A78BFA]" />}
             />
           )}
-          {project.client && <MetaItem label="客户" value={project.client} />}
-          {project.role && <MetaItem label="角色" value={project.role} />}
+          {project.client && (
+            <MetaItem
+              label="客户"
+              value={project.client}
+              icon={<TDShopIcon className="size-[12px] text-[#FB923C]" />}
+            />
+          )}
+          {project.role && (
+            <MetaItem
+              label="角色"
+              value={project.role}
+              icon={<TDUserIcon className="size-[12px] text-[#2DD4BF]" />}
+            />
+          )}
           {project.featured && (
-            <MetaItem label="状态" value="★ Featured" accent />
+            <MetaItem
+              label="状态"
+              value={
+                <span className="inline-flex items-center gap-1">
+                  <TDStarFilledIcon className="size-[11px]" />
+                  Featured
+                </span>
+              }
+              accent
+              icon={<TDStarFilledIcon className="size-[12px] text-[#F5C518]" />}
+            />
           )}
         </div>
       </header>
 
-      {/* 01 · 项目背景 */}
-      <DetailSection index={1} title="项目背景" label="Background">
+      {/* 01 · 项目背景（章节图标 = TDesign 线性 + 各自色相） */}
+      <DetailSection
+        index={1}
+        title="项目背景"
+        label="Background"
+        icon={<TDFlagIcon className="size-[14px]" />}
+        tint="#4E9BFF"
+      >
         <Prose text={content.background} />
       </DetailSection>
 
       {/* 02 · 设计过程 */}
-      <DetailSection index={2} title="设计过程" label="Process">
+      <DetailSection
+        index={2}
+        title="设计过程"
+        label="Process"
+        icon={<TDEditIcon className="size-[14px]" />}
+        tint="#A78BFA"
+      >
         <Prose text={content.process} />
       </DetailSection>
 
       {/* 03 · 项目设计图 */}
-      <DetailSection index={3} title="项目设计图" label="Design Images">
+      <DetailSection
+        index={3}
+        title="项目设计图"
+        label="Design Images"
+        icon={<TDImageIcon className="size-[14px]" />}
+        tint="#FB923C"
+      >
         <ProjectGallery gallery={project.gallery} title={project.title} />
       </DetailSection>
 
@@ -127,8 +186,9 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       {/* 相关作品 —— 横向滑动 carousel */}
       {related.length > 0 && (
         <section className="border-t border-dashed border-border-subtle pt-[32px] pb-[32px]">
-          <header className="mb-5 flex items-baseline justify-between">
-            <h2 className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
+          <header className="mb-5 flex items-center justify-between">
+            <h2 className="inline-flex items-center gap-2 font-mono text-[11px] uppercase tracking-wider text-text-tertiary">
+              <TDLayersIcon className="size-[13px] text-[#2DD4BF]" />
               More work
             </h2>
             <span className="font-mono text-[11px] uppercase tracking-wider text-text-tertiary tabular-nums">
@@ -141,18 +201,21 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
       )}
 
       {/* 底部联系 —— #237：邮箱改等宽小写（与页脚 /Contact 同语言，
-          消除衬线大字号邮箱与工程图纸气质的冲突） */}
+          消除衬线大字号邮箱与工程图纸气质的冲突）；2026-09 挂信封图标 */}
       <section className="border-t border-border-subtle pt-[32px]">
-        <p className="text-essay-p text-text-secondary">
-          想要了解更多这个项目的过程，或者聊类似的工作？写信到{' '}
-          <a
-            href={`mailto:${site.email}`}
-            data-cursor="link"
-            className="link-grow font-mono text-[15px] lowercase text-text-secondary"
-          >
-            {site.email}
-          </a>
-          。
+        <p className="inline-flex items-start gap-2.5 text-essay-p text-text-secondary">
+          <TDMailIcon className="mt-[6px] size-[15px] shrink-0 text-[#34D399]" />
+          <span className="text-pretty">
+            想要了解更多这个项目的过程，或者聊类似的工作？写信到{' '}
+            <a
+              href={`mailto:${site.email}`}
+              data-cursor="link"
+              className="link-grow font-mono text-[15px] lowercase text-text-secondary"
+            >
+              {site.email}
+            </a>
+            。
+          </span>
         </p>
       </section>
     </article>
@@ -162,25 +225,29 @@ export default async function ProjectDetailPage({ params }: { params: Promise<{ 
 /* ============================================================
  * MetaItem —— 元信息定义式单元（#237：标签在上、值在下；
  * 值整体 nowrap 于单元内，换行只发生在单元之间）
+ * 2026-09：label 行挂 TDesign 线性小图标（独立色相，五项五色）
  * ============================================================ */
 function MetaItem({
   label,
   value,
   accent,
+  icon,
 }: {
   label: string;
-  value: string;
+  value: React.ReactNode;
   accent?: boolean;
+  icon?: React.ReactNode;
 }) {
   return (
     <div className="flex flex-col gap-[6px]">
-      <span className="font-mono text-[10px] uppercase tracking-wider text-text-tertiary opacity-70">
+      <span className="inline-flex items-center gap-[6px] font-mono text-[10px] uppercase tracking-wider text-text-tertiary opacity-80">
+        {icon}
         {label}
       </span>
       <span
         className={cn(
           'font-mono text-[12px] tabular-nums',
-          accent ? 'text-accent-lime' : 'text-text-secondary',
+          accent ? 'text-[#F5C518]' : 'text-text-secondary',
         )}
       >
         {value}
@@ -191,24 +258,43 @@ function MetaItem({
 
 /* ============================================================
  * DetailSection —— 详情页通用章节壳
+ * 2026-09：标题前挂 24px 图标 chip（TDesign 线性图标 + tint 8% 底 + 描边），
+ * 与左侧序号、右侧英文 label 构成「01 ▦ 标题 ····· LABEL」的章节签名
  * ============================================================ */
 function DetailSection({
   index,
   title,
   label,
+  icon,
+  tint,
   children,
 }: {
   index: number;
   title: string;
   label: string;
+  icon?: React.ReactNode;
+  tint?: string;
   children: React.ReactNode;
 }) {
   return (
     <section className="border-t border-dashed border-border-subtle pt-[32px] pb-[32px]">
-      <header className="mb-6 flex items-baseline gap-3">
+      <header className="mb-6 flex items-center gap-3">
         <span className="font-mono text-[11px] tabular-nums text-text-tertiary">
           {String(index).padStart(2, '0')}
         </span>
+        {icon && (
+          <span
+            aria-hidden
+            style={
+              tint
+                ? { backgroundColor: `${tint}14`, color: tint, borderColor: `${tint}33` }
+                : undefined
+            }
+            className="flex size-[24px] items-center justify-center rounded-[6px] border border-border-subtle bg-bg-elevated"
+          >
+            {icon}
+          </span>
+        )}
         <h2 className="font-serif text-xl text-text-primary">{title}</h2>
         <span className="ml-auto font-mono text-[10px] uppercase tracking-wider text-text-tertiary opacity-60">
           {label}

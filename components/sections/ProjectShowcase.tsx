@@ -193,6 +193,10 @@ export function WorkCard({ project }: { project: Project }) {
         aria-hidden
       />
 
+      {/* 极光描边 —— hover 时 1px 五色 conic 环沿卡片缓慢旋转
+          （globals.css .aurora-ring；group:hover 驱动，静息不可见） */}
+      <span aria-hidden className="aurora-ring" />
+
       {/* 右上角 icon badge —— 圆形玻璃感；箭头颜色随封面深浅（深白 / 浅黑）
           #237：16→28px + 箭头 8→14px（远低于触控标准的装饰小角标放大到可识别） */}
       <div
@@ -222,7 +226,7 @@ export function WorkCard({ project }: { project: Project }) {
           {project.description}
         </p>
         {project.type && (
-          <span className="mt-1 inline-flex w-fit items-center rounded-full border border-white/20 bg-white/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-white/75">
+          <span className="mt-1 inline-flex w-fit items-center rounded-full border border-white/20 bg-white/10 px-2 py-0.5 font-mono text-[10px] uppercase tracking-wider text-white/75 backdrop-blur-sm">
             {project.type}
           </span>
         )}

@@ -109,7 +109,21 @@ export function AIProjectEntrance() {
   const mobileOnly = projects.find((p) => p.mobileOnly);
 
   return (
-    <section id="ai-projects" aria-label="AI 协作项目" className="w-full scroll-mt-[calc(104px+env(safe-area-inset-top,0px))]">
+    <section id="ai-projects" aria-label="AI 协作项目" className="relative w-full scroll-mt-[calc(104px+env(safe-area-inset-top,0px))]">
+      {/* 高斯模糊彩斑（globals.css .aurora-blob）—— 2026 soft-glow 趋势的克制版：
+          两团低透明度彩光垫在卡片层之下，静息给区块一点「极光天气」，
+          不参与交互；reduced-motion / 打印不受影响 */}
+      <span
+        aria-hidden
+        className="aurora-blob right-[-60px] top-[-40px] z-0 size-[280px] opacity-[0.12]"
+        style={{ background: 'radial-gradient(circle, #2c7fff 0%, transparent 70%)' }}
+      />
+      <span
+        aria-hidden
+        className="aurora-blob bottom-[-60px] left-[-80px] z-0 size-[300px] opacity-[0.10]"
+        style={{ background: 'radial-gradient(circle, #b06cf7 0%, transparent 70%)' }}
+      />
+      <div className="relative z-10">
       {/* 手机端：竖向单卡 + 分段切换（参考移动端工作台 / 国资管家的 tab+卡片语言）；
           PC 自适应网格，md 档起接管（MobileProjectDeck hidden） */}
       <MobileProjectDeck projects={projects} />
@@ -119,6 +133,7 @@ export function AIProjectEntrance() {
           <MiniCard key={p.id} project={p} />
         ))}
         {mobileOnly && <LockedMobileCard project={mobileOnly} />}
+      </div>
       </div>
     </section>
   );

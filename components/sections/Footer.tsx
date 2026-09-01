@@ -5,6 +5,15 @@ import { usePathname } from 'next/navigation';
 
 import { site } from '@/lib/config';
 import { cn, withBasePath } from '@/lib/utils';
+import {
+  TDSunnyIcon,
+  TDPartlyIcon,
+  TDCloudIcon,
+  TDFogIcon,
+  TDRainIcon,
+  TDSnowIcon,
+  TDStormIcon,
+} from '@/components/icons';
 
 /**
  * Footer — atom63.io 风格 colophon
@@ -261,8 +270,11 @@ export function Footer() {
 
             {/* / 武汉 —— 天气看板（实时；右上角贴片图标随昼夜与天气现象切换） */}
             <div className="relative px-6 py-6">
-              <p className="font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
+              <p className="inline-flex items-center gap-[6px] font-mono text-mono-micro uppercase tracking-wide text-text-tertiary">
                 / 武汉 · Wuhan
+                {/* 现象小图标 —— TDesign 线性天气字素，色相与贴片投影同源
+                    （weatherShadow 特征色），标签即读出当前天气现象 */}
+                <WeatherGlyph code={weather?.code} />
               </p>
               {weather && (
                 /* v7 用户参考图直切贴片（透明底，无昼夜分版）—— 落在天气光晕处；
@@ -499,6 +511,21 @@ function weatherTileSrc(code: number): string {
   const g = wmoGroup(code);
   if (g === 'fog') return withBasePath('/weather/cloud.png?v=8');
   return withBasePath(`/weather/${g}.png?v=8`);
+}
+
+/** 天气现象小图标 —— 标签行内用（TDesign 线性字素 + 贴片同源特征色）；
+ *  拿不到天气时不渲染（标签保持纯文字，不挂占位） */
+function WeatherGlyph({ code }: { code?: number }) {
+  if (code === undefined) return null;
+  const g = wmoGroup(code);
+  const cls = 'size-[12px] shrink-0 opacity-90';
+  if (g === 'clear') return <TDSunnyIcon className={cn(cls, 'text-[#FCBA4A]')} />;
+  if (g === 'partly') return <TDPartlyIcon className={cn(cls, 'text-[#FDC359]')} />;
+  if (g === 'fog') return <TDFogIcon className={cn(cls, 'text-[#B4C2DE]')} />;
+  if (g === 'rain') return <TDRainIcon className={cn(cls, 'text-[#99B8DC]')} />;
+  if (g === 'snow') return <TDSnowIcon className={cn(cls, 'text-[#B2C2DA]')} />;
+  if (g === 'storm') return <TDStormIcon className={cn(cls, 'text-[#B072FA]')} />;
+  return <TDCloudIcon className={cn(cls, 'text-[#B4C2DE]')} />; // cloud 及兜底
 }
 
 /** 贴片同色投影 —— 色相取自该贴片参考图的实测特征色（饱和像素均值，

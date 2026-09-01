@@ -7,6 +7,7 @@ import { ShowcaseCarousel } from '@/components/sections/ShowcaseCarousel';
 import { ShowcaseStacked } from '@/components/sections/ShowcaseStacked';
 import { AIProjectEntrance } from '@/components/sections/AIProjectEntrance';
 import { ProjectShowcase } from '@/components/sections/ProjectShowcase';
+import { ToolDeck } from '@/components/sections/ToolDeck';
 
 /**
  * HomeMain —— atom63.io 长文式主体（1:1 复刻）
@@ -97,10 +98,15 @@ export function HomeMain() {
           平安时期的代表作——<Tool>网点服务小程序</Tool>把传统门店业务转为清晰、易操作的线上预约办理流程；<Tool>Pocket Banker 2.0</Tool>围绕「高效、简单、数据可视化」重塑；<Tool>传送门</Tool>以悬浮窗加自定义常用入口，解决角色权限切换的高频痛点；<Tool>后台管理系统</Tool>汇集全行大数据，为网点门店、中台数据、人才库三大模块做视觉升级并建立统一组件库。
         </EssayParagraph>
 
-        {/* 7. AI 工具栈（#237：纯列举段零加粗，全部 Tool 亮色） */}
-        <EssayParagraph>
-          精通 <Tool>Figma、Sketch、C4D、Ps</Tool> 等设计软件，以及各平台 AI 软件（<Tool>Claude Code、ChatGPT、Codex、HBuilderX</Tool>）等。能够独立完成平面视觉设计、移动端以及 PC 端 UI/UX 设计、3D 设计、后台系统设计。
-        </EssayParagraph>
+        {/* 7. AI 工具栈（#237：纯列举段零加粗，全部 Tool 亮色）；
+            2026-09 追加 ToolDeck —— 同一批工具的品牌卡片（logo 在前），
+            叙事段落保留、查阅交给卡片，长列举一眼可扫 */}
+        <div className="flex flex-col gap-[24px]">
+          <EssayParagraph>
+            精通 <Tool>Figma、Sketch、C4D、Ps</Tool> 等设计软件，以及各平台 AI 软件（<Tool>Claude Code、ChatGPT、Codex、HBuilderX</Tool>）等。能够独立完成平面视觉设计、移动端以及 PC 端 UI/UX 设计、3D 设计、后台系统设计。
+          </EssayParagraph>
+          <ToolDeck />
+        </div>
 
         {/* 8. AI 协作三入口 —— atom63 "I build in public" 1:1 复刻 */}
         <div>
@@ -133,7 +139,7 @@ export function HomeMain() {
               href={withBasePath('/pdf-viewer/')}
               data-cursor="link"
               className={cn(
-                'inline-flex h-[48px] items-center justify-center gap-2 rounded-[var(--control-radius)]',
+                'shine inline-flex h-[48px] items-center justify-center gap-2 rounded-[var(--control-radius)]',
                 'bg-text-primary px-6 text-sm font-[550] tracking-tight text-text-inverse',
                 'transition-all duration-micro ease-out-quart',
                 'hover:-translate-y-0.5 hover:shadow-[var(--shadow-elev-2)]',

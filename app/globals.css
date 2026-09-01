@@ -1179,3 +1179,133 @@ html[data-a63-surface]::before {
     animation: none;
   }
 }
+
+/* ============================================================
+ * 2026-09 视觉层 —— 流光 / 炫彩渐变 / 高斯模糊
+ *   （Behance/Dribbble 2026 趋势的克制版：只挂在 hover 与装饰层，
+ *    静息状态维持工程图纸的黑白灰，不破坏 Make to Think 气质）
+ * ============================================================ */
+
+/* 1) .tool-card —— 工具卡：品牌色描边 + 辉光 + 对角流光扫过
+      --tc 由每张卡内联指定（品牌色），color-mix 派生透明度 */
+.tool-card {
+  position: relative;
+}
+.tool-card:hover {
+  border-color: color-mix(in srgb, var(--tc) 45%, transparent);
+  box-shadow:
+    0 8px 22px -8px color-mix(in srgb, var(--tc) 45%, transparent),
+    0 2px 8px -4px color-mix(in srgb, var(--tc) 30%, transparent);
+}
+.tool-card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  left: -60%;
+  width: 55%;
+  transform: skewX(-16deg) translateX(0);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    color-mix(in srgb, var(--tc) 20%, transparent),
+    transparent
+  );
+  opacity: 0;
+  pointer-events: none;
+}
+.tool-card:hover::after {
+  opacity: 1;
+  transform: skewX(-16deg) translateX(320%);
+  transition:
+    transform 720ms var(--ease-out-expo),
+    opacity 200ms linear;
+}
+
+/* 2) .aurora-ring —— hover 极光描边：conic 五色环沿卡片旋转
+      1px 环由 mask 挖出（content-box xor）；--ang 用 @property 注册后才可动画 */
+@property --ang {
+  syntax: '<angle>';
+  initial-value: 0deg;
+  inherits: false;
+}
+.aurora-ring {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: conic-gradient(
+    from var(--ang),
+    #2c7fff,
+    #8b5cf6,
+    #ec4899,
+    #f59e0b,
+    #2dd4bf,
+    #2c7fff
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 320ms var(--ease-out-quart);
+  pointer-events: none;
+}
+.group:hover .aurora-ring {
+  opacity: 1;
+  animation: aurora-spin 4.5s linear infinite;
+}
+@keyframes aurora-spin {
+  to {
+    --ang: 360deg;
+  }
+}
+
+/* 3) .shine —— 主 CTA 悬停扫光：一道高光斜切着划过按钮 */
+.shine {
+  position: relative;
+  overflow: hidden;
+}
+.shine::after {
+  content: '';
+  position: absolute;
+  top: -20%;
+  bottom: -20%;
+  left: -80%;
+  width: 50%;
+  transform: skewX(-18deg) translateX(0);
+  background: linear-gradient(
+    100deg,
+    transparent,
+    rgba(255, 255, 255, 0.32),
+    transparent
+  );
+  pointer-events: none;
+}
+.shine:hover::after {
+  transform: skewX(-18deg) translateX(420%);
+  transition: transform 760ms var(--ease-out-quart);
+}
+
+/* 4) .aurora-blob —— 高斯模糊彩色光斑（2026 soft-glow 趋势）：
+      绝对定位挂在区块装饰层，尺寸/颜色由调用方内联给 */
+.aurora-blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(72px);
+  pointer-events: none;
+}
+
+/* 流光全家 —— reduced-motion 一并静默 */
+@media (prefers-reduced-motion: reduce) {
+  .tool-card::after,
+  .shine::after {
+    display: none;
+  }
+  .group:hover .aurora-ring {
+    animation: none;
+  }
+}
