@@ -71,7 +71,7 @@ export function HomeMain() {
         </div>
 
         <EssayParagraph>
-          <Strong>统信官网改版</Strong>——负责官网整体<Strong>视觉体系重构</Strong>与落地执行，覆盖全站页面与模块；建立覆盖全站的组件库，输出色彩、字体、图标、组件、模板等规范。C 端与 B 端视觉统一，整体布局自适应保证各设备阅读性；期间自学 <Tool><BrandMark src="/images/brands/c4d.svg">C4D</BrandMark></Tool> 投入实战，首页头图以 3D 动态效果呈现。项目六个月完成上线，设计体系支持后续产品线持续扩展。
+          <Strong>统信官网改版</Strong>——负责官网整体<Strong>视觉体系重构</Strong>与落地执行，覆盖全站页面与模块；建立覆盖全站的组件库，输出色彩、字体、图标、组件、模板等规范。C 端与 B 端视觉统一，整体布局自适应保证各设备阅读性；期间自学 <Tool><BrandMark src="/images/brands/c4d.png">C4D</BrandMark></Tool> 投入实战，首页头图以 3D 动态效果呈现。项目六个月完成上线，设计体系支持后续产品线持续扩展。
         </EssayParagraph>
 
         <EssayParagraph>
@@ -105,7 +105,7 @@ export function HomeMain() {
             2026-09-01：工具名前加 macOS 平台 App 图标（能取到官方
             mac 图标的都用 tile/裸标图标，扫读时一眼可辨） */}
         <EssayParagraph>
-          精通 <Tool><BrandMark src="/images/brands/figma.png">Figma</BrandMark>、<BrandMark src="/images/brands/sketch.png">Sketch</BrandMark>、<BrandMark src="/images/brands/c4d.svg">C4D</BrandMark>、<BrandMark src="/images/brands/photoshop.png">Ps</BrandMark></Tool> 等设计软件，以及各平台 AI 软件（<Tool><BrandMark src="/images/brands/claude.png">Claude Code</BrandMark>、<BrandMark src="/images/brands/chatgpt.png">ChatGPT</BrandMark>、<span className="whitespace-nowrap"><ToolMark><BrandOpenAIIcon className="size-full" /></ToolMark>Codex</span>、<BrandMark src="/images/brands/hbuilderx.png">HBuilderX</BrandMark></Tool>）等。能够独立完成平面视觉设计、移动端以及 PC 端 UI/UX 设计、3D 设计、后台系统设计。
+          精通 <Tool><BrandMark src="/images/brands/figma.png">Figma</BrandMark>、<BrandMark src="/images/brands/sketch.png">Sketch</BrandMark>、<BrandMark src="/images/brands/c4d.png">C4D</BrandMark>、<BrandMark src="/images/brands/photoshop.png">Ps</BrandMark></Tool> 等设计软件，以及各平台 AI 软件（<Tool><BrandMark src="/images/brands/claude.png">Claude Code</BrandMark>、<BrandMark src="/images/brands/chatgpt.png">ChatGPT</BrandMark>、<span className="whitespace-nowrap"><ToolMark><BrandOpenAIIcon className="size-full" /></ToolMark>Codex</span>、<BrandMark src="/images/brands/hbuilderx.png">HBuilderX</BrandMark></Tool>）等。能够独立完成平面视觉设计、移动端以及 PC 端 UI/UX 设计、3D 设计、后台系统设计。
         </EssayParagraph>
 
         {/* 8. AI 协作三入口 —— atom63 "I build in public" 1:1 复刻 */}
@@ -319,10 +319,10 @@ function ToolMark({
 }
 
 /* 视觉等高校准表（2026-09-01 换 macOS App 图标）：
- *   tile 类（figma/sketch/photoshop/claude/gemini/doubao/chatgpt）
+ *   tile 类（figma/sketch/photoshop/claude/gemini/doubao/chatgpt/c4d）
  *   已统一裁成满格 256px 方形画布——方形实底同高下比线形墨迹显大，
  *   统一 0.91 档（tile 视觉高 ≈15.5px，与裸标 1em 墨迹等观感）；
- *   裸标类（c4d/jimeng/hbuilderx，官方 mac 图标即裸形或无桌面端）
+ *   裸标类（jimeng/hbuilderx，官方 mac 图标即裸形或无桌面端）
  *   保持 1.0 满格 */
 const BRAND_SCALE: Record<string, number> = {
   'figma.png': 0.91,
@@ -332,7 +332,7 @@ const BRAND_SCALE: Record<string, number> = {
   'gemini.png': 0.91,
   'doubao.png': 0.91,
   'chatgpt.png': 0.91,
-  'c4d.svg': 1,
+  'c4d.png': 0.91,
   'jimeng.png': 1,
   'hbuilderx.png': 1,
 };
