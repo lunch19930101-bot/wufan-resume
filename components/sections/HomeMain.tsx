@@ -57,7 +57,7 @@ export function HomeMain() {
         <div id="uniontech" className="scroll-mt-[calc(104px+env(safe-area-inset-top,0px))]">
           <EssayParagraph>
             曾在
-            <Favicon src="/images/clients/uniontech.svg" alt="统信软件" />
+            <Favicon src="/images/clients/uniontech.svg" alt="统信软件" scale={1.5} />
             <Strong> 统信软件</Strong>
             担任网页设计组组长与资深
             UI 设计师（武汉，2021–2025）——负责公司官网设计与改版、主页面风格、3D
@@ -80,14 +80,14 @@ export function HomeMain() {
 
         {/* 4. 设计系统 / 组件库工程化 */}
         <EssayParagraph>
-          在视觉之外，我同时负责<Strong>设计系统</Strong>的工程化落地——与开发团队定制设计语言、开发周期、<Strong>组件库代码化</Strong>，让设计还原走查与后续迭代的效率得到极大提升。同时把 AI 协作引入工作流——从 <Tool><span className="whitespace-nowrap"><ToolMark color="#B9C0CC"><BrandMidjourneyIcon className="size-full" /></ToolMark>MJ</span>、<BrandMark src="/images/brands/doubao.png">豆包</BrandMark>、<BrandMark src="/images/brands/jimeng.png">即梦</BrandMark></Tool>等 AI 设计工具起步，到现在用 <Tool><BrandMark src="/images/brands/claude.svg">Claude Code</BrandMark></Tool> 打通设计与开发的衔接，效率一路提升。
+          在视觉之外，我同时负责<Strong>设计系统</Strong>的工程化落地——与开发团队定制设计语言、开发周期、<Strong>组件库代码化</Strong>，让设计还原走查与后续迭代的效率得到极大提升。同时把 AI 协作引入工作流——从 <Tool><span className="whitespace-nowrap"><ToolMark color="#B9C0CC" scale={1.21}><BrandMidjourneyIcon className="size-full" /></ToolMark>MJ</span>、<BrandMark src="/images/brands/doubao.png">豆包</BrandMark>、<BrandMark src="/images/brands/jimeng.png">即梦</BrandMark></Tool>等 AI 设计工具起步，到现在用 <Tool><BrandMark src="/images/brands/claude.svg">Claude Code</BrandMark></Tool> 打通设计与开发的衔接，效率一路提升。
         </EssayParagraph>
 
         {/* 5. 平安银行时代 */}
         <div id="pingan" className="scroll-mt-[calc(104px+env(safe-area-inset-top,0px))]">
           <EssayParagraph>
             更早之前，我在
-            <Favicon src="/images/clients/pingan.ico" alt="平安银行" />
+            <Favicon src="/images/clients/pingan.ico" alt="平安银行" scale={1.13} />
             <Strong> 平安银行</Strong>
             度过了四年（深圳，2016–2020）——担任设计组组长与高级
             UI 设计师。从口袋银行家
@@ -251,19 +251,34 @@ function DownloadIcon({ className }: { className?: string }) {
  *   - midjourney.svg：单色 currentColor 图形，<img> 上下文里渲染为黑色，
  *     加 mono 白底 chip 让它在深色主题下也可见
  * ============================================================ */
-function Favicon({ src, alt = '', mono = false }: { src: string; alt?: string; mono?: boolean }) {
+function Favicon({
+  src,
+  alt = '',
+  mono = false,
+  scale = 1,
+}: {
+  src: string;
+  alt?: string;
+  mono?: boolean;
+  scale?: number;
+}) {
   return (
     <span className="mx-[0.2em] inline-flex size-[1em] align-baseline">
-      <img
-        src={withBasePath(src)}
-        alt={alt}
-        loading="lazy"
-        className={
-          mono
-            ? 'size-full rounded-[2px] bg-white/90 object-contain p-[1px]'
-            : 'size-full object-contain'
-        }
-      />
+      <span
+        className="inline-flex size-full"
+        style={scale !== 1 ? { transform: `scale(${scale})` } : undefined}
+      >
+        <img
+          src={withBasePath(src)}
+          alt={alt}
+          loading="lazy"
+          className={
+            mono
+              ? 'size-full rounded-[2px] bg-white/90 object-contain p-[1px]'
+              : 'size-full object-contain'
+          }
+        />
+      </span>
     </span>
   );
 }
@@ -273,18 +288,51 @@ function Favicon({ src, alt = '', mono = false }: { src: string; alt?: string; m
  *   与 Favicon（统信/平安）同一形式：inline size-[1em]，
  *   align-baseline，无底色无框；品牌色由调用方传，
  *   不传 color 则继承文字色（OpenAI 这类官方单色标）
+ *   2026-09-01 视觉等高：各官方资产画布留白不一，同一 1em
+ *   盒子下实测墨迹高度 82%–100%（Ps/MJ 82% 最瘦，C4D/豆包/
+ *   即梦/HBuilderX/OpenAI 满格）。scale 按实测校准到统一 1em
+ *   墨迹高度——transform 缩放不参与布局，基线与行高不受影响
  * ============================================================ */
-function ToolMark({ color, children }: { color?: string; children: ReactNode }) {
+function ToolMark({
+  color,
+  scale = 1,
+  children,
+}: {
+  color?: string;
+  scale?: number;
+  children: ReactNode;
+}) {
   return (
     <span
       aria-hidden
       className="mx-[0.18em] inline-flex size-[1em] items-center justify-center align-baseline"
       style={color ? { color } : undefined}
     >
-      {children}
+      <span
+        className="inline-flex size-full"
+        style={scale !== 1 ? { transform: `scale(${scale})` } : undefined}
+      >
+        {children}
+      </span>
     </span>
   );
 }
+
+/* 视觉等高校准表（2026-09-01 实测墨迹高度 → 统一 1em）：
+ *   c4d/doubao/jimeng/hbuilderx 满格 100% → 1.0；
+ *   claude 97% → 1.03 / figma 94% → 1.06 / gemini 91% → 1.10 /
+ *   sketch 88% → 1.13 / photoshop 82% → 1.21 */
+const BRAND_SCALE: Record<string, number> = {
+  'c4d.svg': 1,
+  'doubao.png': 1,
+  'jimeng.png': 1,
+  'hbuilderx.png': 1,
+  'claude.svg': 1.03,
+  'figma.svg': 1.06,
+  'gemini.svg': 1.1,
+  'sketch.png': 1.13,
+  'photoshop.png': 1.21,
+};
 
 /* BrandMark —— 2026-09 官网现行真彩 logo（/images/brands/）：
  *   figma / sketch / c4d / photoshop / claude / gemini / doubao /
@@ -294,9 +342,10 @@ function ToolMark({ color, children }: { color?: string; children: ReactNode }) 
  *   一个不可折行单元（走查修复：HBuilderX 的 logo 曾被单独甩在
  *   上一行行尾，与名字分离） */
 function BrandMark({ src, children }: { src: string; children?: ReactNode }) {
+  const scale = BRAND_SCALE[src.split('/').pop() ?? ''] ?? 1;
   return (
     <span className="whitespace-nowrap">
-      <ToolMark>
+      <ToolMark scale={scale}>
         <img
           src={withBasePath(src)}
           alt=""
